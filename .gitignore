@@ -1,0 +1,43 @@
+# ===== Java =====
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+target/
+build/
+out/
+bin/
+
+# ===== IDEs =====
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+.vscode/
+nbproject/
+nbbuild/
+dist/
+nbdist/
+
+# ===== Sistema operativo =====
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+.AppleDouble
+*~
+
+# ===== StarUML =====
+*.bak
+*.mdj.bak
+staruml/
+cache/
+
+# ===== Logs =====
+*.log
+logs/
