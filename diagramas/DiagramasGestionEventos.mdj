@@ -13134,7 +13134,7 @@
 															"font": "Arial;13;1",
 															"parentStyle": true,
 															"left": 1525,
-															"top": 2191,
+															"top": 2204,
 															"width": 113.68994140625,
 															"height": 13,
 															"text": "VersionCotizacion"
@@ -13172,7 +13172,7 @@
 													"font": "Arial;13;0",
 													"parentStyle": true,
 													"left": 1520,
-													"top": 2184,
+													"top": 2197,
 													"width": 123.68994140625,
 													"height": 25,
 													"stereotypeLabel": {
@@ -13207,6 +13207,7 @@
 															"model": {
 																"$ref": "AAAAAAGgrWpAlbADYnU="
 															},
+															"visible": false,
 															"font": "Arial;13;0",
 															"parentStyle": true,
 															"left": 1525,
@@ -13292,9 +13293,9 @@
 													"font": "Arial;13;0",
 													"parentStyle": true,
 													"left": 1520,
-													"top": 2209,
+													"top": 2222,
 													"width": 123.68994140625,
-													"height": 83
+													"height": 70
 												},
 												{
 													"_type": "UMLOperationCompartmentView",
@@ -13417,7 +13418,7 @@
 															"font": "Arial;13;1",
 															"parentStyle": true,
 															"left": 1645,
-															"top": 1615,
+															"top": 1628,
 															"width": 169.71435546875,
 															"height": 13,
 															"text": "ReglaDescuento"
@@ -13455,7 +13456,7 @@
 													"font": "Arial;13;0",
 													"parentStyle": true,
 													"left": 1640,
-													"top": 1608,
+													"top": 1621,
 													"width": 179.71435546875,
 													"height": 25,
 													"stereotypeLabel": {
@@ -13490,6 +13491,7 @@
 															"model": {
 																"$ref": "AAAAAAGgrWsZ1wsUV8Y="
 															},
+															"visible": false,
 															"font": "Arial;13;0",
 															"parentStyle": true,
 															"left": 1645,
@@ -13539,9 +13541,9 @@
 													"font": "Arial;13;0",
 													"parentStyle": true,
 													"left": 1640,
-													"top": 1633,
+													"top": 1646,
 													"width": 179.71435546875,
-													"height": 53
+													"height": 40
 												},
 												{
 													"_type": "UMLOperationCompartmentView",
@@ -13664,7 +13666,7 @@
 															"font": "Arial;13;1",
 															"parentStyle": true,
 															"left": 693,
-															"top": 2271,
+															"top": 2284,
 															"width": 109.3544921875,
 															"height": 13,
 															"text": "DetalleCotizacion"
@@ -13702,7 +13704,7 @@
 													"font": "Arial;13;0",
 													"parentStyle": true,
 													"left": 688,
-													"top": 2264,
+													"top": 2277,
 													"width": 119.3544921875,
 													"height": 25,
 													"stereotypeLabel": {
@@ -13737,6 +13739,7 @@
 															"model": {
 																"$ref": "AAAAAAGgrW5L7M9KZBQ="
 															},
+															"visible": false,
 															"font": "Arial;13;0",
 															"parentStyle": true,
 															"left": 693,
@@ -13840,9 +13843,9 @@
 													"font": "Arial;13;0",
 													"parentStyle": true,
 													"left": 688,
-													"top": 2289,
+													"top": 2302,
 													"width": 119.3544921875,
-													"height": 98
+													"height": 85
 												},
 												{
 													"_type": "UMLOperationCompartmentView",
@@ -22853,6 +22856,19 @@
 											"headQualifiersCompartment": {
 												"$ref": "AAAAAAGgvAm1ANMMmOE="
 											}
+										},
+										{
+											"_type": "UMLTextView",
+											"_id": "AAAAAAGgvBNQBKlYyA8=",
+											"_parent": {
+												"$ref": "AAAAAAGUYVWeMWJyTA8="
+											},
+											"font": "Arial;13;0",
+											"parentStyle": false,
+											"left": 1901,
+											"top": 1720,
+											"width": 100,
+											"height": 25
 										}
 									]
 								},
@@ -25135,7 +25151,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGgrTlifCyhroQ="
 											},
-											"name": "idPropuestaEvento"
+											"name": "idPropuestaEvento",
+											"type": ""
 										}
 									]
 								},
