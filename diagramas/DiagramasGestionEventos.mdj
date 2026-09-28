@@ -21002,9 +21002,9 @@
 																	},
 																	"font": "Arial;13;0",
 																	"parentStyle": false,
-																	"left": 962,
+																	"left": 945,
 																	"top": 556,
-																	"width": 101.181640625,
+																	"width": 135.85888671875,
 																	"height": 13,
 																	"alpha": 1.5707963267948966,
 																	"distance": 10,
@@ -21012,7 +21012,7 @@
 																		"$ref": "AAAAAAGg5d0oUt7JuP4="
 																	},
 																	"edgePosition": 1,
-																	"text": "18 : datos evento"
+																	"text": "18 : datos evento (folio)"
 																},
 																{
 																	"_type": "EdgeLabelView",
@@ -23914,7 +23914,7 @@
 													"_parent": {
 														"$ref": "AAAAAAGUYVXt8mJ3E98="
 													},
-													"name": "datos evento",
+													"name": "datos evento (folio)",
 													"source": {
 														"$ref": "AAAAAAGgwBJodm2XByY="
 													},
