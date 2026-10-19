@@ -11,6 +11,6 @@ package com.equipogestioneventos.sistemagestoreventos;
 public class SistemaGestorEventos {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+     
     }
 }
