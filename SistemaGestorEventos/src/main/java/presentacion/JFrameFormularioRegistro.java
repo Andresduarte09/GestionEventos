@@ -28,31 +28,31 @@ public class JFrameFormularioRegistro extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel5 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        lblTituloRegistroClienteNuevo = new javax.swing.JLabel();
+        lblNombreCompleto = new javax.swing.JLabel();
+        txtNombreCompleto = new javax.swing.JTextField();
+        lblCorreoElectronico = new javax.swing.JLabel();
+        txtCorreoElectronico = new javax.swing.JTextField();
+        lblTelefonoContacto = new javax.swing.JLabel();
+        txtTelefonoContacto = new javax.swing.JTextField();
+        lblTelefonoRespaldo = new javax.swing.JLabel();
+        txtRelefonoRespaldo = new javax.swing.JTextField();
+        btnFinalizarRegistro = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
-        jLabel5.setText("Registro de cliente nuevo");
+        lblTituloRegistroClienteNuevo.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
+        lblTituloRegistroClienteNuevo.setText("Registro de cliente nuevo");
 
-        jLabel1.setText("Nombre completo:");
+        lblNombreCompleto.setText("Nombre completo:");
 
-        jLabel2.setText("Correo electrónico:");
+        lblCorreoElectronico.setText("Correo electrónico:");
 
-        jLabel3.setText("Teléfono de contacto:");
+        lblTelefonoContacto.setText("Teléfono de contacto:");
 
-        jLabel4.setText("Teléfono de respaldo:");
+        lblTelefonoRespaldo.setText("Teléfono de respaldo:");
 
-        jToggleButton1.setText("Finalizar Registro");
+        btnFinalizarRegistro.setText("Finalizar Registro");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -63,46 +63,46 @@ public class JFrameFormularioRegistro extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(72, 72, 72)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField3)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)))
+                            .addComponent(lblTelefonoRespaldo)
+                            .addComponent(lblTelefonoContacto)
+                            .addComponent(lblCorreoElectronico)
+                            .addComponent(lblNombreCompleto)
+                            .addComponent(txtNombreCompleto)
+                            .addComponent(txtCorreoElectronico)
+                            .addComponent(txtTelefonoContacto)
+                            .addComponent(txtRelefonoRespaldo, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(126, 126, 126)
-                        .addComponent(jToggleButton1)))
+                        .addComponent(btnFinalizarRegistro)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 61, Short.MAX_VALUE)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblTituloRegistroClienteNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jLabel5)
+                .addComponent(lblTituloRegistroClienteNuevo)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1)
+                .addComponent(lblNombreCompleto)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNombreCompleto, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2)
+                .addComponent(lblCorreoElectronico)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCorreoElectronico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel3)
+                .addComponent(lblTelefonoContacto)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtTelefonoContacto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel4)
+                .addComponent(lblTelefonoRespaldo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtRelefonoRespaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jToggleButton1)
+                .addComponent(btnFinalizarRegistro)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -135,15 +135,15 @@ public class JFrameFormularioRegistro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JToggleButton btnFinalizarRegistro;
+    private javax.swing.JLabel lblCorreoElectronico;
+    private javax.swing.JLabel lblNombreCompleto;
+    private javax.swing.JLabel lblTelefonoContacto;
+    private javax.swing.JLabel lblTelefonoRespaldo;
+    private javax.swing.JLabel lblTituloRegistroClienteNuevo;
+    private javax.swing.JTextField txtCorreoElectronico;
+    private javax.swing.JTextField txtNombreCompleto;
+    private javax.swing.JTextField txtRelefonoRespaldo;
+    private javax.swing.JTextField txtTelefonoContacto;
     // End of variables declaration//GEN-END:variables
 }

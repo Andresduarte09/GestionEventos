@@ -28,17 +28,82 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        lblTituloRegistrarDatosEvento = new javax.swing.JLabel();
+        lblTipo = new javax.swing.JLabel();
+        lblFecha = new javax.swing.JLabel();
+        lblUbicacion = new javax.swing.JLabel();
+        lblHora = new javax.swing.JLabel();
+        lblNumeroAsistentes = new javax.swing.JLabel();
+        txtUbicacion = new javax.swing.JTextField();
+        txtTipo = new javax.swing.JTextField();
+        txtFecha = new javax.swing.JTextField();
+        txtHorario = new javax.swing.JTextField();
+        txtNumeroAsistentes = new javax.swing.JTextField();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        lblTituloRegistrarDatosEvento.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
+        lblTituloRegistrarDatosEvento.setText("Registrar Datos del Evento");
+
+        lblTipo.setText("Tipo de evento:");
+
+        lblFecha.setText("Fecha");
+
+        lblUbicacion.setText("Ubicación:");
+
+        lblHora.setText("Horario");
+
+        lblNumeroAsistentes.setText("Número de asistentes:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 520, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(121, 121, 121)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTituloRegistrarDatosEvento)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblUbicacion)
+                            .addComponent(lblTipo)
+                            .addComponent(lblFecha)
+                            .addComponent(lblHora)
+                            .addComponent(lblNumeroAsistentes)
+                            .addComponent(txtNumeroAsistentes, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                            .addComponent(txtHorario)
+                            .addComponent(txtFecha)
+                            .addComponent(txtUbicacion)
+                            .addComponent(txtTipo))))
+                .addContainerGap(108, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 511, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(lblTituloRegistrarDatosEvento)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblTipo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblUbicacion)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblFecha)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblHora)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblNumeroAsistentes)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtNumeroAsistentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
@@ -70,5 +135,16 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel lblFecha;
+    private javax.swing.JLabel lblHora;
+    private javax.swing.JLabel lblNumeroAsistentes;
+    private javax.swing.JLabel lblTipo;
+    private javax.swing.JLabel lblTituloRegistrarDatosEvento;
+    private javax.swing.JLabel lblUbicacion;
+    private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextField txtHorario;
+    private javax.swing.JTextField txtNumeroAsistentes;
+    private javax.swing.JTextField txtTipo;
+    private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
 }
