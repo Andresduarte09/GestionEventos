@@ -17,6 +17,7 @@ public class JFrameFormularioRegistro extends javax.swing.JFrame {
      */
     public JFrameFormularioRegistro() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

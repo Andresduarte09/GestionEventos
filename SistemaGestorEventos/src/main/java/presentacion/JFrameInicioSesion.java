@@ -17,6 +17,7 @@ public class JFrameInicioSesion extends javax.swing.JFrame {
      */
     public JFrameInicioSesion() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -83,7 +84,9 @@ public class JFrameInicioSesion extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
     private void btnRegistrarEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEventoActionPerformed
-        // TODO add your handling code here:
+        JFrameRegistrarDatosEvento registrarDatosEvento = new JFrameRegistrarDatosEvento();
+        registrarDatosEvento.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnRegistrarEventoActionPerformed
 
     /**
