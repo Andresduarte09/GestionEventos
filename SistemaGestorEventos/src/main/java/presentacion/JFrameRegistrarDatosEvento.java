@@ -15,6 +15,7 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
     /**
      * Creates new form JFrameRegistrarDatosEvento
      */
+    controlPresentacion control = new controlPresentacion();
     public JFrameRegistrarDatosEvento() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -126,13 +127,12 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        
+        control.iniciarRecursosEvento();
         this.dispose();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        JFrameInicioSesion inicioSesion = new JFrameInicioSesion();
-        inicioSesion.setVisible(true);
+        control.cancelarRegistrarEvento();
         this.dispose();
        
     }//GEN-LAST:event_btnCancelarActionPerformed

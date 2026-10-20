@@ -17,6 +17,7 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
      */
     public JFrameRecursosEvento() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
