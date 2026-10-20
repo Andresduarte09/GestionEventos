@@ -8,14 +8,14 @@ package presentacion;
  *
  * @author armen
  */
-public class JFrameAnalisisEvalucacion extends javax.swing.JFrame {
+public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameAnalisisEvalucacion.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameAnalisisEvaluacion.class.getName());
 
     /**
      * Creates new form JFrameAnalisisEvalucacion
      */
-    public JFrameAnalisisEvalucacion() {
+    public JFrameAnalisisEvaluacion() {
         initComponents();
     }
 
@@ -202,7 +202,7 @@ public class JFrameAnalisisEvalucacion extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JFrameAnalisisEvalucacion().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new JFrameAnalisisEvaluacion().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

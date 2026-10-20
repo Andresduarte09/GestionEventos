@@ -20439,8 +20439,8 @@
 																		"$ref": "AAAAAAGUYVXt8mJ5bTU="
 																	},
 																	"font": "Arial;13;0",
-																	"left": 64.72998046875,
-																	"top": 61,
+																	"left": 24.72998046875,
+																	"top": 5,
 																	"width": 52.03173828125,
 																	"height": 13,
 																	"text": "cu_1_FB"
@@ -20452,16 +20452,14 @@
 																		"$ref": "AAAAAAGUYVXt8mJ5bTU="
 																	},
 																	"font": "Arial;13;1",
-																	"left": 45,
-																	"top": 61,
+																	"left": 5,
+																	"top": 5,
 																	"width": 13.72998046875,
 																	"height": 13,
 																	"text": "sd"
 																}
 															],
 															"font": "Arial;13;0",
-															"left": 40,
-															"top": 56,
 															"width": 4152,
 															"height": 2176,
 															"nameLabel": {
@@ -39788,7 +39786,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6GwNKpIiBY="
 											},
-											"name": "idReserva"
+											"name": "idReserva",
+											"type": ""
 										},
 										{
 											"_type": "UMLAttribute",
@@ -39796,7 +39795,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6GwNKpIiBY="
 											},
-											"name": "fecha"
+											"name": "fecha",
+											"type": ""
 										},
 										{
 											"_type": "UMLAttribute",
@@ -39804,7 +39804,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6GwNKpIiBY="
 											},
-											"name": "horaInicio"
+											"name": "horaInicio",
+											"type": ""
 										},
 										{
 											"_type": "UMLAttribute",
@@ -39812,7 +39813,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6GwNKpIiBY="
 											},
-											"name": "horaFin"
+											"name": "horaFin",
+											"type": ""
 										},
 										{
 											"_type": "UMLAttribute",
@@ -39820,7 +39822,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6GwNKpIiBY="
 											},
-											"name": "estado"
+											"name": "estado",
+											"type": ""
 										}
 									]
 								},
@@ -39841,7 +39844,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6M/BTcKPhI="
 											},
-											"name": "idLocalEvento"
+											"name": "idLocalEvento",
+											"type": ""
 										},
 										{
 											"_type": "UMLAttribute",
@@ -39849,7 +39853,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6M/BTcKPhI="
 											},
-											"name": "tipoLocal"
+											"name": "tipoLocal",
+											"type": ""
 										},
 										{
 											"_type": "UMLAttribute",
@@ -39857,7 +39862,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6M/BTcKPhI="
 											},
-											"name": "dimensionesLugar"
+											"name": "dimensionesLugar",
+											"type": ""
 										},
 										{
 											"_type": "UMLAttribute",
@@ -39865,7 +39871,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6M/BTcKPhI="
 											},
-											"name": "distribucionEspacios"
+											"name": "distribucionEspacios",
+											"type": ""
 										},
 										{
 											"_type": "UMLAttribute",
@@ -39873,7 +39880,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6M/BTcKPhI="
 											},
-											"name": "condicionesAcceso"
+											"name": "condicionesAcceso",
+											"type": ""
 										},
 										{
 											"_type": "UMLAttribute",
@@ -39881,7 +39889,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6M/BTcKPhI="
 											},
-											"name": "restriccionesLocal"
+											"name": "restriccionesLocal",
+											"type": ""
 										},
 										{
 											"_type": "UMLAttribute",
@@ -39889,7 +39898,8 @@
 											"_parent": {
 												"$ref": "AAAAAAGhV6M/BTcKPhI="
 											},
-											"name": "necesidadesDetectadas"
+											"name": "necesidadesDetectadas",
+											"type": ""
 										}
 									]
 								}
