@@ -10,4 +10,10 @@ package presentacion;
  */
 public class controlPresentacion {
     
+    
+    public void iniciarRegistrarEvento(){
+        JFrameRegistrarDatosEvento registrarEvento = new JFrameRegistrarDatosEvento();
+        registrarEvento.setVisible(true);
+    }
+    
 }
