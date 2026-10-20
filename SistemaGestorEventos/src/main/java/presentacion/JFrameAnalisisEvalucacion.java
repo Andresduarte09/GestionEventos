@@ -176,7 +176,8 @@ public class JFrameAnalisisEvalucacion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRevisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRevisarActionPerformed
-        // TODO add your handling code here:
+        new JFrameRevisarAnalisisEvaluacion().setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnRevisarActionPerformed
 
     /**

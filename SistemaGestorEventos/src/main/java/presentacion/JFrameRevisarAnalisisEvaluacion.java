@@ -4,6 +4,8 @@
  */
 package presentacion;
 
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author armen
@@ -156,7 +158,11 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        SwingUtilities.invokeLater(() -> {
+        JFrameConfigurarPropuesta frmConfigurarPropuesta = new JFrameConfigurarPropuesta();
+        frmConfigurarPropuesta.setVisible(true);
+        });
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void RetrocederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RetrocederActionPerformed

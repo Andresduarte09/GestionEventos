@@ -61,6 +61,7 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
         txtNecesidadesExtra.addActionListener(this::txtNecesidadesExtraActionPerformed);
 
         btnContinuar.setText("Continuar");
+        btnContinuar.addActionListener(this::btnContinuarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -123,6 +124,12 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnComidaActionPerformed
 
+    private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
+        JFrameAnalisisEvalucacion frmAnalisisEvaluacion = new JFrameAnalisisEvalucacion();        
+        frmAnalisisEvaluacion.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnContinuarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -144,7 +151,6 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new JFrameRecursosEvento().setVisible(true));
     }
 
