@@ -651,7 +651,7 @@
 									"font": "Arial;13;0",
 									"left": 629.5,
 									"top": 261,
-									"width": 258,
+									"width": 258.52978515625,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGg61e3iH1gzWE="
@@ -20513,7 +20513,7 @@
 															"top": 950,
 															"width": 87.37255859375,
 															"height": 13,
-															"text": "+idEquipo",
+															"text": "+equipo",
 															"horizontalAlignment": 0
 														},
 														{
@@ -20530,7 +20530,24 @@
 															"top": 965,
 															"width": 87.37255859375,
 															"height": 13,
-															"text": "+nombre",
+															"text": "+servicios",
+															"horizontalAlignment": 0
+														},
+														{
+															"_type": "UMLAttributeView",
+															"_id": "AAAAAAGhYED/Kpdhoxk=",
+															"_parent": {
+																"$ref": "AAAAAAGhX9pn+DpzWoA="
+															},
+															"model": {
+																"$ref": "AAAAAAGhYED/GJbppDk="
+															},
+															"font": "Arial;13;0",
+															"left": 485,
+															"top": 980,
+															"width": 87.37255859375,
+															"height": 13,
+															"text": "+personal",
 															"horizontalAlignment": 0
 														},
 														{
@@ -20544,7 +20561,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 485,
-															"top": 980,
+															"top": 995,
 															"width": 87.37255859375,
 															"height": 13,
 															"text": "+disponibilidad",
@@ -20555,7 +20572,7 @@
 													"left": 480,
 													"top": 945,
 													"width": 97.37255859375,
-													"height": 53
+													"height": 68
 												},
 												{
 													"_type": "UMLOperationCompartmentView",
@@ -20611,7 +20628,7 @@
 											"left": 480,
 											"top": 880,
 											"width": 96.37255859375,
-											"height": 118,
+											"height": 133,
 											"stereotypeDisplay": "icon",
 											"nameCompartment": {
 												"$ref": "AAAAAAGhX9pn+DpufnQ="
@@ -20651,8 +20668,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 740,
-													"top": 1049,
+													"left": 739,
+													"top": 1053,
 													"height": 13,
 													"alpha": 1.5707963267948966,
 													"distance": 15,
@@ -20672,8 +20689,8 @@
 													},
 													"visible": null,
 													"font": "Arial;13;0",
-													"left": 748,
-													"top": 1036,
+													"left": 747,
+													"top": 1040,
 													"height": 13,
 													"alpha": 1.5707963267948966,
 													"distance": 30,
@@ -20693,8 +20710,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 723,
-													"top": 1074,
+													"left": 724,
+													"top": 1078,
 													"height": 13,
 													"alpha": -1.5707963267948966,
 													"distance": 15,
@@ -20715,7 +20732,7 @@
 													"visible": false,
 													"font": "Arial;13;0",
 													"left": 606,
-													"top": 965,
+													"top": 971,
 													"height": 13,
 													"alpha": 0.5235987755982988,
 													"distance": 30,
@@ -20735,8 +20752,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 616,
-													"top": 955,
+													"left": 615,
+													"top": 961,
 													"height": 13,
 													"alpha": 0.7853981633974483,
 													"distance": 40,
@@ -20756,7 +20773,7 @@
 													},
 													"font": "Arial;13;0",
 													"left": 579,
-													"top": 986,
+													"top": 992,
 													"width": 19.5126953125,
 													"height": 13,
 													"alpha": -0.5235987755982988,
@@ -20778,8 +20795,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 873,
-													"top": 1134,
+													"left": 872,
+													"top": 1135,
 													"height": 13,
 													"alpha": -0.5235987755982988,
 													"distance": 30,
@@ -20798,8 +20815,8 @@
 													},
 													"visible": false,
 													"font": "Arial;13;0",
-													"left": 878,
-													"top": 1121,
+													"left": 877,
+													"top": 1123,
 													"height": 13,
 													"alpha": -0.7853981633974483,
 													"distance": 40,
@@ -20818,7 +20835,7 @@
 													},
 													"font": "Arial;13;0",
 													"left": 853,
-													"top": 1159,
+													"top": 1161,
 													"width": 19.5126953125,
 													"height": 13,
 													"alpha": 0.5235987755982988,
@@ -20865,7 +20882,7 @@
 												"$ref": "AAAAAAGhX9pn+Dpt3LI="
 											},
 											"lineStyle": 1,
-											"points": "577:970;887:1167",
+											"points": "577:977;887:1168",
 											"showVisibility": true,
 											"nameLabel": {
 												"$ref": "AAAAAAGhX+D0UPm+rIs="
@@ -20912,8 +20929,8 @@
 											"left": 376,
 											"top": 888,
 											"width": 100,
-											"height": 116,
-											"text": "Inventario es el catálogo de equipos que la empresa tiene registrados, con su disponibilidad conocida."
+											"height": 168,
+											"text": "Inventario es el catálogo de cosas importantes que la empresa tiene registrada, ya sea el equipo interno, los servicios disponibles y el personal"
 										}
 									]
 								},
@@ -20958,9 +20975,9 @@
 																		"$ref": "AAAAAAGUYVXt8mJ5bTU="
 																	},
 																	"font": "Arial;13;0",
-																	"left": 22.55908203125,
+																	"left": 24.72998046875,
 																	"top": 5,
-																	"width": 47.6708984375,
+																	"width": 52.03173828125,
 																	"height": 13,
 																	"text": "cu_1_FB"
 																},
@@ -20973,7 +20990,7 @@
 																	"font": "Arial;13;1",
 																	"left": 5,
 																	"top": 5,
-																	"width": 11.55908203125,
+																	"width": 13.72998046875,
 																	"height": 13,
 																	"text": "sd"
 																}
@@ -25557,9 +25574,9 @@
 																		"$ref": "AAAAAAGhVaAI6StDLxc="
 																	},
 																	"font": "Arial;13;0",
-																	"left": 154.11181640625,
+																	"left": 155.578125,
 																	"top": 293,
-																	"width": 157.73291015625,
+																	"width": 179.18798828125,
 																	"height": 13,
 																	"text": "mientras se seleccione recurso"
 																},
@@ -25572,7 +25589,7 @@
 																	"font": "Arial;13;1",
 																	"left": 125,
 																	"top": 293,
-																	"width": 23.11181640625,
+																	"width": 24.578125,
 																	"height": 13,
 																	"text": "loop"
 																},
@@ -33738,9 +33755,9 @@
 																		"$ref": "AAAAAAGUYVaAUWKIarQ="
 																	},
 																	"font": "Arial;13;0",
-																	"left": 30.55908203125,
+																	"left": 32.72998046875,
 																	"top": 13,
-																	"width": 47.42333984375,
+																	"width": 51.314453125,
 																	"height": 13,
 																	"text": "cu_1_FA"
 																},
@@ -33753,7 +33770,7 @@
 																	"font": "Arial;13;1",
 																	"left": 13,
 																	"top": 13,
-																	"width": 11.55908203125,
+																	"width": 13.72998046875,
 																	"height": 13,
 																	"text": "sd"
 																}
@@ -40596,7 +40613,7 @@
 											"_parent": {
 												"$ref": "AAAAAAGhX9pn+DpsSVA="
 											},
-											"name": "idEquipo",
+											"name": "equipo",
 											"type": ""
 										},
 										{
@@ -40605,7 +40622,16 @@
 											"_parent": {
 												"$ref": "AAAAAAGhX9pn+DpsSVA="
 											},
-											"name": "nombre",
+											"name": "servicios",
+											"type": ""
+										},
+										{
+											"_type": "UMLAttribute",
+											"_id": "AAAAAAGhYED/GJbppDk=",
+											"_parent": {
+												"$ref": "AAAAAAGhX9pn+DpsSVA="
+											},
+											"name": "personal",
 											"type": ""
 										},
 										{
