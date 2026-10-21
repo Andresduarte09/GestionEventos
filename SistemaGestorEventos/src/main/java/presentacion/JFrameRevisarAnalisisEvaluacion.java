@@ -4,6 +4,7 @@
  */
 package presentacion;
 
+import static java.awt.SystemColor.control;
 import javax.swing.SwingUtilities;
 
 /**
@@ -13,6 +14,7 @@ import javax.swing.SwingUtilities;
 public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRevisarAnalisisEvaluacion.class.getName());
+    private controlPresentacion control = new controlPresentacion();
 
     /**
      * Creates new form JFrameRevisarAnalisisEvaluacion
@@ -159,8 +161,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         SwingUtilities.invokeLater(() -> {
-        JFrameConfigurarPropuesta frmConfigurarPropuesta = new JFrameConfigurarPropuesta();
-        frmConfigurarPropuesta.setVisible(true);
+        control.iniciarConfigurarPropuesta();
         });
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
