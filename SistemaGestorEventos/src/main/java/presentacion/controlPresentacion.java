@@ -75,11 +75,6 @@ public class controlPresentacion {
         revisarAnalisisEvaluacion.setVisible(true);
     }
     
-    public void iniciarConfiguracionPropuesta(){    
-        JFrameConfigurarPropuesta configurarPropuesta = new JFrameConfigurarPropuesta();
-        configurarPropuesta.setVisible(true);
-    }
-    
     public void iniciarRegistrarCotizacion(){
         JFrameRegistrarCotizacion registrarCotizacion = new JFrameRegistrarCotizacion();
         registrarCotizacion.setVisible(true);

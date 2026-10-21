@@ -161,11 +161,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        SwingUtilities.invokeLater(() -> {
         control.iniciarConfigurarPropuesta();
-        });
-
-        control.iniciarConfiguracionPropuesta();
 
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
