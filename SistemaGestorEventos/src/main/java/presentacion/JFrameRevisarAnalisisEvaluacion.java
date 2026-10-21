@@ -8,19 +8,19 @@ import static java.awt.SystemColor.control;
 import javax.swing.SwingUtilities;
 
 /**
- *
+ * SE MODIFICO ESTA CLASE, SI HAY ALGUN ERROR CHECAR LOGICA DE AQUI
  * @author armen
  */
 public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRevisarAnalisisEvaluacion.class.getName());
     private controlPresentacion control = new controlPresentacion();
-
     /**
      * Creates new form JFrameRevisarAnalisisEvaluacion
      */
     public JFrameRevisarAnalisisEvaluacion() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -160,9 +160,13 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
         SwingUtilities.invokeLater(() -> {
         control.iniciarConfigurarPropuesta();
         });
+
+        control.iniciarConfiguracionPropuesta();
+
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 

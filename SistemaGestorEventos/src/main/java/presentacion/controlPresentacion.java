@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package presentacion;
 
 /**
@@ -9,6 +5,7 @@ package presentacion;
  * @author lui
  */
 public class controlPresentacion {
+    
     JFrameRecursosEvento recursosEvento = new JFrameRecursosEvento();
     private JFrameConfigurarPropuesta configurarPropuesta;
     
@@ -23,9 +20,11 @@ public class controlPresentacion {
     }
     
     public void iniciarRecursosEvento(){
+        JFrameRecursosEvento recursosEvento = new JFrameRecursosEvento();
         recursosEvento.setVisible(true);
     }
     
+
     
     //Aqui va la inicializacion de la pantalla de configuracion de propuesta
     public void iniciarConfigurarPropuesta() {
@@ -66,6 +65,23 @@ public class controlPresentacion {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
     }
     
+    public void iniciarAnalisisEvaluacion(){
+        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion();
+        analisisEvaluacion.setVisible(true);
+    }
     
+    public void iniciarRevisarAnalisisEvaluacion(){
+        JFrameRevisarAnalisisEvaluacion revisarAnalisisEvaluacion = new JFrameRevisarAnalisisEvaluacion();
+        revisarAnalisisEvaluacion.setVisible(true);
+    }
     
+    public void iniciarConfiguracionPropuesta(){    
+        JFrameConfigurarPropuesta configurarPropuesta = new JFrameConfigurarPropuesta();
+        configurarPropuesta.setVisible(true);
+    }
+    
+    public void iniciarRegistrarCotizacion(){
+        JFrameRegistrarCotizacion registrarCotizacion = new JFrameRegistrarCotizacion();
+        registrarCotizacion.setVisible(true);
+    }
 }

@@ -9,7 +9,7 @@ package presentacion;
  * @author armen
  */
 public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
-    
+    controlPresentacion control = new controlPresentacion();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameAnalisisEvaluacion.class.getName());
 
     /**
@@ -17,6 +17,7 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
      */
     public JFrameAnalisisEvaluacion() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -176,7 +177,7 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRevisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRevisarActionPerformed
-        new JFrameRevisarAnalisisEvaluacion().setVisible(true);
+        control.iniciarRevisarAnalisisEvaluacion();
         this.dispose();
     }//GEN-LAST:event_btnRevisarActionPerformed
 

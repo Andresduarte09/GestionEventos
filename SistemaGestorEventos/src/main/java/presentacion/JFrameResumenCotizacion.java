@@ -15,8 +15,10 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
     /**
      * Creates new form JFrameResumenCotizacion
      */
+    controlPresentacion control = new controlPresentacion();
     public JFrameResumenCotizacion() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -251,6 +253,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         btnAtras.setText("Atrás");
 
         btnAprobar.setText("Aprobar");
+        btnAprobar.addActionListener(this::btnAprobarActionPerformed);
 
         btnModificar.setText("Modificar");
 
@@ -299,6 +302,11 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAprobarActionPerformed
+        control.iniciarRegistrarCotizacion();
+        this.dispose();
+    }//GEN-LAST:event_btnAprobarActionPerformed
 
     /**
      * @param args the command line arguments
