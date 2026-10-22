@@ -182,7 +182,8 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarCotizaciónActionPerformed
 
     private void btnCancelarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarRegistroActionPerformed
-        // TODO add your handling code here:
+        control.iniciarResumenCotizacion();
+        this.dispose();
     }//GEN-LAST:event_btnCancelarRegistroActionPerformed
 
     /**
