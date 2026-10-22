@@ -10,4 +10,5 @@
         <maven.compiler.release>25</maven.compiler.release>
         <exec.mainClass>com.mycompany.dto_sistemagestorevento.DTO_SistemaGestorEvento</exec.mainClass>
     </properties>
+    <name>objetosdto_SistemaGestorEvento</name>
 </project>
