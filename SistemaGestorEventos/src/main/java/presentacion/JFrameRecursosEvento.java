@@ -29,15 +29,18 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnNecesidadesExtra = new javax.swing.JButton();
         lblTituloRecursosEvento = new javax.swing.JLabel();
         btnComida = new javax.swing.JButton();
         btnEntretenimiento = new javax.swing.JButton();
         btnDecoracion = new javax.swing.JButton();
         btnIluminacion = new javax.swing.JButton();
         btnPantallas = new javax.swing.JButton();
-        btnNecesidadesExtra = new javax.swing.JButton();
         txtNecesidadesExtra = new javax.swing.JTextField();
         btnContinuar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+
+        btnNecesidadesExtra.setText("Necesidades extra");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,13 +58,13 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
 
         btnPantallas.setText("Pantallas");
 
-        btnNecesidadesExtra.setText("Necesidades extra");
-
         txtNecesidadesExtra.setText("                                              ");
         txtNecesidadesExtra.addActionListener(this::txtNecesidadesExtraActionPerformed);
 
         btnContinuar.setText("Continuar");
         btnContinuar.addActionListener(this::btnContinuarActionPerformed);
+
+        jLabel1.setText("Necesidades extra");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,15 +82,20 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
                             .addComponent(btnComida, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnIluminacion, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDecoracion, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnPantallas, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnNecesidadesExtra)))
+                            .addComponent(btnPantallas, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(125, 125, 125)
-                        .addComponent(txtNecesidadesExtra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(160, 160, 160)
-                        .addComponent(btnContinuar)))
+                        .addGap(151, 151, 151)
+                        .addComponent(jLabel1)))
                 .addContainerGap(102, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(txtNecesidadesExtra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(126, 126, 126))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnContinuar)
+                        .addGap(168, 168, 168))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -105,12 +113,12 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(btnPantallas)
                 .addGap(18, 18, 18)
-                .addComponent(btnNecesidadesExtra)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtNecesidadesExtra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(btnContinuar)
-                .addContainerGap())
+                .addGap(17, 17, 17))
         );
 
         pack();
@@ -162,6 +170,7 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
     private javax.swing.JButton btnIluminacion;
     private javax.swing.JButton btnNecesidadesExtra;
     private javax.swing.JButton btnPantallas;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblTituloRecursosEvento;
     private javax.swing.JTextField txtNecesidadesExtra;
     // End of variables declaration//GEN-END:variables

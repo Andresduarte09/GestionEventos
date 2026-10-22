@@ -9,7 +9,7 @@ import java.time.LocalTime;
 
 
 public class DTOLevantamiento {
-    int idLevatamiento;
+    int idLevantamiento;
     LocalDate fechaLevantamiento;
     LocalTime horarioMontaje;
     LocalTime horarioDesmontaje;
@@ -19,11 +19,11 @@ public class DTOLevantamiento {
     public DTOLevantamiento(){}
 
     public int getIdLevatamiento() {
-        return idLevatamiento;
+        return idLevantamiento;
     }
 
     public void setIdLevatamiento(int idLevatamiento) {
-        this.idLevatamiento = idLevatamiento;
+        this.idLevantamiento = idLevatamiento;
     }
 
     public LocalDate getFechaLevantamiento() {
@@ -68,13 +68,13 @@ public class DTOLevantamiento {
 
     @Override
     public String toString() {
-        return "DTOLevantamiento{" + "idLevatamiento=" + idLevatamiento + ", fechaLevantamiento=" + fechaLevantamiento + ", horarioMontaje=" + horarioMontaje + ", horarioDesmontaje=" + horarioDesmontaje + ", estadoLevantamiento=" + estadoLevantamiento + ", observaciones=" + observaciones + '}';
+        return "DTOLevantamiento{" + "idLevatamiento=" + idLevantamiento + ", fechaLevantamiento=" + fechaLevantamiento + ", horarioMontaje=" + horarioMontaje + ", horarioDesmontaje=" + horarioDesmontaje + ", estadoLevantamiento=" + estadoLevantamiento + ", observaciones=" + observaciones + '}';
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + this.idLevatamiento;
+        hash = 67 * hash + this.idLevantamiento;
         return hash;
     }
 
@@ -90,7 +90,7 @@ public class DTOLevantamiento {
             return false;
         }
         final DTOLevantamiento other = (DTOLevantamiento) obj;
-        return this.idLevatamiento == other.idLevatamiento;
+        return this.idLevantamiento == other.idLevantamiento;
     }
     
     

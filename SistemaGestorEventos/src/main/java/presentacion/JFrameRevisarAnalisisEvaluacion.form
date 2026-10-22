@@ -188,7 +188,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Segoe UI" size="24" style="2"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Anl&#xe1;lisis y Evaluaci&#xf3;n de espacio"/>
+        <Property name="text" type="java.lang.String" value="An&#xe1;lisis y Evaluaci&#xf3;n de espacio"/>
       </Properties>
     </Component>
   </SubComponents>

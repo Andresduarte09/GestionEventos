@@ -82,7 +82,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         Retroceder.addActionListener(this::RetrocederActionPerformed);
 
         lblTituloAnalisisEvaluacion.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
-        lblTituloAnalisisEvaluacion.setText("Anlálisis y Evaluación de espacio");
+        lblTituloAnalisisEvaluacion.setText("Análisis y Evaluación de espacio");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
