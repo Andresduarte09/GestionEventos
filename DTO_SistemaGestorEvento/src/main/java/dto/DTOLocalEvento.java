@@ -30,7 +30,6 @@ public class DTOLocalEvento {
     }
     
     
-    
     public int getIdLocalEvento() {
         return idLocalEvento;
     }
@@ -86,5 +85,4 @@ public class DTOLocalEvento {
     public void setNecesidadesDetectadas(String necesidadesDetectadas) {
         this.necesidadesDetectadas = necesidadesDetectadas;
     }
-
 }

@@ -17,6 +17,8 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
      */
     public JFrameGenerarOrden() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        
     }
 
     /**

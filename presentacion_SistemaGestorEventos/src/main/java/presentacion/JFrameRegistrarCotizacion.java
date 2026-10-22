@@ -9,7 +9,7 @@ package presentacion;
  * @author armen
  */
 public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
-    
+    controlPresentacion control = new controlPresentacion();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRegistrarCotizacion.class.getName());
 
     /**
@@ -17,6 +17,7 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
      */
     public JFrameRegistrarCotizacion() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -176,11 +177,13 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void btnRegistrarCotizaciónActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCotizaciónActionPerformed
-        // TODO add your handling code here:
+        control.iniciarGenerarOrden();
+        this.dispose();
     }//GEN-LAST:event_btnRegistrarCotizaciónActionPerformed
 
     private void btnCancelarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarRegistroActionPerformed
-        // TODO add your handling code here:
+        control.iniciarResumenCotizacion();
+        this.dispose();
     }//GEN-LAST:event_btnCancelarRegistroActionPerformed
 
     /**
