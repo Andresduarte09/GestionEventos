@@ -16,14 +16,16 @@ public class dtoInventario {
     private List<dtoEquipo> equipos = new ArrayList<>();
     private List<dtoPersonal> personal = new ArrayList<>();
     private List<dtoServicio> servicios = new ArrayList<>();
+    private int disponibilidad; 
 
     public dtoInventario() {
     }
 
-    public dtoInventario(List<dtoEquipo> equipos, List<dtoPersonal> personal, List<dtoServicio> servicios) {
+    public dtoInventario(List<dtoEquipo> equipos, List<dtoPersonal> personal, List<dtoServicio> servicios, int disponibilidad) {
         this.equipos = equipos;
         this.personal = personal;
         this.servicios = servicios;
+        this.disponibilidad = disponibilidad;
     }
 
     public List<dtoEquipo> getEquipos() {
@@ -49,4 +51,14 @@ public class dtoInventario {
     public void setServicios(List<dtoServicio> servicios) {
         this.servicios = servicios;
     }
+
+    public int getDisponibilidad() {
+        return disponibilidad;
+    }
+
+    public void setDisponibilidad(int disponibilidad) {
+        this.disponibilidad = disponibilidad;
+    }
+    
+    
 }
