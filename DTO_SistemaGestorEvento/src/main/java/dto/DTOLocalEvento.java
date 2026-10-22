@@ -8,16 +8,28 @@ package dto;
  *
  * @author luise
  */
-public class LocalEvento {
+public class DTOLocalEvento {
     int idLocalEvento;
     String tipoLocal;
     String dimensionesLugar;
-    String dimencionesEspacios;
+    String dimensionesEspacios;
     String condicionesAcceso;
     String restriccionesLocal;
     String necesidadesDetectadas;
 
-    public LocalEvento(){}
+    public DTOLocalEvento(){}
+
+    public DTOLocalEvento(int idLocalEvento, String tipoLocal, String dimensionesLugar, String dimensionesEspacios, String condicionesAcceso, String restriccionesLocal, String necesidadesDetectadas) {
+        this.idLocalEvento = idLocalEvento;
+        this.tipoLocal = tipoLocal;
+        this.dimensionesLugar = dimensionesLugar;
+        this.dimensionesEspacios = dimensionesEspacios;
+        this.condicionesAcceso = condicionesAcceso;
+        this.restriccionesLocal = restriccionesLocal;
+        this.necesidadesDetectadas = necesidadesDetectadas;
+    }
+    
+    
     
     public int getIdLocalEvento() {
         return idLocalEvento;
@@ -43,12 +55,12 @@ public class LocalEvento {
         this.dimensionesLugar = dimensionesLugar;
     }
 
-    public String getDimencionesEspacios() {
-        return dimencionesEspacios;
+    public String getDimensionesEspacios() {
+        return dimensionesEspacios;
     }
 
-    public void setDimencionesEspacios(String dimencionesEspacios) {
-        this.dimencionesEspacios = dimencionesEspacios;
+    public void setDimensionesEspacios(String dimencionesEspacios) {
+        this.dimensionesEspacios = dimencionesEspacios;
     }
 
     public String getCondicionesAcceso() {
@@ -75,33 +87,4 @@ public class LocalEvento {
         this.necesidadesDetectadas = necesidadesDetectadas;
     }
 
-    @Override
-    public String toString() {
-        return "LocalEvento{" + "idLocalEvento=" + idLocalEvento + ", tipoLocal=" + tipoLocal + ", dimensionesLugar=" + dimensionesLugar + ", dimencionesEspacios=" + dimencionesEspacios + ", condicionesAcceso=" + condicionesAcceso + ", restriccionesLocal=" + restriccionesLocal + ", necesidadesDetectadas=" + necesidadesDetectadas + '}';
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + this.idLocalEvento;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final LocalEvento other = (LocalEvento) obj;
-        return this.idLocalEvento == other.idLocalEvento;
-    }
-    
-    
-    
 }
