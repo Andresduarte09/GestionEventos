@@ -79,4 +79,9 @@ public class controlPresentacion {
         JFrameRegistrarCotizacion registrarCotizacion = new JFrameRegistrarCotizacion();
         registrarCotizacion.setVisible(true);
     }
+    
+    public void iniciarResumenCotizacion(){
+        JFrameResumenCotizacion resumenCotizacion = new JFrameResumenCotizacion();
+        resumenCotizacion.setVisible(true);
+    }
 }

@@ -7,6 +7,7 @@ package presentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -19,11 +20,12 @@ import javax.swing.JTextArea;
  * @author Andre
  */
 public class PanelResumen extends JPanel {
-
+    
     private final controlPresentacion control;
     private JLabel lblEncabezado;
     private JTextArea txtResumenPropuesta, txtComentarios;
     private JButton btnVolver, btnEnviarCotizacion;
+    private JFrameConfigurarPropuesta configurarPropuesta;
 
     public PanelResumen(controlPresentacion control) {
         this.control = control;
@@ -57,5 +59,9 @@ public class PanelResumen extends JPanel {
         add(lblEncabezado, BorderLayout.NORTH);
         add(pnlCentro, BorderLayout.CENTER);
         add(pnlSur, BorderLayout.SOUTH);
+        
+        btnEnviarCotizacion.addActionListener(e -> this.control.iniciarResumenCotizacion());
+        
     }
+    
 }
