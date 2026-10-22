@@ -1,4 +1,5 @@
 package presentacion;
+import dto.*;
 
 /**
  *
@@ -23,8 +24,6 @@ public class controlPresentacion {
         JFrameRecursosEvento recursosEvento = new JFrameRecursosEvento();
         recursosEvento.setVisible(true);
     }
-    
-
     
     //Aqui va la inicializacion de la pantalla de configuracion de propuesta
     public void iniciarConfigurarPropuesta() {
