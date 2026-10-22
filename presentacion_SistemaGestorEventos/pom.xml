@@ -13,9 +13,9 @@
     <dependencies>
         <dependency>
             <groupId>com.equipogestioneventos</groupId>
-            <artifactId>DTO_SistemaGestorEvento</artifactId>
+            <artifactId>objetosdto_SistemaGestorEvento</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>    
+        </dependency>
     </dependencies>    
     <name>presentacion_SistemaGestorEventos</name>
 </project>

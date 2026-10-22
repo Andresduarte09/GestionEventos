@@ -6,8 +6,8 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>../DTO_SistemaGestorEvento</module>
-        <module>../SistemaGestorEventos</module>
+        <module>../objetosdto_SistemaGestorEvento</module>
+        <module>../presentacion_SistemaGestorEventos</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
