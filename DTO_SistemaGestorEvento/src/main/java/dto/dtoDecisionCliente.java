@@ -10,21 +10,21 @@ package dto;
  */
 import java.time.LocalDate;
 public class dtoDecisionCliente {
-    private String idDecision;
+    private int idDecision;
     private LocalDate fecha;
     private String tipoDecision;
     private String observaciones;
     
     public dtoDecisionCliente(){}
     
-    public dtoDecisionCliente(String idDecision, LocalDate fecha, String tipoDecision, String observaciones){
+    public dtoDecisionCliente(int idDecision, LocalDate fecha, String tipoDecision, String observaciones){
             this.idDecision = idDecision; 
             this.fecha= fecha;
             this.tipoDecision = tipoDecision;
             this.observaciones = observaciones;
     }
 
-    public String getIdDecision() {
+    public int getIdDecision() {
         return idDecision;
     }
 
@@ -40,7 +40,7 @@ public class dtoDecisionCliente {
         return observaciones;
     }
 
-    public void setIdDecision(String idDecision) {
+    public void setIdDecision(int idDecision) {
         this.idDecision = idDecision;
     }
 

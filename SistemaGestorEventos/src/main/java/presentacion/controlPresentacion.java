@@ -85,4 +85,9 @@ public class controlPresentacion {
         JFrameResumenCotizacion resumenCotizacion = new JFrameResumenCotizacion();
         resumenCotizacion.setVisible(true);
     }
-}
+    
+    public void iniciarGenerarOrden(){
+        JFrameGenerarOrden generarOrden = new JFrameGenerarOrden();
+        generarOrden.setVisible(true);
+    }
+}   
