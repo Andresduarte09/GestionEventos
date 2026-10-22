@@ -17,7 +17,6 @@ public class dtoDetalleCotizacion {
     private int ID;
     private LocalTime horarioFases;
     List<dtoInventario> inventario = new ArrayList<>();
-    private int cantidad;
     private float importe;
 
     public int getID() {
@@ -42,14 +41,6 @@ public class dtoDetalleCotizacion {
 
     public void setInventario(List<dtoInventario> inventario) {
         this.inventario = inventario;
-    }
-
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
     }
 
     public float getImporte() {
