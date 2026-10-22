@@ -10,5 +10,12 @@
         <maven.compiler.release>21</maven.compiler.release>
         <exec.mainClass>com.equipogestioneventos.sistemagestoreventos.SistemaGestorEventos</exec.mainClass>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.equipogestioneventos</groupId>
+            <artifactId>DTO_SistemaGestorEvento</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>    
+    </dependencies>    
     <name>presentacion_SistemaGestorEventos</name>
 </project>
