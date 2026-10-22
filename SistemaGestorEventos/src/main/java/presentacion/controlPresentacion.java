@@ -81,6 +81,7 @@ public class controlPresentacion {
     }
     
     public void iniciarResumenCotizacion(){
+        configurarPropuesta.dispose();
         JFrameResumenCotizacion resumenCotizacion = new JFrameResumenCotizacion();
         resumenCotizacion.setVisible(true);
     }
