@@ -1,5 +1,15 @@
-package presentacion;
-import dto.*;
+package presentacion.control;
+
+import presentacion.vistas.JFrameAnalisisEvaluacion;
+import presentacion.vistas.JFrameConfigurarPropuesta;
+import presentacion.vistas.JFrameGenerarOrden;
+import presentacion.vistas.JFrameInicioSesion;
+import presentacion.vistas.JFrameRecursosEvento;
+import presentacion.vistas.JFrameRegistrarCotizacion;
+import presentacion.vistas.JFrameRegistrarDatosEvento;
+import presentacion.vistas.JFrameResumenCotizacion;
+import presentacion.vistas.JFrameRevisarAnalisisEvaluacion;
+
 
 /**
  *

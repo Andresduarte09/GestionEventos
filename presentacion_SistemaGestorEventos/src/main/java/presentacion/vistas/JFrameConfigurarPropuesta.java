@@ -1,5 +1,12 @@
-package presentacion;
+package presentacion.vistas;
 
+import presentacion.paneles.PanelServicios;
+import presentacion.paneles.PanelResumen;
+import presentacion.paneles.PanelProveedor;
+import presentacion.paneles.PanelPersonal;
+import presentacion.paneles.PanelFolio;
+import presentacion.paneles.PanelEquipo;
+import presentacion.control.controlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
