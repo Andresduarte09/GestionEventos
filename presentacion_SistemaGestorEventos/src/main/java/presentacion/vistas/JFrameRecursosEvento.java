@@ -3,6 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package presentacion.vistas;
+import java.awt.CardLayout;
+import java.awt.Dimension;
+import javax.swing.JPanel;
+import presentacion.control.controlPresentacion;
+import presentacion.paneles.PanelComida;
+import presentacion.paneles.PanelDecoracion;
+import presentacion.paneles.PanelEntretenimiento;
+import presentacion.paneles.PanelIluminacion;
+import presentacion.paneles.PanelPantallas;
 /**
  *
  * @author lui
@@ -10,13 +19,52 @@ package presentacion.vistas;
 public class JFrameRecursosEvento extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRecursosEvento.class.getName());
+    // Identificadores de cada panel en el CardLayout
+    public static final String PANEL_MENU = "PanelMenu";
+    public static final String PANEL_COMIDA = "PanelComida";
+    public static final String PANEL_ENTRETENIMIENTO = "PanelEntretenimiento";
+    public static final String PANEL_ILUMINACION = "PanelIluminacion";
+    public static final String PANEL_DECORACION = "PanelDecoracion";
+    public static final String PANEL_PANTALLAS = "PanelPantallas";
 
-    /**
-     * Creates new form JFrameRecursosEvento
-     */
-    public JFrameRecursosEvento() {
+    private final controlPresentacion control;
+    private JPanel pnlContenido;
+    private CardLayout layoutPaneles;
+
+    public JFrameRecursosEvento(controlPresentacion control) {
+        this.control = control;
         initComponents();
+        iniciarPaneles();
         this.setLocationRelativeTo(null);
+    }
+
+    //El menu del disenador pasa a ser una carta mas del CardLayout, junto a los 5 paneles
+    private void iniciarPaneles() {
+        JPanel pnlMenu = (JPanel) getContentPane();
+        Dimension tamano = pnlMenu.getPreferredSize();
+
+        layoutPaneles = new CardLayout();
+        pnlContenido = new JPanel(layoutPaneles);
+        setContentPane(pnlContenido);
+
+        pnlContenido.add(pnlMenu, PANEL_MENU);
+        agregarPanel(new PanelComida(control), PANEL_COMIDA, tamano);
+        agregarPanel(new PanelEntretenimiento(control), PANEL_ENTRETENIMIENTO, tamano);
+        agregarPanel(new PanelIluminacion(control), PANEL_ILUMINACION, tamano);
+        agregarPanel(new PanelDecoracion(control), PANEL_DECORACION, tamano);
+        agregarPanel(new PanelPantallas(control), PANEL_PANTALLAS, tamano);
+
+        navegarA(PANEL_MENU);
+        pack();
+    }
+    
+    private void agregarPanel(JPanel panel, String nombre, Dimension tamano) {
+        panel.setPreferredSize(tamano);
+        pnlContenido.add(panel, nombre);
+    }
+
+    public void navegarA(String nombrePanel) {
+        layoutPaneles.show(pnlContenido, nombrePanel);
     }
 
     /**
@@ -42,6 +90,8 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
         btnNecesidadesExtra.setText("Necesidades extra");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(900, 800));
+        setResizable(false);
 
         lblTituloRecursosEvento.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         lblTituloRecursosEvento.setText("Recursos del evento");
@@ -50,12 +100,16 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
         btnComida.addActionListener(this::btnComidaActionPerformed);
 
         btnEntretenimiento.setText("Entretenimiento");
+        btnEntretenimiento.addActionListener(this::btnEntretenimientoActionPerformed);
 
         btnDecoracion.setText("Decoración");
+        btnDecoracion.addActionListener(this::btnDecoracionActionPerformed);
 
         btnIluminacion.setText("Iluminación");
+        btnIluminacion.addActionListener(this::btnIluminacionActionPerformed);
 
         btnPantallas.setText("Pantallas");
+        btnPantallas.addActionListener(this::btnPantallasActionPerformed);
 
         txtNecesidadesExtra.setText("                                              ");
         txtNecesidadesExtra.addActionListener(this::txtNecesidadesExtraActionPerformed);
@@ -69,53 +123,49 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 353, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(104, 104, 104)
-                        .addComponent(lblTituloRecursosEvento))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(139, 139, 139)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnContinuar)
+                        .addGap(168, 168, 168))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblTituloRecursosEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(328, 328, 328))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNecesidadesExtra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnEntretenimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnComida, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnIluminacion, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDecoracion, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnPantallas, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(151, 151, 151)
-                        .addComponent(jLabel1)))
-                .addContainerGap(102, Short.MAX_VALUE))
+                            .addComponent(btnPantallas, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(354, 354, 354))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(txtNecesidadesExtra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(126, 126, 126))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btnContinuar)
-                        .addGap(168, 168, 168))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(392, 392, 392))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblTituloRecursosEvento)
-                .addGap(27, 27, 27)
+                .addContainerGap(160, Short.MAX_VALUE)
+                .addComponent(lblTituloRecursosEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
                 .addComponent(btnComida)
-                .addGap(18, 18, 18)
+                .addGap(42, 42, 42)
                 .addComponent(btnEntretenimiento)
-                .addGap(18, 18, 18)
+                .addGap(44, 44, 44)
                 .addComponent(btnIluminacion)
-                .addGap(18, 18, 18)
+                .addGap(47, 47, 47)
                 .addComponent(btnDecoracion)
-                .addGap(18, 18, 18)
+                .addGap(48, 48, 48)
                 .addComponent(btnPantallas)
-                .addGap(18, 18, 18)
+                .addGap(38, 38, 38)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(txtNecesidadesExtra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addGap(102, 102, 102)
                 .addComponent(btnContinuar)
                 .addGap(17, 17, 17))
         );
@@ -128,14 +178,30 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNecesidadesExtraActionPerformed
 
     private void btnComidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComidaActionPerformed
-        // TODO add your handling code here:
+         control.mostrarComida();
     }//GEN-LAST:event_btnComidaActionPerformed
-
+    
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
         JFrameAnalisisEvaluacion frmAnalisisEvaluacion = new JFrameAnalisisEvaluacion();        
         frmAnalisisEvaluacion.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnContinuarActionPerformed
+
+    private void btnEntretenimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntretenimientoActionPerformed
+        control.mostrarEntretenimiento();
+    }//GEN-LAST:event_btnEntretenimientoActionPerformed
+
+    private void btnIluminacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIluminacionActionPerformed
+        control.mostrarIluminacion();
+    }//GEN-LAST:event_btnIluminacionActionPerformed
+
+    private void btnDecoracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecoracionActionPerformed
+        control.mostrarDecoracion();
+    }//GEN-LAST:event_btnDecoracionActionPerformed
+
+    private void btnPantallasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPantallasActionPerformed
+        control.mostrarPantallas();
+    }//GEN-LAST:event_btnPantallasActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

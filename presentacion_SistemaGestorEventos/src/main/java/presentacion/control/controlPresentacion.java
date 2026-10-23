@@ -9,15 +9,14 @@ import presentacion.vistas.JFrameRegistrarCotizacion;
 import presentacion.vistas.JFrameRegistrarDatosEvento;
 import presentacion.vistas.JFrameResumenCotizacion;
 import presentacion.vistas.JFrameRevisarAnalisisEvaluacion;
-
+import dto.*;
 
 /**
  *
  * @author lui
  */
 public class controlPresentacion {
-    
-    JFrameRecursosEvento recursosEvento = new JFrameRecursosEvento();
+    private JFrameRecursosEvento recursosEvento;
     private JFrameConfigurarPropuesta configurarPropuesta;
     
     public void iniciarRegistrarEvento(){
@@ -31,8 +30,15 @@ public class controlPresentacion {
     }
     
     public void iniciarRecursosEvento(){
-        JFrameRecursosEvento recursosEvento = new JFrameRecursosEvento();
+        recursosEvento = new JFrameRecursosEvento(this);
         recursosEvento.setVisible(true);
+    }
+
+    //Paneles de la pantalla de recursos del evento
+    private void mostrarPanelRecursos(String panel) {
+        if (recursosEvento != null) {
+            recursosEvento.navegarA(panel);
+        }
     }
     
     //Aqui va la inicializacion de la pantalla de configuracion de propuesta
@@ -43,13 +49,36 @@ public class controlPresentacion {
         configurarPropuesta.navegarA(JFrameConfigurarPropuesta.PANEL_FOLIO);
         configurarPropuesta.setVisible(true);
     }
+    public void mostrarMenuRecursos() {
+        mostrarPanelRecursos(JFrameRecursosEvento.PANEL_MENU);
+    }
 
+    public void mostrarComida() {
+        mostrarPanelRecursos(JFrameRecursosEvento.PANEL_COMIDA);
+    }
+
+    public void mostrarEntretenimiento() {
+        mostrarPanelRecursos(JFrameRecursosEvento.PANEL_ENTRETENIMIENTO);
+    }
+
+    public void mostrarIluminacion() {
+        mostrarPanelRecursos(JFrameRecursosEvento.PANEL_ILUMINACION);
+    }
+
+    public void mostrarDecoracion() {
+        mostrarPanelRecursos(JFrameRecursosEvento.PANEL_DECORACION);
+    }
+
+    public void mostrarPantallas() {
+        mostrarPanelRecursos(JFrameRecursosEvento.PANEL_PANTALLAS);
+    }
+    
     private void mostrarPanel(String panel) {
         if (configurarPropuesta != null) {
             configurarPropuesta.navegarA(panel);
         }
     }
-
+    
     public void mostrarFolio() {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_FOLIO);
     }
