@@ -11,13 +11,14 @@ import presentacion.control.controlPresentacion;
  * @author armen
  */
 public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
-    controlPresentacion control = new controlPresentacion();
+    private controlPresentacion control;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameAnalisisEvaluacion.class.getName());
 
     /**
      * Creates new form JFrameAnalisisEvalucacion
      */
     public JFrameAnalisisEvaluacion() {
+        this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
     }

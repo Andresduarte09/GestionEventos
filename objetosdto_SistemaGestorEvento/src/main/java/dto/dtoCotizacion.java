@@ -12,17 +12,17 @@ import java.time.LocalDate;
  *
  * @author lui
  */
-public class dtoCotizacion {
+public class DTOCotizacion {
     private int ID;
     private LocalDate fecha;
     private String estadoGeneral;
     private String reglaDescuento;
     private final int porcentajeMaximoDescuento = 10;
     
-    public dtoCotizacion() {
+    public DTOCotizacion() {
     }
 
-    public dtoCotizacion(int ID, LocalDate fecha, String estadoGeneral) {
+    public DTOCotizacion(int ID, LocalDate fecha, String estadoGeneral) {
         this.ID = ID;
         this.fecha = fecha;
         this.estadoGeneral = estadoGeneral;

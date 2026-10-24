@@ -4,6 +4,7 @@
  */
 package presentacion.vistas;
 
+import dto.DTOCliente;
 import presentacion.control.controlPresentacion;
 
 /**
@@ -17,8 +18,11 @@ public class JFrameInicioSesion extends javax.swing.JFrame {
     /**
      * Creates new form JFrameInicioSesion
      */
+    
+    //comentariado por el momento el renglon de abajo
     controlPresentacion control = new controlPresentacion();
     public JFrameInicioSesion() {
+        this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
     }
@@ -94,7 +98,9 @@ public class JFrameInicioSesion extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
     private void btnRegistrarEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEventoActionPerformed
-        control.iniciarRegistrarEvento();
+        DTOCliente cliente = new DTOCliente();
+        cliente.setTelefono(txtTelefono.getText());
+        control.iniciarRegistrarEvento(cliente);
         this.dispose();
     }//GEN-LAST:event_btnRegistrarEventoActionPerformed
 

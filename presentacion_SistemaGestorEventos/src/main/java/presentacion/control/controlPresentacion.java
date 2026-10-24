@@ -19,7 +19,27 @@ public class controlPresentacion {
     private JFrameRecursosEvento recursosEvento;
     private JFrameConfigurarPropuesta configurarPropuesta;
     
-    public void iniciarRegistrarEvento(){
+    //DTO´s que se mueven entre las pantallas y solo el control las conserva
+    private DTOCliente cliente;
+    private DTOEvento evento;
+
+    public void iniciarSesion() {
+        JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
+        inicioSesion.setVisible(true);
+    }
+    
+    public DTOCliente getCliente() {
+        return cliente;
+    }
+
+    public DTOEvento getEvento() {
+        return evento;
+    }
+    
+    
+    //Registra datos del evento (recibe el DTO del cliente)
+    public void iniciarRegistrarEvento(DTOCliente cliente){
+        this.cliente = cliente;
         JFrameRegistrarDatosEvento registrarEvento = new JFrameRegistrarDatosEvento();
         registrarEvento.setVisible(true);
     }

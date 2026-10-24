@@ -8,7 +8,7 @@ package dto;
  *
  * @author Andre
  */
-public class dtoServicio {
+public class DTOServicio {
 
     private int idServicio;
     private String nombre;
@@ -17,10 +17,10 @@ public class dtoServicio {
     private boolean esAdicional;
     private String observaciones;
 
-    public dtoServicio() {
+    public DTOServicio() {
     }
 
-    public dtoServicio(int idServicio, String nombre, String descripcion,
+    public DTOServicio(int idServicio, String nombre, String descripcion,
             boolean seleccionado, boolean esAdicional, String observaciones) {
         this.idServicio = idServicio;
         this.nombre = nombre;

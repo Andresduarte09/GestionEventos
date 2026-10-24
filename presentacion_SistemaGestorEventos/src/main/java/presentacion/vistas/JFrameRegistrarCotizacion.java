@@ -11,13 +11,14 @@ import presentacion.control.controlPresentacion;
  * @author armen
  */
 public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
-    controlPresentacion control = new controlPresentacion();
+    private controlPresentacion control;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRegistrarCotizacion.class.getName());
 
     /**
      * Creates new form JFrameGenerarOrden
      */
-    public JFrameRegistrarCotizacion() {
+    public JFrameRegistrarCotizacion(controlPresentacion control) {
+        this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
     }

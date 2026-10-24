@@ -8,17 +8,17 @@ package dto;
  *
  * @author Andre
  */
-public class dtoEquipo {
+public class DTOEquipo {
 
     private int idEquipo;
     private String nombre;
     private int disponibilidad;
     private int cantidadSeleccionada;
 
-    public dtoEquipo() {
+    public DTOEquipo() {
     }
 
-    public dtoEquipo(int idEquipo, String nombre, int disponibilidad, int cantidadSeleccionada) {
+    public DTOEquipo(int idEquipo, String nombre, int disponibilidad, int cantidadSeleccionada) {
         this.idEquipo = idEquipo;
         this.nombre = nombre;
         this.disponibilidad = disponibilidad;

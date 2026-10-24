@@ -13,10 +13,10 @@ import java.util.List;
  *
  * @author lui
  */
-public class dtoDetalleCotizacion {
+public class DTODetalleCotizacion {
     private int ID;
     private LocalTime horarioFases;
-    List<dtoInventario> inventario = new ArrayList<>();
+    List<DTOInventario> inventario = new ArrayList<>();
     private float importe;
 
     public int getID() {
@@ -35,11 +35,11 @@ public class dtoDetalleCotizacion {
         this.horarioFases = horarioFases;
     }
 
-    public List<dtoInventario> getInventario() {
+    public List<DTOInventario> getInventario() {
         return inventario;
     }
 
-    public void setInventario(List<dtoInventario> inventario) {
+    public void setInventario(List<DTOInventario> inventario) {
         this.inventario = inventario;
     }
 

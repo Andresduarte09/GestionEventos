@@ -9,15 +9,15 @@ package dto;
  * @author armen
  */
 import java.time.LocalDate;
-public class dtoDecisionCliente {
+public class DTODecisionCliente {
     private int idDecision;
     private LocalDate fecha;
     private String tipoDecision;
     private String observaciones;
     
-    public dtoDecisionCliente(){}
+    public DTODecisionCliente(){}
     
-    public dtoDecisionCliente(int idDecision, LocalDate fecha, String tipoDecision, String observaciones){
+    public DTODecisionCliente(int idDecision, LocalDate fecha, String tipoDecision, String observaciones){
             this.idDecision = idDecision; 
             this.fecha= fecha;
             this.tipoDecision = tipoDecision;

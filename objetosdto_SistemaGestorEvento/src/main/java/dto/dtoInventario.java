@@ -11,44 +11,44 @@ import java.util.List;
  * @author Andre
  */
 
-public class dtoInventario {
+public class DTOInventario {
 
-    private List<dtoEquipo> equipos = new ArrayList<>();
-    private List<dtoPersonal> personal = new ArrayList<>();
-    private List<dtoServicio> servicios = new ArrayList<>();
+    private List<DTOEquipo> equipos = new ArrayList<>();
+    private List<DTOPersonal> personal = new ArrayList<>();
+    private List<DTOServicio> servicios = new ArrayList<>();
     private int disponibilidad; 
 
-    public dtoInventario() {
+    public DTOInventario() {
     }
 
-    public dtoInventario(List<dtoEquipo> equipos, List<dtoPersonal> personal, List<dtoServicio> servicios, int disponibilidad) {
+    public DTOInventario(List<DTOEquipo> equipos, List<DTOPersonal> personal, List<DTOServicio> servicios, int disponibilidad) {
         this.equipos = equipos;
         this.personal = personal;
         this.servicios = servicios;
         this.disponibilidad = disponibilidad;
     }
 
-    public List<dtoEquipo> getEquipos() {
+    public List<DTOEquipo> getEquipos() {
         return equipos;
     }
 
-    public void setEquipos(List<dtoEquipo> equipos) {
+    public void setEquipos(List<DTOEquipo> equipos) {
         this.equipos = equipos;
     }
 
-    public List<dtoPersonal> getPersonal() {
+    public List<DTOPersonal> getPersonal() {
         return personal;
     }
 
-    public void setPersonal(List<dtoPersonal> personal) {
+    public void setPersonal(List<DTOPersonal> personal) {
         this.personal = personal;
     }
 
-    public List<dtoServicio> getServicios() {
+    public List<DTOServicio> getServicios() {
         return servicios;
     }
 
-    public void setServicios(List<dtoServicio> servicios) {
+    public void setServicios(List<DTOServicio> servicios) {
         this.servicios = servicios;
     }
 

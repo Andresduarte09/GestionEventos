@@ -9,7 +9,7 @@ package dto;
  * @author Andre
  */
 
-public class dtoPersonal {
+public class DTOPersonal {
 
     private int idEspecialidad;
     private String especialidad;
@@ -18,10 +18,10 @@ public class dtoPersonal {
     private int horasOperacion;
     private int horasDesmontaje;
 
-    public dtoPersonal() {
+    public DTOPersonal() {
     }
 
-    public dtoPersonal(int idEspecialidad, String especialidad, int cantidad,
+    public DTOPersonal(int idEspecialidad, String especialidad, int cantidad,
             int horasMontaje, int horasOperacion, int horasDesmontaje) {
         this.idEspecialidad = idEspecialidad;
         this.especialidad = especialidad;

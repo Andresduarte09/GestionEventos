@@ -14,11 +14,12 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameResumenCotizacion.class.getName());
 
+    private controlPresentacion control;
     /**
      * Creates new form JFrameResumenCotizacion
      */
-    controlPresentacion control = new controlPresentacion();
-    public JFrameResumenCotizacion() {
+    public JFrameResumenCotizacion(controlPresentacion control) {
+        this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
     }

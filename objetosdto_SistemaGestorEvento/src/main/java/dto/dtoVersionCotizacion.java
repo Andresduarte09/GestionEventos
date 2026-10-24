@@ -11,7 +11,7 @@ import java.time.LocalDate;
  *
  * @author lui
  */
-public class dtoVersionCotizacion {
+public class DTOVersionCotizacion {
     private int ID;
     private int numero;
 
@@ -24,10 +24,10 @@ public class dtoVersionCotizacion {
     private final int IVA = 16;
     private float total;
     
-        public dtoVersionCotizacion() {
+        public DTOVersionCotizacion() {
     }
 
-    public dtoVersionCotizacion(int ID, int numero, LocalDate fechaEmision, String estado, String observaciones, float descuento, float subtotal, float total) {
+    public DTOVersionCotizacion(int ID, int numero, LocalDate fechaEmision, String estado, String observaciones, float descuento, float subtotal, float total) {
         this.ID = ID;
         this.numero = numero;
         this.fechaEmision = fechaEmision;

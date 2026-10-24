@@ -17,8 +17,10 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
     /**
      * Creates new form JFrameRegistrarDatosEvento
      */
-    controlPresentacion control = new controlPresentacion();
-    public JFrameRegistrarDatosEvento() {
+    private controlPresentacion control;    
+    
+    public JFrameRegistrarDatosEvento(controlPresentacion control) {
+        this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
         

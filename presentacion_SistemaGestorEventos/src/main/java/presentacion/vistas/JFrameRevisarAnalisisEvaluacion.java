@@ -15,11 +15,12 @@ import javax.swing.SwingUtilities;
 public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRevisarAnalisisEvaluacion.class.getName());
-    private controlPresentacion control = new controlPresentacion();
+    private controlPresentacion control;
     /**
      * Creates new form JFrameRevisarAnalisisEvaluacion
      */
-    public JFrameRevisarAnalisisEvaluacion() {
+    public JFrameRevisarAnalisisEvaluacion(controlPresentacion control) {
+        this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
     }
