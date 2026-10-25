@@ -24,15 +24,18 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
-              <Component id="lblTituloAnalisisEvaluacion" min="-2" pref="358" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
-          </Group>
           <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace pref="66" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="lblTituloAnalisisEvaluacion" min="-2" pref="358" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="btnRevisar" min="-2" pref="179" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblRecursosEventoInfo" alignment="0" min="-2" pref="123" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
@@ -63,17 +66,15 @@
                                   <Component id="lblFechaInfo" min="-2" pref="157" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="lblNecesidadesExtra" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblNecesidadesExtraInfo" min="-2" pref="151" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace pref="33" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace pref="31" max="32767" attributes="0"/>
-                      <Component id="btnRevisar" min="-2" pref="179" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblNecesidadesExtra" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblNecesidadesExtraInfo" min="-2" pref="151" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -84,7 +85,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
               <Component id="lblTituloAnalisisEvaluacion" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblNombreCliente" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lblNombreClienteInfo" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -117,7 +118,7 @@
               <Component id="lblNecesidadesExtra" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="lblNecesidadesExtraInfo" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
               <Component id="btnRevisar" min="-2" pref="57" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
           </Group>

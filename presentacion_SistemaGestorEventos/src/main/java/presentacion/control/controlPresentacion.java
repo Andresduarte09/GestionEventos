@@ -131,7 +131,7 @@ public class controlPresentacion {
     }
     
     public void iniciarAnalisisEvaluacion(){
-        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion();
+        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion(this);
         analisisEvaluacion.setVisible(true);
     }
     

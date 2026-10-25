@@ -4,6 +4,8 @@
  */
 package presentacion.vistas;
 
+import presentacion.control.controlPresentacion;
+
 /**
  *
  * @author armen
@@ -11,11 +13,12 @@ package presentacion.vistas;
 public class JFrameGenerarOrden extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameGenerarOrden.class.getName());
-
+    //private controlPresentacion control;
     /**
      * Creates new form JFrameGenerarOrden
      */
     public JFrameGenerarOrden() {
+        //this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
         

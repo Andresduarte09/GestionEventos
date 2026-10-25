@@ -8,13 +8,13 @@ package presentacion.control;
  *
  * @author lui
  */
-import presentacion.vistas.JFrameInicioSesion;
+
 public class SistemaGestorEventos {
 
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(()-> {
-            JFrameInicioSesion inicio = new JFrameInicioSesion();
-            inicio.setVisible(true);
+            controlPresentacion control = new controlPresentacion();
+            control.iniciarSesion();
         });
     }
 }
