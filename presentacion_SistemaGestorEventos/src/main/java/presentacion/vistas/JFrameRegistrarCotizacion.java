@@ -49,6 +49,7 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
         lblTituloGenerarOrden = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         lblCliente.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblCliente.setText("Cliente:");

@@ -117,6 +117,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(680, 620));
+        setResizable(false);
 
         lblTipoEvento.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblTipoEvento.setText("Tipo de evento:");

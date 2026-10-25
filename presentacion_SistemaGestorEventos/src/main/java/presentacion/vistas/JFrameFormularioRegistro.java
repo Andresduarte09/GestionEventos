@@ -41,6 +41,7 @@ public class JFrameFormularioRegistro extends javax.swing.JFrame {
         btnFinalizarRegistro = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         lblTituloRegistroClienteNuevo.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         lblTituloRegistroClienteNuevo.setText("Registro de cliente nuevo");

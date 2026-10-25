@@ -51,6 +51,7 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Análisis y Evaluación del espacio");
+        setResizable(false);
 
         lblNombreCliente.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblNombreCliente.setText("Nombre del cliente:");
@@ -131,11 +132,8 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
                                     .addComponent(lblFecha)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(lblFechaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblNecesidadesExtra)
-                                    .addComponent(lblNecesidadesExtraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblNecesidadesExtra)
+                            .addComponent(lblNecesidadesExtraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(97, 97, 97))))
         );
         layout.setVerticalGroup(
