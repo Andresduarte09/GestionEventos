@@ -6,6 +6,7 @@ package presentacion.vistas;
 
 import presentacion.control.controlPresentacion;
 import static java.awt.SystemColor.control;
+import java.awt.event.ActionEvent;
 import javax.swing.SwingUtilities;
 
 /**
@@ -23,8 +24,69 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
+        
+        lblImagenUbicacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblEjemploInfo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        
+        //configuracion de las opciones de ubicacion del comboBox
+        jComboBox1.removeAllItems();
+        jComboBox1.addItem("Salon Los Angeles");
+        jComboBox1.addItem("Salon La Joya");
+        jComboBox1.addItem("Jardín de Eventos La Colibrí");
+    
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarUbicacion();
+            }
+        });
+        
+        actualizarUbicacion();
+    }
+    
+    private static final int ANCHO_IMAGEN = 350;
+    private static final int ALTO_IMAGEN = 280;
+    
+    private void actualizarUbicacion(){
+        String ubicacionSelec = (String) jComboBox1.getSelectedItem();
+        
+         if (ubicacionSelec != null) {
+            switch (ubicacionSelec) {
+                case "Salon Los Angeles":
+                    lblEjemploInfo.setText("<html>Salón Los Angeles será el escenario perfecto para la celebración de todo tipo de eventos sociales.</html>");
+                    mostrarImagen("/imagenes/imagenSalonLosAngeles.png");
+                    break;
+                    
+                case "Salon La Joya":
+                    lblEjemploInfo.setText("<html>Salón La Joya ofrece espacios amplios y modernos para bodas y eventos exclusivos.</html>");
+                    mostrarImagen("/imagenes/imagenSalonLaJoya.png");
+                    break;
+                    
+                case "Jardín de Eventos La Colibrí":
+                    lblEjemploInfo.setText("<html>Disfruta de un ambiente único y agradable en el Jardín de Eventos La Colibrí.</html>");
+                    mostrarImagen("/imagenes/imagenJardinLaColibri.png");
+                    break;
+            }
+        }
     }
 
+    private void mostrarImagen(String ruta){
+        java.net.URL url = getClass().getResource(ruta);
+        if (url == null) {
+            lblImagenUbicacion1.setIcon(null);
+            lblImagenUbicacion1.setText("Imagen no encontrada: " + ruta);
+            return;
+        }
+        javax.swing.ImageIcon original = new javax.swing.ImageIcon(url);
+        int ancho = original.getIconWidth();
+        int alto = original.getIconHeight();
+        double escala = Math.min(1.0, Math.min((double) ANCHO_IMAGEN / ancho, (double) ALTO_IMAGEN / alto));
+        java.awt.Image reducida = original.getImage().getScaledInstance(
+                Math.max(1, (int) (ancho * escala)), Math.max(1, (int) (alto * escala)), java.awt.Image.SCALE_SMOOTH);
+        lblImagenUbicacion1.setText(null);
+        lblImagenUbicacion1.setIcon(new javax.swing.ImageIcon(reducida));
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,21 +96,27 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem1 = new javax.swing.JMenuItem();
         lblTipoEvento = new javax.swing.JLabel();
         lblTipoEvento1 = new javax.swing.JLabel();
         txtTipoEvento = new javax.swing.JTextField();
         lblTipoEvento2 = new javax.swing.JLabel();
         lblTipoEvento3 = new javax.swing.JLabel();
         txtNumAsistentes = new javax.swing.JTextField();
-        txtUbicacion = new javax.swing.JTextField();
         txtFecha = new javax.swing.JTextField();
         lblTipoEvento4 = new javax.swing.JLabel();
         lblEjemploInfo = new javax.swing.JLabel();
         btnConfirmar = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
         lblTituloAnalisisEvaluacion = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        lblImagenUbicacion = new javax.swing.JLabel();
+        lblImagenUbicacion1 = new javax.swing.JLabel();
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(680, 620));
 
         lblTipoEvento.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblTipoEvento.setText("Tipo de evento:");
@@ -61,8 +129,6 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
 
         lblTipoEvento3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblTipoEvento3.setText("Fecha");
-
-        txtUbicacion.addActionListener(this::txtUbicacionActionPerformed);
 
         txtFecha.addActionListener(this::txtFechaActionPerformed);
 
@@ -80,6 +146,11 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         lblTituloAnalisisEvaluacion.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         lblTituloAnalisisEvaluacion.setText("Análisis y Evaluación de espacio");
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", " " }));
+        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
+
+        lblImagenUbicacion1.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,68 +159,86 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
                 .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnConfirmar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                            .addComponent(txtNumAsistentes, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                            .addComponent(lblTipoEvento2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblTipoEvento1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblTipoEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTipoEvento)
-                            .addComponent(txtUbicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                            .addComponent(lblTipoEvento3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRegresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(79, 79, 79)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTipoEvento4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblEjemploInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(lblTituloAnalisisEvaluacion)
-                        .addGap(34, 34, 34)))
-                .addContainerGap(62, Short.MAX_VALUE))
+                        .addContainerGap(324, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(lblTipoEvento2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtFecha)
+                                .addComponent(txtNumAsistentes)
+                                .addComponent(lblTipoEvento1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblTipoEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtTipoEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblTipoEvento3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnConfirmar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(77, 77, 77)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(99, 99, 99)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblEjemploInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblTipoEvento4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(lblImagenUbicacion)
+                                        .addGap(128, 128, 128))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(lblImagenUbicacion1, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(17, 17, 17))))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(lblTituloAnalisisEvaluacion)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(56, 56, 56)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(156, 156, 156)
-                        .addComponent(lblTipoEvento4)
-                        .addGap(6, 6, 6)
-                        .addComponent(lblEjemploInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(241, 241, 241))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
                         .addComponent(lblTipoEvento)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtTipoEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(22, 22, 22)
                         .addComponent(lblTipoEvento1)
-                        .addGap(2, 2, 2)
-                        .addComponent(txtNumAsistentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
+                        .addComponent(txtNumAsistentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
                         .addComponent(lblTipoEvento2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblTipoEvento3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblTipoEvento3))
+                    .addComponent(lblImagenUbicacion1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(130, 130, 130)
+                        .addComponent(lblImagenUbicacion)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblTipoEvento4)
+                        .addGap(6, 6, 6)
+                        .addComponent(lblEjemploInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 117, Short.MAX_VALUE)
+                        .addGap(111, 111, 111))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(57, 57, 57)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnConfirmar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnRegresar)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(74, 74, 74))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtUbicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUbicacionActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUbicacionActionPerformed
 
     private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
         // TODO add your handling code here:
@@ -166,10 +255,18 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRegresarActionPerformed
 
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JButton btnRegresar;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JLabel lblEjemploInfo;
+    private javax.swing.JLabel lblImagenUbicacion;
+    private javax.swing.JLabel lblImagenUbicacion1;
     private javax.swing.JLabel lblTipoEvento;
     private javax.swing.JLabel lblTipoEvento1;
     private javax.swing.JLabel lblTipoEvento2;
@@ -179,6 +276,5 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtNumAsistentes;
     private javax.swing.JTextField txtTipoEvento;
-    private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
 }
