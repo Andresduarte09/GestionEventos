@@ -40,12 +40,19 @@ public class controlPresentacion {
     //Registra datos del evento (recibe el DTO del cliente)
     public void iniciarRegistrarEvento(DTOCliente cliente){
         this.cliente = cliente;
-        JFrameRegistrarDatosEvento registrarEvento = new JFrameRegistrarDatosEvento();
+        JFrameRegistrarDatosEvento registrarEvento = new JFrameRegistrarDatosEvento(this);
         registrarEvento.setVisible(true);
     }
     
+    public void registrarDatosEvento(DTOEvento evento){
+        this.evento = evento;
+        iniciarRecursosEvento();
+    }
+            
     public void cancelarRegistrarEvento(){
-        JFrameInicioSesion inicioSesion = new JFrameInicioSesion();
+        this.cliente = null;
+        this.evento = null;
+        JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
         inicioSesion.setVisible(true);
     }
     
@@ -129,18 +136,18 @@ public class controlPresentacion {
     }
     
     public void iniciarRevisarAnalisisEvaluacion(){
-        JFrameRevisarAnalisisEvaluacion revisarAnalisisEvaluacion = new JFrameRevisarAnalisisEvaluacion();
+        JFrameRevisarAnalisisEvaluacion revisarAnalisisEvaluacion = new JFrameRevisarAnalisisEvaluacion(this);
         revisarAnalisisEvaluacion.setVisible(true);
     }
     
     public void iniciarRegistrarCotizacion(){
-        JFrameRegistrarCotizacion registrarCotizacion = new JFrameRegistrarCotizacion();
+        JFrameRegistrarCotizacion registrarCotizacion = new JFrameRegistrarCotizacion(this);
         registrarCotizacion.setVisible(true);
     }
     
     public void iniciarResumenCotizacion(){
         configurarPropuesta.dispose();
-        JFrameResumenCotizacion resumenCotizacion = new JFrameResumenCotizacion();
+        JFrameResumenCotizacion resumenCotizacion = new JFrameResumenCotizacion(this);
         resumenCotizacion.setVisible(true);
     }
     

@@ -20,8 +20,8 @@ public class JFrameInicioSesion extends javax.swing.JFrame {
      */
     
     //comentariado por el momento el renglon de abajo
-    controlPresentacion control = new controlPresentacion();
-    public JFrameInicioSesion() {
+    private controlPresentacion control;
+    public JFrameInicioSesion(controlPresentacion control) {
         this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
