@@ -98,9 +98,8 @@ public class JFrameInicioSesion extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTelefonoActionPerformed
 
     private void btnRegistrarEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEventoActionPerformed
-        DTOCliente cliente = new DTOCliente();
-        cliente.setTelefono(txtTelefono.getText());
-        control.iniciarRegistrarEvento(cliente);
+        String telefono = txtTelefono.getText().trim();
+        control.procesarTelefonoIngresado(telefono, this);
         this.dispose();
     }//GEN-LAST:event_btnRegistrarEventoActionPerformed
 
