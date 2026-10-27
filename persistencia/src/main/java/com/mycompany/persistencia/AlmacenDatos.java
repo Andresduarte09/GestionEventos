@@ -12,6 +12,9 @@ import java.time.LocalTime;
 import java.util.Arrays;
 
 /**
+ * @Author andres y marcelo
+ */
+/**
  * Base de datos provisional en memoria, cuando se cierra la ejecucion no se guarda
  */
 public class AlmacenDatos {
