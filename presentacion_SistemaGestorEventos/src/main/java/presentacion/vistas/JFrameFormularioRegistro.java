@@ -4,6 +4,9 @@
  */
 package presentacion.vistas;
 
+import dto.DTOCliente;
+import presentacion.control.controlPresentacion;
+
 /**
  *
  * @author lui
@@ -11,15 +14,20 @@ package presentacion.vistas;
 public class JFrameFormularioRegistro extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameFormularioRegistro.class.getName());
-
+    private final controlPresentacion control;
+    private final DTOCliente cliente;
     /**
      * Creates new form JFrameFormularioRegistro
      */
-    public JFrameFormularioRegistro() {
+    public JFrameFormularioRegistro(controlPresentacion control, DTOCliente cliente) {
+        this.control = control;
+        this.cliente = cliente;
         initComponents();
         this.setLocationRelativeTo(null);
+        if (cliente.getTelefono() != null) {
+            txtTelefonoContacto.setText(cliente.getTelefono());
+        }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -55,6 +63,7 @@ public class JFrameFormularioRegistro extends javax.swing.JFrame {
         lblTelefonoRespaldo.setText("Teléfono de respaldo:");
 
         btnFinalizarRegistro.setText("Finalizar Registro");
+        btnFinalizarRegistro.addActionListener(this::btnFinalizarRegistroActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -110,6 +119,17 @@ public class JFrameFormularioRegistro extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnFinalizarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarRegistroActionPerformed
+        cliente.setNombre(txtNombreCompleto.getText().trim());
+        cliente.setCorreo(txtCorreoElectronico.getText().trim());
+        cliente.setTelefono(txtTelefonoContacto.getText().trim());
+        cliente.setTelefonoAlt(txtRelefonoRespaldo.getText().trim());
+
+        if (control.registrarClienteYContinuar(cliente, this)) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_btnFinalizarRegistroActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

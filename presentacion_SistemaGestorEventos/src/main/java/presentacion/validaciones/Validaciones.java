@@ -16,7 +16,6 @@ public class Validaciones {
         
     }
     
-    
     public static boolean soloNumeros(JTextField txt) {
         String texto = txt.getText();
         for (int i = 0; i < texto.length(); i++){
@@ -40,15 +39,24 @@ public class Validaciones {
         return true;
     }
     
-    public static boolean sonDiezDigitos(JTextField txt){
-        String texto = txt.getText();
-        return soloNumeros(txt) && texto.length()==10;
-    }
+    public static boolean telefonoValido(String telefono) {
+       if (telefono == null) 
+           return false;
+       String limpio = telefono.trim();
+       if (limpio.length() != 10) 
+           return false;
+       for (int i = 0; i < limpio.length(); i++) {
+           if (!Character.isDigit(limpio.charAt(i))) 
+               return false;
+       }
+       return true;
+   }
     
     
-    public static boolean correoElectronico(JTextField txt) {
-        String correo = txt.getText().trim();
-        return correo.matches("^[\\w.+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
+    public static boolean correoValido(String correo) {
+        if (correo == null) 
+            return false;
+        return correo.trim().matches("^[\\w.+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
     }
 
 

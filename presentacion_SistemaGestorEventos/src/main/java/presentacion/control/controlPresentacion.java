@@ -1,17 +1,13 @@
 package presentacion.control;
 
-import presentacion.vistas.JFrameAnalisisEvaluacion;
-import presentacion.vistas.JFrameConfigurarPropuesta;
-import presentacion.vistas.JFrameGenerarOrden;
-import presentacion.vistas.JFrameInicioSesion;
-import presentacion.vistas.JFrameRecursosEvento;
-import presentacion.vistas.JFrameRegistrarCotizacion;
-import presentacion.vistas.JFrameRegistrarDatosEvento;
-import presentacion.vistas.JFrameResumenCotizacion;
-import presentacion.vistas.JFrameRevisarAnalisisEvaluacion;
+import com.mycompany.persistencia.AlmacenDatos;
+import presentacion.vistas.*;
 import dto.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Component;
+import javax.swing.JOptionPane;
+import presentacion.validaciones.Validaciones;
 
 /**
  *
@@ -31,6 +27,8 @@ public class controlPresentacion {
     private DTOCliente cliente;
     private DTOEvento evento;
 
+    private final AlmacenDatos almacen = new AlmacenDatos();
+
     public void iniciarSesion() {
         JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
         inicioSesion.setVisible(true);
@@ -44,6 +42,62 @@ public class controlPresentacion {
         return evento;
     }
     
+    public boolean procesarTelefonoIngresado(String telefono, Component padre) {
+        // 1. Validar formato
+        if (!Validaciones.telefonoValido(telefono)) {
+            JOptionPane.showMessageDialog(padre,
+                    "Ingresa un teléfono válido de 10 dígitos numéricos.",
+                    "Teléfono inválido",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // 2. Buscar cliente
+        DTOCliente existente = buscarClientePorTelefono(telefono);
+
+        // 3. Decidir flujo
+        if (existente != null) {
+            iniciarRegistrarEvento(existente);
+        } else {
+            DTOCliente nuevo = new DTOCliente();
+            nuevo.setTelefono(telefono);
+            iniciarRegistrarClienteNuevo(nuevo);
+        }
+        return true;
+    }
+    
+    private DTOCliente buscarClientePorTelefono(String telefono) {
+        for (DTOCliente c : almacen.getClientes()) {
+            if (c.getTelefono() != null && c.getTelefono().equals(telefono)) {
+                return c;
+            }
+        }
+        return null;
+    }
+    
+    public void iniciarRegistrarClienteNuevo(DTOCliente cliente) {
+        JFrameFormularioRegistro formulario = new JFrameFormularioRegistro(this, cliente);
+        formulario.setVisible(true);
+    }
+    
+    public boolean registrarClienteYContinuar(DTOCliente cliente, Component padre) {
+        if (!Validaciones.telefonoValido(cliente.getTelefono())
+                || cliente.getNombre() == null || cliente.getNombre().isBlank()
+                || !Validaciones.correoValido(cliente.getCorreo())) {
+            JOptionPane.showMessageDialog(padre,
+                    "Revisa los datos del cliente.",
+                    "Datos inválidos",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // Persistir en memoria (o donde corresponda)
+        almacen.getClientes().add(cliente);
+
+        // Continuar flujo
+        iniciarRegistrarEvento(cliente);
+        return true;
+    }
     
     //Registra datos del evento (recibe el DTO del cliente)
     public void iniciarRegistrarEvento(DTOCliente cliente){
