@@ -6,9 +6,8 @@ package dto;
 
 /**
  *
- * @author Andre
+ * @author lui
  */
-
 public class DTOPersonal {
 
     private int idEspecialidad;
