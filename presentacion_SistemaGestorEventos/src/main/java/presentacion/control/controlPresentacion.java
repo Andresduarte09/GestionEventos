@@ -29,7 +29,6 @@ public class controlPresentacion {
     private DTOCliente cliente;
     private DTOEvento evento;
 
-    private final AlmacenDatos almacen = new AlmacenDatos();
 
     public void iniciarSesion() {
         JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
