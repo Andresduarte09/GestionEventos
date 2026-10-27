@@ -10,6 +10,8 @@ import presentacion.vistas.JFrameRegistrarDatosEvento;
 import presentacion.vistas.JFrameResumenCotizacion;
 import presentacion.vistas.JFrameRevisarAnalisisEvaluacion;
 import dto.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -18,6 +20,12 @@ import dto.*;
 public class controlPresentacion {
     private JFrameRecursosEvento recursosEvento;
     private JFrameConfigurarPropuesta configurarPropuesta;
+    private JFrameResumenCotizacion resumenCotizacion;
+    private DTOCotizacion cotizacion;
+    private DTOVersionCotizacion versionCotizacion;
+    private DTODetalleCotizacion detalleCotizacion;
+    private DTOLevantamiento levantamiento;
+    private List<DTOPersonal> personalSeleccionado = new ArrayList<>();    
     
     //DTO´s que se mueven entre las pantallas y solo el control las conserva
     private DTOCliente cliente;
@@ -166,4 +174,6 @@ public class controlPresentacion {
         JFrameGenerarOrden generarOrden = new JFrameGenerarOrden();
         generarOrden.setVisible(true);
     }
+    
+    
 }   

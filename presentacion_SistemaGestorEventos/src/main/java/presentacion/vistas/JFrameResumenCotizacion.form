@@ -37,13 +37,11 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="btnAtras" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="245" max="32767" attributes="0"/>
+                      <EmptySpace pref="428" max="32767" attributes="0"/>
                       <Component id="btnAprobar" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="161" max="-2" attributes="0"/>
                       <Component id="btnModificar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
-                      <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="244" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -52,7 +50,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="31" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="pnlSuperior" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="lblDesgloseServicios" min="-2" max="-2" attributes="0"/>
@@ -63,7 +61,6 @@
                   <Component id="btnAtras" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnAprobar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnModificar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
           </Group>
@@ -89,28 +86,52 @@
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="lblServicioConcepto" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
-                                  <Component id="lblHorariosFases" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="137" max="-2" attributes="0"/>
-                                  <Component id="lblPersonalRecurso" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="262" max="32767" attributes="0"/>
-                                  <Component id="lblImporte" min="-2" max="-2" attributes="0"/>
-                              </Group>
                               <Component id="pnlPersonalOperativo" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
-                                  <Component id="lblCalculo" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="159" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="lblDescuento" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lblSubtotal" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lblIVA" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lblTotal" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="lblServicioConcepto" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="132" max="-2" attributes="0"/>
+                                          <Component id="lblHorariosFases" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="137" max="-2" attributes="0"/>
+                                          <Component id="lblPersonalRecurso" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Component id="lblCalculo" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="159" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <Component id="lblDescuento" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace pref="573" max="32767" attributes="0"/>
+                                                  <Component id="lblMostrarDescuento" min="-2" pref="38" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="lblSubtotal" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace max="32767" attributes="0"/>
+                                                  <Component id="lblMostrarSubtotal" min="-2" pref="27" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="lblIVA" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="lblTotal" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace max="32767" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="lblMostrarTotal" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="lblMostrarIVA" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
+                                          </Group>
+                                      </Group>
                                   </Group>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <Component id="lblImporte" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -125,8 +146,9 @@
                       <Component id="lblServicioConcepto" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblHorariosFases" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblPersonalRecurso" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblImporte" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                  <Component id="lblImporte" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="pnlServicios" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -135,13 +157,23 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblCalculo" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblSubtotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblMostrarSubtotal" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lblDescuento" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblDescuento" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblMostrarDescuento" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lblIVA" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblIVA" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblMostrarIVA" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="lblTotal" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblMostrarTotal" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace pref="26" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -183,22 +215,38 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="lblServiciosIntegrales" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="123" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="lblMostrarServicios" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblDesmontaje" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblOperacion" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="lblOperacion" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="lblMostrarOperacion" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="lblDesmontaje" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="lblMostrarDesmontaje" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="lblMontaje" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="186" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                              <Component id="lblMostrarMontaje" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
                               <Component id="lblEquipos" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lblMostrarEquipos" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="lblPesos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="lblMostrarImportes" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -212,12 +260,22 @@
                           <Component id="lblServiciosIntegrales" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblMontaje" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblEquipos" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblMostrarServicios" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblMostrarMontaje" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblMostrarEquipos" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblMostrarImportes" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblPesos" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblOperacion" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblOperacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblMostrarOperacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblDesmontaje" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblDesmontaje" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblMostrarDesmontaje" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace pref="34" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -249,9 +307,39 @@
                 <Property name="text" type="java.lang.String" value="Equipos:"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JLabel" name="lblMostrarServicios">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="    "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblMostrarMontaje">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="     "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblMostrarEquipos">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="   "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblMostrarImportes">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="   "/>
+              </Properties>
+            </Component>
             <Component class="javax.swing.JLabel" name="lblPesos">
               <Properties>
                 <Property name="text" type="java.lang.String" value="$"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblMostrarOperacion">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="   "/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblMostrarDesmontaje">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="   "/>
               </Properties>
             </Component>
           </SubComponents>
@@ -271,6 +359,8 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="lblPersonalOperativo" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="222" max="-2" attributes="0"/>
+                      <Component id="lblMostrarPersonalOperativo" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -279,7 +369,10 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblPersonalOperativo" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblPersonalOperativo" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblMostrarPersonalOperativo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace pref="78" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -289,6 +382,11 @@
             <Component class="javax.swing.JLabel" name="lblPersonalOperativo">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Personal operativo"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="lblMostrarPersonalOperativo">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="         "/>
               </Properties>
             </Component>
           </SubComponents>
@@ -318,6 +416,26 @@
             <Property name="text" type="java.lang.String" value="Total"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JLabel" name="lblMostrarSubtotal">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="    "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblMostrarDescuento">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="   "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblMostrarIVA">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="       "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblMostrarTotal">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="     "/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JLabel" name="lblDesgloseServicios">
@@ -340,13 +458,21 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblCotizacion" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblMostrarIDCotizacion" min="-2" pref="33" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblEvento" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="187" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblMostrarNombreEvento" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="144" max="-2" attributes="0"/>
                   <Component id="lblVersion" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblMostrarVersionCotizacion" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
                   <Component id="lblEstado" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="lblMostrarEstadoCotizacion" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -359,6 +485,10 @@
                       <Component id="lblEvento" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblVersion" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblEstado" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblMostrarIDCotizacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblMostrarNombreEvento" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblMostrarVersionCotizacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblMostrarEstadoCotizacion" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="78" max="32767" attributes="0"/>
               </Group>
@@ -386,6 +516,26 @@
             <Property name="text" type="java.lang.String" value="Estado:"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JLabel" name="lblMostrarIDCotizacion">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="     "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblMostrarNombreEvento">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="     "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblMostrarVersionCotizacion">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="     "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblMostrarEstadoCotizacion">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="       "/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JButton" name="btnAtras">
@@ -404,11 +554,6 @@
     <Component class="javax.swing.JButton" name="btnModificar">
       <Properties>
         <Property name="text" type="java.lang.String" value="Modificar"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnCancelar">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Cancelar"/>
       </Properties>
     </Component>
   </SubComponents>
