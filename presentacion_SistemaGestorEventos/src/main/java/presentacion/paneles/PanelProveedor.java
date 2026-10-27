@@ -4,10 +4,12 @@
  */
 package presentacion.paneles;
 
+import dto.DTOEquipo;
 import presentacion.control.controlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -15,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import presentacion.validaciones.Validaciones;
 
 /**
@@ -75,6 +78,25 @@ public class PanelProveedor extends JPanel {
 
             // Realizar búsqueda de proveedor
         });
+    }
+    
+    //Muestra los equipos del proveedor externo (cuando el almacén los tenga)
+    public void mostrarEquiposProveedor(List<DTOEquipo> equipos) {
+        DefaultTableModel modelo = modeloSoloLectura(new String[]{"Equipo", "Disponibilidad", "Cantidad seleccionada"});
+        for (DTOEquipo equipo : equipos) {
+            modelo.addRow(new Object[]{equipo.getNombre(), equipo.getDisponibilidad(), equipo.getCantidadSeleccionada()});
+        }
+        tblConsulta.setModel(modelo);
+    }
+ 
+    //Modelo de tabla solo de lectura
+    private static javax.swing.table.DefaultTableModel modeloSoloLectura(String[] columnas) {
+        return new javax.swing.table.DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int fila, int columna) {
+                return false;
+            }
+        };
     }
 }
 

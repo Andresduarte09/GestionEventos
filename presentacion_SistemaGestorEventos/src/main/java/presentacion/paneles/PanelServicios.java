@@ -5,12 +5,15 @@
 
 package presentacion.paneles;
 
+import dto.DTOServicio;
 import presentacion.control.controlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.List;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -82,5 +85,18 @@ public class PanelServicios extends JPanel {
 
             // Realizar la busqueda
         });
+    }
+    
+    public void mostrarServicios(List<DTOServicio> servicios) {
+        pnlOpcionesServicios.removeAll();
+        for (DTOServicio servicio : servicios) {
+            JCheckBox chk = new JCheckBox(servicio.getNombre() + (servicio.isEsAdicional() ? " (adicional)" : ""),
+                    servicio.isSeleccionado());
+            chk.setOpaque(false);
+            chk.setToolTipText("<html>" + servicio.getDescripcion() + "<br>" + servicio.getObservaciones() + "</html>");
+            pnlOpcionesServicios.add(chk);
+        }
+        pnlOpcionesServicios.revalidate();
+        pnlOpcionesServicios.repaint();
     }
 }

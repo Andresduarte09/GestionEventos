@@ -4,11 +4,17 @@
  */
 package presentacion.paneles;
 
+import dto.DTOCliente;
+import dto.DTOEquipo;
+import dto.DTOEvento;
+import dto.DTOPersonal;
+import dto.DTOServicio;
 import presentacion.control.controlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -64,6 +70,37 @@ public class PanelResumen extends JPanel {
         
         btnEnviarCotizacion.addActionListener(e -> this.control.iniciarResumenCotizacion());
         
+    }
+    //Muestra un resumen con la información que ya existe en los DTO (sin calcular precios)
+    public void mostrarResumen(DTOCliente cliente, DTOEvento evento, List<DTOServicio> servicios,
+            List<DTOEquipo> equipos, List<DTOPersonal> personal) {
+        StringBuilder sb = new StringBuilder();
+        if (cliente != null) {
+            sb.append("Cliente: ").append(cliente.getNombre()).append("\n");
+        }
+        if (evento != null) {
+            sb.append("Evento: ").append(evento.getTipoEvento()).append(" - ").append(evento.getFechaEvento()).append("\n");
+            sb.append("Ubicación: ").append(evento.getUbicacion()).append("\n");
+            sb.append("Asistentes: ").append(evento.getNumAsistentes()).append("\n");
+        }
+        sb.append("\nServicios seleccionados:\n");
+        for (DTOServicio s : servicios) {
+            if (s.isSeleccionado()) {
+                sb.append("  - ").append(s.getNombre()).append(s.isEsAdicional() ? " (adicional)" : "").append("\n");
+            }
+        }
+        sb.append("\nEquipo seleccionado:\n");
+        for (DTOEquipo e : equipos) {
+            if (e.getCantidadSeleccionada() > 0) {
+                sb.append("  - ").append(e.getNombre()).append(" x").append(e.getCantidadSeleccionada()).append("\n");
+            }
+        }
+        sb.append("\nPersonal:\n");
+        for (DTOPersonal p : personal) {
+            sb.append("  - ").append(p.getEspecialidad()).append(" x").append(p.getCantidad()).append("\n");
+        }
+        txtResumenPropuesta.setText(sb.toString());
+        txtResumenPropuesta.setCaretPosition(0);
     }
     
 }

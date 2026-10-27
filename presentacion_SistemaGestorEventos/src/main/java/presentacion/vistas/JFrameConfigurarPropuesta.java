@@ -13,10 +13,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import presentacion.paneles.PanelInventario;
+import dto.*;
 
 
 /**
@@ -132,6 +134,35 @@ public class JFrameConfigurarPropuesta extends JFrame {
         btn.setBackground(new Color(45, 45, 45));
         btn.setFocusPainted(false);
         return btn;
+    }
+    
+    public void cargarFolio(DTOCliente cliente, DTOEvento evento) {
+        pnlFolio.mostrarFolio(cliente, evento);
+    }
+ 
+    public void cargarServicios(List<DTOServicio> servicios) {
+        pnlServicios.mostrarServicios(servicios);
+    }
+ 
+    public void cargarEquipos(List<DTOEquipo> equipos) {
+        pnlEquipo.mostrarEquipos(equipos);
+    }
+ 
+    public void cargarInventario(List<DTOInventario> inventarios) {
+        pnlInventario.mostrarInventario(inventarios);
+    }
+ 
+    public void cargarProveedor(List<DTOEquipo> equiposProveedor) {
+        pnlProveedor.mostrarEquiposProveedor(equiposProveedor);
+    }
+ 
+    public void cargarPersonal(List<DTOPersonal> personal) {
+        pnlPersonal.mostrarPersonal(personal);
+    }
+ 
+    public void cargarResumen(DTOCliente cliente, DTOEvento evento, List<DTOServicio> servicios,
+            List<DTOEquipo> equipos, List<DTOPersonal> personal) {
+        pnlResumen.mostrarResumen(cliente, evento, servicios, equipos, personal);
     }
 
     public void navegarA(String nombrePanel) {

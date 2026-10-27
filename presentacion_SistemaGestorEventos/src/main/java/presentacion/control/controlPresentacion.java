@@ -10,6 +10,7 @@ import presentacion.vistas.JFrameRegistrarDatosEvento;
 import presentacion.vistas.JFrameResumenCotizacion;
 import presentacion.vistas.JFrameRevisarAnalisisEvaluacion;
 import dto.*;
+import com.mycompany.persistencia.AlmacenDatos;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,8 @@ public class controlPresentacion {
     private DTOVersionCotizacion versionCotizacion;
     private DTODetalleCotizacion detalleCotizacion;
     private DTOLevantamiento levantamiento;
-    private List<DTOPersonal> personalSeleccionado = new ArrayList<>();    
+    private List<DTOPersonal> personalSeleccionado = new ArrayList<>();   
+    private final AlmacenDatos almacen = new AlmacenDatos();
     
     //DTO´s que se mueven entre las pantallas y solo el control las conserva
     private DTOCliente cliente;
@@ -34,6 +36,30 @@ public class controlPresentacion {
     public void iniciarSesion() {
         JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
         inicioSesion.setVisible(true);
+    }
+    
+    /*
+    Consulta lo del almacen para mostrarlo unicamente
+    */
+    public List<DTOServicio> consultarServicios() {
+        return new ArrayList<>(almacen.getServicios());
+    }
+ 
+    public List<DTOEquipo> consultarEquipos() {
+        return new ArrayList<>(almacen.getEquipos());
+    }
+ 
+    public List<DTOInventario> consultarInventarios() {
+        return new ArrayList<>(almacen.getInventario());
+    }
+ 
+    public List<DTOPersonal> consultarPersonal() {
+        return new ArrayList<>(almacen.getPersonal());
+    }
+ 
+    //Por ahora el almacén no guarda inventario de proveedor externo, por eso la lista va vacía
+    public List<DTOEquipo> consultarEquiposProveedor() {
+        return new ArrayList<>();
     }
     
     public DTOCliente getCliente() {
@@ -81,7 +107,7 @@ public class controlPresentacion {
         if (configurarPropuesta == null) {
             configurarPropuesta = new JFrameConfigurarPropuesta(this);
         }
-        configurarPropuesta.navegarA(JFrameConfigurarPropuesta.PANEL_FOLIO);
+        mostrarFolio();
         configurarPropuesta.setVisible(true);
     }
     public void mostrarMenuRecursos() {
@@ -114,31 +140,53 @@ public class controlPresentacion {
         }
     }
     
+    //Cada método carga en su panel la información del almacén y luego lo muestra
     public void mostrarFolio() {
+        if (configurarPropuesta != null) {
+            configurarPropuesta.cargarFolio(cliente, evento);
+        }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_FOLIO);
     }
-
+ 
     public void mostrarServicios() {
+        if (configurarPropuesta != null) {
+            configurarPropuesta.cargarServicios(consultarServicios());
+        }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_SERVICIOS);
     }
-
+ 
     public void mostrarEquipo() {
+        if (configurarPropuesta != null) {
+            configurarPropuesta.cargarEquipos(consultarEquipos());
+        }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_EQUIPO);
     }
     
     public void mostrarInventario() {
+        if (configurarPropuesta != null) {
+            configurarPropuesta.cargarInventario(consultarInventarios());
+        }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_INVENTARIO);
     }
     
     public void mostrarProveedor() {
+        if (configurarPropuesta != null) {
+            configurarPropuesta.cargarProveedor(consultarEquiposProveedor());
+        }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_PROVEEDOR);
     }
-
+ 
     public void mostrarPersonal() {
+        if (configurarPropuesta != null) {
+            configurarPropuesta.cargarPersonal(consultarPersonal());
+        }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_PERSONAL);
     }
-
+ 
     public void mostrarResumen() {
+        if (configurarPropuesta != null) {
+            configurarPropuesta.cargarResumen(cliente, evento, consultarServicios(), consultarEquipos(), consultarPersonal());
+        }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
     }
     

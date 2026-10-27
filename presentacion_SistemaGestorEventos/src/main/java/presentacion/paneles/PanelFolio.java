@@ -4,6 +4,8 @@
  */
 package presentacion.paneles;
 
+import dto.DTOCliente;
+import dto.DTOEvento;
 import presentacion.control.controlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -49,5 +51,36 @@ public class PanelFolio extends JPanel {
         add(lblTitulo, BorderLayout.NORTH);
         add(new JScrollPane(txtDetalles), BorderLayout.CENTER);
         add(pnlSur, BorderLayout.SOUTH);
+    }
+    
+    public void mostrarFolio(DTOCliente cliente, DTOEvento evento) {
+        StringBuilder sb = new StringBuilder();
+        if (evento != null) {
+            sb.append("Folio: ").append(evento.getIdEvento() > 0 ? String.valueOf(evento.getIdEvento()) : "Sin asignar").append("\n\n");
+        }
+        if (cliente != null) {
+            sb.append("CLIENTE\n");
+            sb.append("Nombre: ").append(valor(cliente.getNombre())).append("\n");
+            sb.append("Correo: ").append(valor(cliente.getCorreo())).append("\n");
+            sb.append("Teléfono: ").append(valor(cliente.getTelefono())).append("\n");
+            sb.append("Teléfono alterno: ").append(valor(cliente.getTelefonoAlt())).append("\n\n");
+        }
+        if (evento != null) {
+            sb.append("EVENTO\n");
+            sb.append("Tipo: ").append(valor(evento.getTipoEvento())).append("\n");
+            sb.append("Fecha: ").append(evento.getFechaEvento() == null ? "-" : evento.getFechaEvento()).append("\n");
+            sb.append("Horario: ").append(evento.getHoraInicio() == null ? "-" : evento.getHoraInicio())
+                    .append(" a ").append(evento.getHoraFin() == null ? "-" : evento.getHoraFin()).append("\n");
+            sb.append("Ubicación: ").append(valor(evento.getUbicacion())).append("\n");
+            sb.append("Asistentes: ").append(evento.getNumAsistentes()).append("\n");
+            sb.append("Necesidades: ").append(valor(evento.getNecesidadesIniciales())).append("\n");
+            sb.append("Observaciones: ").append(valor(evento.getObservaciones())).append("\n");
+        }
+        txtDetalles.setText(sb.toString());
+        txtDetalles.setCaretPosition(0);
+    }
+ 
+    private static String valor(String texto) {
+        return texto == null || texto.isBlank() ? "-" : texto;
     }
 }
