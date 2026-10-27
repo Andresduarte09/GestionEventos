@@ -2,6 +2,7 @@ package dto;
 
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license

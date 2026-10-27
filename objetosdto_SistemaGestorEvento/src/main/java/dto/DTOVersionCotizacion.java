@@ -2,11 +2,6 @@ package dto;
 
 import java.time.LocalDate;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 /**
  *
  * @author lui
@@ -14,7 +9,6 @@ import java.time.LocalDate;
 public class DTOVersionCotizacion {
     private int ID;
     private int numero;
-
 
     private LocalDate fechaEmision;
     private String estado;
