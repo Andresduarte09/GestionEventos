@@ -7,6 +7,7 @@ package com.mycompany.persistencia;
 import java.util.ArrayList;
 import java.util.List;
 import dto.*;
+import java.time.LocalDate;
 
 public class AlmacenDatos {
 
@@ -32,6 +33,23 @@ public class AlmacenDatos {
 
     private void cargarDatos() {
         DTOCliente cliente1 = new DTOCliente(1, "Mario Jesús S. Kennedy", "mario20@gmail.com", "6444238967", "6441155423");
+        DTOCotizacion cotizacion = new DTOCotizacion(1, LocalDate.of(2026, 11, 15), "Pendiente");
+        DTODecisionCliente decisionCliente = new DTODecisionCliente(1, LocalDate.of(2026, 11, 1), "Aceptada", "Cotización aprobada");
+        DTODetalleCotizacion detalleCotizacion = new DTODetalleCotizacion();
+        DTODetalleSolicitud detalleSolicitud = new DTODetalleSolicitud();
+        DTOEquipo equipo = new DTOEquipo(1, "Silla", 100, 50);
+        DTOEvento evento = new DTOEvento();
+        DTOPersonal personal = new DTOPersonal(1, "Técnico de audio", 3, 2, 5, 1);
+        DTOServicio servicio = new DTOServicio(1, "Audio", "Servicio de audio para evento", true, false, "Sin observaciones");
+        List<DTOEquipo> equipos = new ArrayList<>(Arrays.asList(equipo));
+        List<DTOPersonal> listaPersonal = new ArrayList<>(Arrays.asList(personal));
+        List<DTOServicio> servicios = new ArrayList<>(Arrays.asList(servicio));
+        DTOInventario inventario = new DTOInventario(equipos, listaPersonal, servicios, 1);
+        DTOLevantamiento levantamiento = new DTOLevantamiento();
+        DTOLocalEvento localEvento = new DTOLocalEvento(1, "Salón", "30 x 20 m", "Escenario y pista", "Acceso por entrada principal", "No fumar", "Se necesita conexión eléctrica");
+        DTORecurso recurso = new DTORecurso(1, "Bocina", "Bocina amplificada", 100, 1500.0f, "personas", "Audio", "pieza", "Activo");
+        DTOReserva reserva = new DTOReserva();
+        DTOVersionCotizacion versionCotizacion = new DTOVersionCotizacion(1, 1, LocalDate.of(2026, 11, 15), "Vigente", "Versión inicial", 5.0f, 10000.0f, 11020.0f);
     }
 
     public List<DTOCliente> getClientes() {
