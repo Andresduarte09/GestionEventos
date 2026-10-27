@@ -5,16 +5,28 @@
     <artifactId>presentacion_SistemaGestorEventos</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <name>presentacion_SistemaGestorEventos</name>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>com.equipogestioneventos.sistemagestoreventos.SistemaGestorEventos</exec.mainClass>
-    </properties>    
-    <name>presentacion_SistemaGestorEventos</name>
+        <exec.mainClass>presentacion.control.SistemaGestorEventos</exec.mainClass>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.equipogestioneventos</groupId>
             <artifactId>objetosdto_SistemaGestorEvento</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.equipogestioneventos</groupId>
+            <artifactId>negocio_SistemaGestorEventos</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mycompany</groupId>
+            <artifactId>persistencia</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

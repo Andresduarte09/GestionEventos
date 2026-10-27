@@ -17,14 +17,14 @@ public class AlmacenDatos {
     private final List<DTOLocalEvento> localesEvento = new ArrayList<>();
     private final List<DTORecurso> recursos = new ArrayList<>();
     private final List<DTOReserva> reservas = new ArrayList<>();
-    private final List<DTOCotizacion> cotizaciones = new ArrayList<>();
-    private final List<DTODecisionCliente> decisionesCliente = new ArrayList<>();
-    private final List<DTODetalleCotizacion> detallesCotizacion = new ArrayList<>();
-    private final List<DTOEquipo> equipos = new ArrayList<>();
-    private final List<DTOInventario> inventario = new ArrayList<>();
-    private final List<DTOPersonal> personal = new ArrayList<>();
-    private final List<DTOServicio> servicios = new ArrayList<>();
-    private final List<DTOVersionCotizacion> versionesCotizacion = new ArrayList<>();
+    private final List<dtoCotizacion> cotizaciones = new ArrayList<>();
+    private final List<dtoDecisionCliente> decisionesCliente = new ArrayList<>();
+    private final List<dtoDetalleCotizacion> detallesCotizacion = new ArrayList<>();
+    private final List<dtoEquipo> equipos = new ArrayList<>();
+    private final List<dtoInventario> inventario = new ArrayList<>();
+    private final List<dtoPersonal> personal = new ArrayList<>();
+    private final List<dtoServicio> servicios = new ArrayList<>();
+    private final List<dtoVersionCotizacion> versionesCotizacion = new ArrayList<>();
 
     public AlmacenDatos() {
         cargarDatos();
@@ -62,35 +62,35 @@ public class AlmacenDatos {
         return reservas;
     }
 
-    public List<DTOCotizacion> getCotizaciones() {
+    public List<dtoCotizacion> getCotizaciones() {
         return cotizaciones;
     }
 
-    public List<DTODecisionCliente> getDecisionesCliente() {
+    public List<dtoDecisionCliente> getDecisionesCliente() {
         return decisionesCliente;
     }
 
-    public List<DTODetalleCotizacion> getDetallesCotizacion() {
+    public List<dtoDetalleCotizacion> getDetallesCotizacion() {
         return detallesCotizacion;
     }
 
-    public List<DTOEquipo> getEquipos() {
+    public List<dtoEquipo> getEquipos() {
         return equipos;
     }
 
-    public List<DTOInventario> getInventario() {
+    public List<dtoInventario> getInventario() {
         return inventario;
     }
 
-    public List<DTOPersonal> getPersonal() {
+    public List<dtoPersonal> getPersonal() {
         return personal;
     }
 
-    public List<DTOServicio> getServicios() {
+    public List<dtoServicio> getServicios() {
         return servicios;
     }
 
-    public List<DTOVersionCotizacion> getVersionesCotizacion() {
+    public List<dtoVersionCotizacion> getVersionesCotizacion() {
         return versionesCotizacion;
     }
 }
