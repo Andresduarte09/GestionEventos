@@ -244,8 +244,9 @@ public class controlPresentacion {
     }
     
     public void registrarRecursosEvento(String necesidadesExtra){
-    
+      
         evento.setNecesidadesIniciales(necesidadesExtra);
+        
         iniciarAnalisisEvaluacion();
     }
     
