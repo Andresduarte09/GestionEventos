@@ -99,8 +99,9 @@ public class JFrameInicioSesion extends javax.swing.JFrame {
 
     private void btnRegistrarEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEventoActionPerformed
         String telefono = txtTelefono.getText().trim();
-        control.procesarTelefonoIngresado(telefono, this);
-        this.dispose();
+        if (control.procesarTelefonoIngresado(telefono, this)) {
+            this.dispose();
+        }
     }//GEN-LAST:event_btnRegistrarEventoActionPerformed
 
 
