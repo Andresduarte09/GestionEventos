@@ -186,8 +186,7 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
     }//GEN-LAST:event_btnComidaActionPerformed
     
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
-        JFrameAnalisisEvaluacion frmAnalisisEvaluacion = new JFrameAnalisisEvaluacion(control);        
-        frmAnalisisEvaluacion.setVisible(true);
+        control.registrarRecursosEvento(txtNecesidadesExtra.getText().trim());
         this.dispose();
     }//GEN-LAST:event_btnContinuarActionPerformed
 

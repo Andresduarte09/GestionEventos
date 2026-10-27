@@ -4,6 +4,8 @@
  */
 package presentacion.vistas;
 
+import dto.DTOCliente;
+import dto.DTOEvento;
 import presentacion.control.controlPresentacion;
 
 /**
@@ -17,10 +19,26 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
     /**
      * Creates new form JFrameAnalisisEvalucacion
      */
-    public JFrameAnalisisEvaluacion(controlPresentacion control) {
+    public JFrameAnalisisEvaluacion(controlPresentacion control,  DTOCliente cliente, DTOEvento evento) {
         this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
+        mostrarDatos(cliente, evento);
+    }
+    
+    private void mostrarDatos(DTOCliente cliente, DTOEvento evento) {
+        if (cliente != null) {
+            String nombre = cliente.getNombre();
+            lblNombreClienteInfo.setText(nombre != null && !nombre.isBlank() ? nombre : cliente.getTelefono());
+        }
+        if (evento != null) {
+            lblTipoInfo.setText(evento.getTipoEvento());
+            lblUbicacionInfo.setText(evento.getUbicacion());
+            lblFechaInfo.setText(String.valueOf(evento.getFechaEvento()));
+            lblAsistentesInfo.setText(String.valueOf(evento.getNumAsistentes()));
+            String extra = evento.getNecesidadesIniciales();
+            lblNecesidadesExtraInfo.setText(extra == null || extra.isEmpty() ? "Ninguna" : extra);
+        }
     }
 
     /**
