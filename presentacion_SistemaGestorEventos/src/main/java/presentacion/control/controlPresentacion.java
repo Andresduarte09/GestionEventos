@@ -117,7 +117,11 @@ public class controlPresentacion {
     public void mostrarEquipo() {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_EQUIPO);
     }
-
+    
+    public void mostrarInventario() {
+        mostrarPanel(JFrameConfigurarPropuesta.PANEL_INVENTARIO);
+    }
+    
     public void mostrarProveedor() {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_PROVEEDOR);
     }

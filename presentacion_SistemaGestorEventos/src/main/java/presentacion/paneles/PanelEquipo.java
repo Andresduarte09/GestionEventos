@@ -38,7 +38,7 @@ public class PanelEquipo extends JPanel {
         btnConsultarInventario = new JButton("Consultar Inventario");
         btnConsultarProveedor = new JButton("Consultar Proveedor");
 
-        btnConsultarInventario.addActionListener(e -> this.control.mostrarProveedor());
+        btnConsultarInventario.addActionListener(e -> this.control.mostrarInventario());
         btnConsultarProveedor.addActionListener(e -> this.control.mostrarProveedor());
 
         JPanel pnlCentro = new JPanel(new BorderLayout(10, 10));

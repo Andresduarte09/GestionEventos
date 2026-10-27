@@ -16,6 +16,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import presentacion.paneles.PanelInventario;
 
 
 /**
@@ -28,6 +29,7 @@ public class JFrameConfigurarPropuesta extends JFrame {
     public static final String PANEL_FOLIO = "PanelFolio";
     public static final String PANEL_SERVICIOS = "PanelServicios";
     public static final String PANEL_EQUIPO = "PanelEquipo";
+    public static final String PANEL_INVENTARIO = "PanelInventario";
     public static final String PANEL_PROVEEDOR = "PanelProveedor";
     public static final String PANEL_PERSONAL = "PanelPersonal";
     public static final String PANEL_RESUMEN = "PanelResumen";
@@ -50,6 +52,7 @@ public class JFrameConfigurarPropuesta extends JFrame {
     private PanelFolio pnlFolio;
     private PanelServicios pnlServicios;
     private PanelEquipo pnlEquipo;
+    private PanelInventario pnlInventario;
     private PanelProveedor pnlProveedor;
     private PanelPersonal pnlPersonal;
     private PanelResumen pnlResumen;
@@ -92,6 +95,7 @@ public class JFrameConfigurarPropuesta extends JFrame {
         pnlFolio = new PanelFolio(control);
         pnlServicios = new PanelServicios(control);
         pnlEquipo = new PanelEquipo(control);
+        pnlInventario = new PanelInventario(control);
         pnlProveedor = new PanelProveedor(control);
         pnlPersonal = new PanelPersonal(control);
         pnlResumen = new PanelResumen(control);
@@ -100,6 +104,7 @@ public class JFrameConfigurarPropuesta extends JFrame {
         pnlContenido.add(pnlFolio, PANEL_FOLIO);
         pnlContenido.add(pnlServicios, PANEL_SERVICIOS);
         pnlContenido.add(pnlEquipo, PANEL_EQUIPO);
+        pnlContenido.add(pnlInventario, PANEL_INVENTARIO);
         pnlContenido.add(pnlProveedor, PANEL_PROVEEDOR);
         pnlContenido.add(pnlPersonal, PANEL_PERSONAL);
         pnlContenido.add(pnlResumen, PANEL_RESUMEN);

@@ -31,7 +31,7 @@ public class PanelProveedor extends JPanel {
         setLayout(new BorderLayout(15, 15));
         setBackground(new Color(220, 220, 220));
 
-        JLabel lblTitulo = new JLabel("Consulta de Inventario de Proveedor Externo / Propio", JLabel.LEFT);
+        JLabel lblTitulo = new JLabel("Consulta de Inventario de Proveedor Externo", JLabel.LEFT);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
 
         JPanel pnlBusqueda = new JPanel();
