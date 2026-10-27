@@ -130,13 +130,20 @@ public class controlPresentacion {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
     }
     
+    public void registrarRecursosEvento(String necesidadesExtra){
+    
+        evento.setNecesidadesIniciales(necesidadesExtra);
+        iniciarAnalisisEvaluacion();
+    }
+    
+    
     public void iniciarAnalisisEvaluacion(){
-        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion(this);
+        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion(this, cliente, evento);
         analisisEvaluacion.setVisible(true);
     }
     
     public void iniciarRevisarAnalisisEvaluacion(){
-        JFrameRevisarAnalisisEvaluacion revisarAnalisisEvaluacion = new JFrameRevisarAnalisisEvaluacion(this);
+        JFrameRevisarAnalisisEvaluacion revisarAnalisisEvaluacion = new JFrameRevisarAnalisisEvaluacion(this, evento);
         revisarAnalisisEvaluacion.setVisible(true);
     }
     

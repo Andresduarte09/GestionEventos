@@ -4,6 +4,7 @@
  */
 package presentacion.vistas;
 
+import dto.DTOEvento;
 import presentacion.control.controlPresentacion;
 import static java.awt.SystemColor.control;
 import java.awt.event.ActionEvent;
@@ -11,57 +12,70 @@ import javax.swing.SwingUtilities;
 
 /**
  * SE MODIFICO ESTA CLASE, SI HAY ALGUN ERROR CHECAR LOGICA DE AQUI
+ *
  * @author armen
  */
 public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRevisarAnalisisEvaluacion.class.getName());
     private controlPresentacion control;
+
+    private DTOEvento evento;
+
     /**
      * Creates new form JFrameRevisarAnalisisEvaluacion
      */
-    public JFrameRevisarAnalisisEvaluacion(controlPresentacion control) {
+    public JFrameRevisarAnalisisEvaluacion(controlPresentacion control, DTOEvento evento) {
         this.control = control;
+        this.evento = evento;
         initComponents();
         this.setLocationRelativeTo(null);
-        
+
         lblImagenUbicacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblEjemploInfo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        
+
         //configuracion de las opciones de ubicacion del comboBox
         jComboBox1.removeAllItems();
         jComboBox1.addItem("Salon Los Angeles");
         jComboBox1.addItem("Salon La Joya");
         jComboBox1.addItem("Jardín de Eventos La Colibrí");
-    
+
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 actualizarUbicacion();
             }
         });
-        
+
+        if (evento != null) {
+            txtTipoEvento.setText(evento.getTipoEvento());
+            txtNumAsistentes.setText(String.valueOf(evento.getNumAsistentes()));
+            txtFecha.setText(String.valueOf(evento.getFechaEvento()));
+            if (evento.getUbicacion() != null) {
+                jComboBox1.setSelectedItem(evento.getUbicacion());
+            }
+        }
         actualizarUbicacion();
     }
-    
+
     private static final int ANCHO_IMAGEN = 350;
     private static final int ALTO_IMAGEN = 280;
-    
-    private void actualizarUbicacion(){
+
+    private void actualizarUbicacion() {
         String ubicacionSelec = (String) jComboBox1.getSelectedItem();
-        
-         if (ubicacionSelec != null) {
+
+        if (ubicacionSelec != null) {
             switch (ubicacionSelec) {
                 case "Salon Los Angeles":
                     lblEjemploInfo.setText("<html>Salón Los Angeles será el escenario perfecto para la celebración de todo tipo de eventos sociales.</html>");
                     mostrarImagen("/imagenes/imagenSalonLosAngeles.png");
                     break;
-                    
+
                 case "Salon La Joya":
                     lblEjemploInfo.setText("<html>Salón La Joya ofrece espacios amplios y modernos para bodas y eventos exclusivos.</html>");
                     mostrarImagen("/imagenes/imagenSalonLaJoya.png");
                     break;
-                    
+
                 case "Jardín de Eventos La Colibrí":
                     lblEjemploInfo.setText("<html>Disfruta de un ambiente único y agradable en el Jardín de Eventos La Colibrí.</html>");
                     mostrarImagen("/imagenes/imagenJardinLaColibri.png");
@@ -70,7 +84,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         }
     }
 
-    private void mostrarImagen(String ruta){
+    private void mostrarImagen(String ruta) {
         java.net.URL url = getClass().getResource(ruta);
         if (url == null) {
             lblImagenUbicacion1.setIcon(null);
@@ -86,7 +100,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         lblImagenUbicacion1.setText(null);
         lblImagenUbicacion1.setIcon(new javax.swing.ImageIcon(reducida));
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
