@@ -243,6 +243,7 @@ public class controlPresentacion {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
     }
     
+    // ----
     public void registrarRecursosEvento(String necesidadesExtra){
       
         evento.setNecesidadesIniciales(necesidadesExtra);

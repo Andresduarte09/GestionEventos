@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package presentacion.vistas;
+
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import javax.swing.JPanel;
@@ -12,12 +13,13 @@ import presentacion.paneles.PanelDecoracion;
 import presentacion.paneles.PanelEntretenimiento;
 import presentacion.paneles.PanelIluminacion;
 import presentacion.paneles.PanelPantallas;
+
 /**
  *
  * @author lui
  */
 public class JFrameRecursosEvento extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRecursosEvento.class.getName());
     // Identificadores de cada panel en el CardLayout
     public static final String PANEL_MENU = "PanelMenu";
@@ -57,7 +59,7 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
         navegarA(PANEL_MENU);
         pack();
     }
-    
+
     private void agregarPanel(JPanel panel, String nombre, Dimension tamano) {
         panel.setPreferredSize(tamano);
         pnlContenido.add(panel, nombre);
@@ -182,11 +184,12 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNecesidadesExtraActionPerformed
 
     private void btnComidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComidaActionPerformed
-         control.mostrarComida();
+        control.mostrarComida();
     }//GEN-LAST:event_btnComidaActionPerformed
-    
+
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
         control.registrarRecursosEvento(txtNecesidadesExtra.getText().trim());
+        
         this.dispose();
     }//GEN-LAST:event_btnContinuarActionPerformed
 

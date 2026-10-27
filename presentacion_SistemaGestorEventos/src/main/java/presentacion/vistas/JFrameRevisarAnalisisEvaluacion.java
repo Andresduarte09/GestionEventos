@@ -260,8 +260,8 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFechaActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        //control.iniciarConfigurarPropuesta();
-        //this.dispose();
+        control.iniciarConfigurarPropuesta();
+        this.dispose();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
