@@ -10,10 +10,12 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import presentacion.validaciones.Validaciones;
 
 /**
  *
@@ -63,6 +65,16 @@ public class PanelProveedor extends JPanel {
         add(lblTitulo, BorderLayout.NORTH);
         add(pnlCentro, BorderLayout.CENTER);
         add(pnlSur, BorderLayout.SOUTH);
+        
+        btnBuscar.addActionListener(e -> {
+            if (!Validaciones.soloLetras(txtBuscar)) {
+                JOptionPane.showMessageDialog(this,
+                        "El nombre solo debe contener letras y espacios.");
+                return;
+            }
+
+            // Realizar búsqueda de proveedor
+        });
     }
 }
 

@@ -9,11 +9,13 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import presentacion.control.controlPresentacion;
+import presentacion.validaciones.Validaciones;
 
 /**
  *
@@ -63,5 +65,15 @@ public class PanelInventario extends JPanel{
         add(lblTitulo, BorderLayout.NORTH);
         add(pnlCentro, BorderLayout.CENTER);
         add(pnlSur, BorderLayout.SOUTH);
+        
+        btnBuscar.addActionListener(e -> {
+            if (!Validaciones.soloNumeros(txtBuscar)) {
+                JOptionPane.showMessageDialog(this,
+                        "El folio solo debe contener números.");
+                return;
+            }
+
+            // Realizar búsqueda en inventario
+        });
     }
 }
