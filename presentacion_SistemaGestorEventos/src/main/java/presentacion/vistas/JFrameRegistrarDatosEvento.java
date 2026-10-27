@@ -4,6 +4,7 @@
  */
 package presentacion.vistas;
 
+import dto.DTOEvento;
 import presentacion.control.controlPresentacion;
 
 /**
@@ -11,7 +12,7 @@ import presentacion.control.controlPresentacion;
  * @author lui
  */
 public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
-    
+    DTOEvento evento = new DTOEvento();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRegistrarDatosEvento.class.getName());
 
     /**
@@ -135,7 +136,7 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        control.iniciarRecursosEvento();
+        control.registrarDatosEvento(evento);
         this.dispose();
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
