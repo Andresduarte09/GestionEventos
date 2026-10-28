@@ -121,7 +121,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         lblTipoEvento4 = new javax.swing.JLabel();
         lblEjemploInfo = new javax.swing.JLabel();
         btnConfirmar = new javax.swing.JButton();
-        btnRegresar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         lblTituloAnalisisEvaluacion = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         lblImagenUbicacion = new javax.swing.JLabel();
@@ -155,8 +155,8 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         btnConfirmar.setText("Confirmar");
         btnConfirmar.addActionListener(this::btnConfirmarActionPerformed);
 
-        btnRegresar.setText("Regresar");
-        btnRegresar.addActionListener(this::btnRegresarActionPerformed);
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(this::btnCancelarActionPerformed);
 
         lblTituloAnalisisEvaluacion.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         lblTituloAnalisisEvaluacion.setText("Análisis y Evaluación de espacio");
@@ -191,7 +191,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(btnConfirmar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(77, 77, 77)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -248,7 +248,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnConfirmar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnRegresar)
+                        .addComponent(btnCancelar)
                         .addGap(74, 74, 74))))
         );
 
@@ -264,17 +264,19 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
-    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        control.CancelarRevisarAnalisisEvaluacion();
+        this.dispose();
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegresarActionPerformed
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConfirmar;
-    private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JLabel lblEjemploInfo;

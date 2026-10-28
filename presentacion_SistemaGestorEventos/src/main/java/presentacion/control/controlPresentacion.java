@@ -143,6 +143,23 @@ public class controlPresentacion {
         inicioSesion.setVisible(true);
     }
     
+    //cancelar recursos del evento
+    public void cancelarRecursosEvento(){
+        JFrameRegistrarDatosEvento registrarDatos = new JFrameRegistrarDatosEvento(this);
+        registrarDatos.setVisible(true);
+        
+    }
+    
+    public void CancelarAnalisisEvaluacion(){
+        JFrameRecursosEvento recursoEvento = new JFrameRecursosEvento(this);
+        recursoEvento.setVisible(true);
+    }
+    
+    public void CancelarRevisarAnalisisEvaluacion(){
+        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion(this, cliente, evento);
+        analisisEvaluacion.setVisible(true);
+    }
+    
     public void iniciarRecursosEvento(){
         recursosEvento = new JFrameRecursosEvento(this);
         recursosEvento.setVisible(true);

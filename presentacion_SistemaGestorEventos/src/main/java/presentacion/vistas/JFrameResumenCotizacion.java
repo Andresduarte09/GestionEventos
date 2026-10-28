@@ -361,6 +361,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         );
 
         btnAtras.setText("Atrás");
+        btnAtras.addActionListener(this::btnAtrasActionPerformed);
 
         btnAprobar.setText("Aprobar");
         btnAprobar.addActionListener(this::btnAprobarActionPerformed);
@@ -412,6 +413,10 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         control.iniciarRegistrarCotizacion();
         this.dispose();
     }//GEN-LAST:event_btnAprobarActionPerformed
+
+    private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAtrasActionPerformed
     
     
     
