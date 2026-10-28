@@ -9,6 +9,7 @@ import java.util.List;
 import java.awt.Component;
 import javax.swing.JOptionPane;
 import presentacion.validaciones.Validaciones;
+import java.time.LocalTime;
 
 /**
  *
@@ -342,8 +343,31 @@ public class controlPresentacion {
     
     public void iniciarResumenCotizacion(){
         configurarPropuesta.dispose();
-        JFrameResumenCotizacion resumenCotizacion = new JFrameResumenCotizacion(this);
+        resumenCotizacion = new JFrameResumenCotizacion(this);
+        mostrarResumenCotizacion();
         resumenCotizacion.setVisible(true);
+        
+    }
+    
+    public void mostrarResumenCotizacion() {
+        if (resumenCotizacion == null) {
+            return;
+        }
+
+        if (evento != null) {
+            resumenCotizacion.setEvento(evento.getTipoEvento());
+            resumenCotizacion.setOperacion(formatearHorario(evento.getHoraInicio(), evento.getHoraFin()));
+        }
+    }
+    
+    private String formatearHorario(LocalTime inicio, LocalTime fin) {
+        if (inicio == null) {
+            return "";
+        }
+        if (fin == null) {
+            return inicio.toString();
+        }
+        return inicio + " - " + fin;
     }
     
     public void iniciarGenerarOrden(){

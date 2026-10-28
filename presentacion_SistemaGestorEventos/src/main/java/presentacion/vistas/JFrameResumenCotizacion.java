@@ -418,7 +418,13 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAtrasActionPerformed
     
+    public void setEvento(String evento) {
+        lblMostrarNombreEvento.setText(evento);
+    }
     
+    public void setOperacion(String horario) {
+        lblMostrarOperacion.setText(horario);
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAprobar;
