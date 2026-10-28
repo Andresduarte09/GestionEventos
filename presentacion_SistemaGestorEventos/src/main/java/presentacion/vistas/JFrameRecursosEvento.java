@@ -199,7 +199,6 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
 
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
         control.registrarRecursosEvento(txtNecesidadesExtra.getText().trim());
-        
         this.dispose();
     }//GEN-LAST:event_btnContinuarActionPerformed
 

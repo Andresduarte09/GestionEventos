@@ -5,6 +5,11 @@
 package presentacion.vistas;
 
 import dto.DTOEvento;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import javax.swing.JOptionPane;
 import presentacion.control.controlPresentacion;
 
 /**
@@ -78,6 +83,11 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
 
         lblNumeroAsistentes.setText("Número de asistentes:");
 
+        txtFecha.setText("dd/mm/aaaa");
+        txtFecha.addActionListener(this::txtFechaActionPerformed);
+
+        txtHorario.setText("HH:mm");
+
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(this::btnRegistrarActionPerformed);
 
@@ -148,8 +158,22 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        control.registrarDatosEvento(evento);
-        this.dispose();
+        try {
+            DTOEvento evento = new DTOEvento();
+            evento.setTipoEvento((String) jComboBoxTipoEvento.getSelectedItem());
+            evento.setUbicacion((String) jComboBoxUbicacion.getSelectedItem());
+            evento.setFechaEvento(LocalDate.parse(txtFecha.getText().trim(),
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            evento.setHoraInicio(LocalTime.parse(txtHorario.getText().trim()));
+            evento.setNumAsistentes(Integer.parseInt(txtNumeroAsistentes.getText().trim()));
+            evento.setFechaRegistro(LocalDate.now());
+            control.registrarDatosEvento(evento);
+            this.dispose();
+        } catch (DateTimeParseException | NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "Revisa la fecha (dd/MM/yyyy), la hora (HH:mm) y el número de asistentes.");
+        }
+
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -161,6 +185,10 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
     private void jComboBoxTipoEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoEventoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBoxTipoEventoActionPerformed
+
+    private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFechaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
