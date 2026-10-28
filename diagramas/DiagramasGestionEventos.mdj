@@ -651,7 +651,7 @@
 									"font": "Arial;13;0",
 									"left": 629.5,
 									"top": 261,
-									"width": 258.52978515625,
+									"width": 258,
 									"height": 25,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAGg61e3iH1gzWE="
@@ -19708,7 +19708,7 @@
 															},
 															"font": "Arial;13;1",
 															"left": 781,
-															"top": 606,
+															"top": 591,
 															"width": 147.3515625,
 															"height": 13,
 															"text": "LocalEvento"
@@ -19743,7 +19743,7 @@
 													],
 													"font": "Arial;13;0",
 													"left": 776,
-													"top": 599,
+													"top": 584,
 													"width": 157.3515625,
 													"height": 25,
 													"stereotypeLabel": {
@@ -19780,7 +19780,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 781,
-															"top": 629,
+															"top": 614,
 															"width": 147.3515625,
 															"height": 13,
 															"text": "+idLocalEvento",
@@ -19797,7 +19797,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 781,
-															"top": 644,
+															"top": 629,
 															"width": 147.3515625,
 															"height": 13,
 															"text": "+tipoLocal",
@@ -19814,7 +19814,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 781,
-															"top": 659,
+															"top": 644,
 															"width": 147.3515625,
 															"height": 13,
 															"text": "+dimensionesLugar",
@@ -19831,7 +19831,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 781,
-															"top": 674,
+															"top": 659,
 															"width": 147.3515625,
 															"height": 13,
 															"text": "+distribucionEspacios",
@@ -19848,7 +19848,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 781,
-															"top": 689,
+															"top": 674,
 															"width": 147.3515625,
 															"height": 13,
 															"text": "+condicionesAcceso",
@@ -19865,7 +19865,7 @@
 															},
 															"font": "Arial;13;0",
 															"left": 781,
-															"top": 704,
+															"top": 689,
 															"width": 147.3515625,
 															"height": 13,
 															"text": "+restriccionesLocal",
@@ -19882,18 +19882,35 @@
 															},
 															"font": "Arial;13;0",
 															"left": 781,
-															"top": 719,
+															"top": 704,
 															"width": 147.3515625,
 															"height": 13,
 															"text": "+necesidadesDetectadas",
+															"horizontalAlignment": 0
+														},
+														{
+															"_type": "UMLAttributeView",
+															"_id": "AAAAAAGhgHALpEmEpdY=",
+															"_parent": {
+																"$ref": "AAAAAAGhV6M/BTcRDvA="
+															},
+															"model": {
+																"$ref": "AAAAAAGhgHALkEkS660="
+															},
+															"font": "Arial;13;0",
+															"left": 781,
+															"top": 719,
+															"width": 147.3515625,
+															"height": 13,
+															"text": "+capacidad",
 															"horizontalAlignment": 0
 														}
 													],
 													"font": "Arial;13;0",
 													"left": 776,
-													"top": 624,
+													"top": 609,
 													"width": 157.3515625,
-													"height": 113
+													"height": 128
 												},
 												{
 													"_type": "UMLOperationCompartmentView",
@@ -37400,9 +37417,9 @@
 																		"$ref": "AAAAAAGhddyOo311j3U="
 																	},
 																	"font": "Arial;13;0",
-																	"left": 248.72998046875,
+																	"left": 246.55908203125,
 																	"top": 5,
-																	"width": 58.54443359375,
+																	"width": 53.92333984375,
 																	"height": 13,
 																	"text": "cu_1_FA2"
 																},
@@ -37415,7 +37432,7 @@
 																	"font": "Arial;13;1",
 																	"left": 229,
 																	"top": 5,
-																	"width": 13.72998046875,
+																	"width": 11.55908203125,
 																	"height": 13,
 																	"text": "sd"
 																}
@@ -46015,6 +46032,14 @@
 											},
 											"name": "necesidadesDetectadas",
 											"type": ""
+										},
+										{
+											"_type": "UMLAttribute",
+											"_id": "AAAAAAGhgHALkEkS660=",
+											"_parent": {
+												"$ref": "AAAAAAGhV6M/BTcKPhI="
+											},
+											"name": "capacidad"
 										}
 									],
 									"operations": [

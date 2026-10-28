@@ -135,6 +135,44 @@ public class controlPresentacion {
         this.evento = evento;
         iniciarRecursosEvento();
     }
+    
+    public boolean registrarDatosEventoDesdeFormulario(String tipoEvento,String ubicacion,java.time.LocalDate fecha,java.time.LocalTime hora,
+            String asistentesTexto, Component padre) {
+
+        StringBuilder errores = new StringBuilder();
+
+        if (!Validaciones.textoValido(tipoEvento)) {
+            errores.append("• Selecciona un tipo de evento.\n");
+        }
+        if (!Validaciones.textoValido(ubicacion)) {
+            errores.append("• Selecciona una ubicación.\n");
+        }
+        if (!Validaciones.fechaValida(fecha)) {
+            errores.append("• Selecciona una fecha.\n");
+        }
+        if (!Validaciones.horaValida(hora)) {
+            errores.append("• Selecciona un horario.\n");
+        }
+        if (!Validaciones.esEnteroPositivo(asistentesTexto)) {
+            errores.append("• El número de asistentes debe ser un entero positivo.\n");
+        }
+
+        if (errores.length() > 0) {
+            JOptionPane.showMessageDialog(padre, errores.toString(),
+                    "Datos inválidos", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        DTOEvento evento = new DTOEvento();
+        evento.setTipoEvento(tipoEvento);
+        evento.setUbicacion(ubicacion);
+        evento.setFechaEvento(fecha);
+        evento.setHoraInicio(hora);
+        evento.setNumAsistentes(Integer.parseInt(asistentesTexto.trim()));
+
+        registrarDatosEvento(evento);
+        return true;
+    }
             
     public void cancelarRegistrarEvento(){
         this.cliente = null;
@@ -163,6 +201,24 @@ public class controlPresentacion {
     public void iniciarRecursosEvento(){
         recursosEvento = new JFrameRecursosEvento(this);
         recursosEvento.setVisible(true);
+    }
+    
+    //actualizar cuando haya logica de reservas 
+    public List<DTOLocalEvento> recomendarLocales(DTOEvento evento) {
+        List<DTOLocalEvento> recomendados = new ArrayList<>();
+        if (evento == null) {
+            return recomendados;
+        }
+
+        for (DTOLocalEvento local : almacen.getLocalesEvento()) {
+            if (local.getCapacidad() >= evento.getNumAsistentes()) {
+                recomendados.add(local);
+            }
+        }
+
+        // Opcional: ordenar por capacidad ascendente (el más ajustado primero)
+        recomendados.sort((a, b) -> Integer.compare(a.getCapacidad(), b.getCapacidad()));
+        return recomendados;
     }
 
     //Paneles de la pantalla de recursos del evento

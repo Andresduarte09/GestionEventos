@@ -59,6 +59,26 @@ public class Validaciones {
         return correo.trim().matches("^[\\w.+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$");
     }
 
+    public static boolean textoValido(String texto) {
+        return texto != null && !texto.trim().isEmpty();
+    }
+    public static boolean fechaValida(java.time.LocalDate fecha) {
+        return fecha != null;
+    }
 
+    public static boolean horaValida(java.time.LocalTime hora) {
+        return hora != null;
+    }
+
+    public static boolean esEnteroPositivo(String texto) {
+        if (texto == null || texto.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            return Integer.parseInt(texto.trim()) > 0;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
 
 }

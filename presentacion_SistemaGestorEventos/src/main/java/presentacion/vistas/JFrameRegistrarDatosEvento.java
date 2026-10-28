@@ -10,6 +10,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import javax.swing.JOptionPane;
+import com.github.lgooddatepicker.components.DatePicker;
+import com.github.lgooddatepicker.components.TimePicker;
 import presentacion.control.controlPresentacion;
 
 /**
@@ -17,8 +19,6 @@ import presentacion.control.controlPresentacion;
  * @author lui
  */
 public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
-
-    DTOEvento evento = new DTOEvento();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRegistrarDatosEvento.class.getName());
 
     /**
@@ -42,6 +42,19 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
         jComboBoxUbicacion.addItem("Salón");
         jComboBoxUbicacion.addItem("Jardín");
         jComboBoxUbicacion.addItem("Auditorio");
+        
+        txtFecha.setVisible(false);
+        txtHorario.setVisible(false);
+        
+        datePickerFecha = new DatePicker();
+        timePickerHorario = new TimePicker();
+        
+        getContentPane().add(datePickerFecha);
+        getContentPane().add(timePickerHorario);
+
+        //pone posicion y tamaño
+        datePickerFecha.setBounds(txtFecha.getX(), txtFecha.getY(), txtFecha.getWidth(), 28);
+        timePickerHorario.setBounds(txtHorario.getX(), txtHorario.getY(), txtHorario.getWidth(), 28);
     }
 
     /**
@@ -71,7 +84,7 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
         setResizable(false);
 
         lblTituloRegistrarDatosEvento.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
-        lblTituloRegistrarDatosEvento.setText("Registrar Datos del Evento");
+        lblTituloRegistrarDatosEvento.setText("Registrar datos del evento");
 
         lblTipo.setText("Tipo de evento:");
 
@@ -82,11 +95,6 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
         lblHora.setText("Horario");
 
         lblNumeroAsistentes.setText("Número de asistentes:");
-
-        txtFecha.setText("dd/mm/aaaa");
-        txtFecha.addActionListener(this::txtFechaActionPerformed);
-
-        txtHorario.setText("HH:mm");
 
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(this::btnRegistrarActionPerformed);
@@ -104,76 +112,94 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(btnCancelar)
-                .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTituloRegistrarDatosEvento)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jComboBoxUbicacion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jComboBoxTipoEvento, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnRegistrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblUbicacion)
-                        .addComponent(lblTipo)
-                        .addComponent(lblFecha)
-                        .addComponent(lblHora)
-                        .addComponent(lblNumeroAsistentes)
-                        .addComponent(txtNumeroAsistentes, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
-                        .addComponent(txtHorario)
-                        .addComponent(txtFecha)))
-                .addContainerGap(127, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnCancelar)
+                        .addGap(95, 95, 95)
+                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(73, 73, 73)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblUbicacion)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(11, 11, 11)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(lblHora)
+                                            .addComponent(lblFecha))))
+                                .addGap(49, 49, 49))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(lblNumeroAsistentes)
+                                        .addGap(27, 27, 27))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(lblTipo)
+                                        .addGap(37, 37, 37)))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jComboBoxTipoEvento, 0, 219, Short.MAX_VALUE)
+                                .addComponent(txtHorario, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                                .addComponent(txtNumeroAsistentes, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                                .addComponent(jComboBoxUbicacion, 0, 219, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(144, 144, 144)
+                        .addComponent(lblTituloRegistrarDatosEvento)))
+                .addContainerGap(161, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addContainerGap()
                 .addComponent(lblTituloRegistrarDatosEvento)
-                .addGap(18, 18, 18)
-                .addComponent(lblTipo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBoxTipoEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(lblUbicacion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBoxUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(lblFecha)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblHora)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblNumeroAsistentes)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNumeroAsistentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addGap(54, 54, 54)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegistrar)
-                    .addComponent(btnCancelar)))
+                    .addComponent(jComboBoxTipoEvento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTipo))
+                .addGap(38, 38, 38)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblUbicacion))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblFecha))
+                .addGap(66, 66, 66)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblHora))
+                .addGap(86, 86, 86)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNumeroAsistentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNumeroAsistentes))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addComponent(btnCancelar))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRegistrar)
+                        .addGap(20, 20, 20))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        try {
-            DTOEvento evento = new DTOEvento();
-            evento.setTipoEvento((String) jComboBoxTipoEvento.getSelectedItem());
-            evento.setUbicacion((String) jComboBoxUbicacion.getSelectedItem());
-            evento.setFechaEvento(LocalDate.parse(txtFecha.getText().trim(),
-                    DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            evento.setHoraInicio(LocalTime.parse(txtHorario.getText().trim()));
-            evento.setNumAsistentes(Integer.parseInt(txtNumeroAsistentes.getText().trim()));
-            evento.setFechaRegistro(LocalDate.now());
-            control.registrarDatosEvento(evento);
-            this.dispose();
-        } catch (DateTimeParseException | NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this,
-                    "Revisa la fecha (dd/MM/yyyy), la hora (HH:mm) y el número de asistentes.");
-        }
-
+        if (control.registrarDatosEventoDesdeFormulario(
+            (String) jComboBoxTipoEvento.getSelectedItem(),
+            (String) jComboBoxUbicacion.getSelectedItem(),
+            datePickerFecha.getDate(),
+            timePickerHorario.getTime(),
+            txtNumeroAsistentes.getText(),
+            this)) {
+                this.dispose();
+    }
+        
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -186,11 +212,18 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBoxTipoEventoActionPerformed
 
+
     private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaActionPerformed
 
+    private void txtNumeroAsistentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroAsistentesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNumeroAsistentesActionPerformed
 
+
+    private DatePicker datePickerFecha;
+    private TimePicker timePickerHorario;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnRegistrar;
