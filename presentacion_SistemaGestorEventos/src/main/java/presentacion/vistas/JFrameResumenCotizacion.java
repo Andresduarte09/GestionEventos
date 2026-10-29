@@ -77,7 +77,6 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         lblMostrarEstadoCotizacion = new javax.swing.JLabel();
         btnAtras = new javax.swing.JButton();
         btnAprobar = new javax.swing.JButton();
-        btnModificar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -373,8 +372,6 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         btnAprobar.setText("Aprobar");
         btnAprobar.addActionListener(this::btnAprobarActionPerformed);
 
-        btnModificar.setText("Modificar");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -384,10 +381,8 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAtras)
-                        .addGap(433, 433, 433)
-                        .addComponent(btnAprobar)
-                        .addGap(412, 412, 412)
-                        .addComponent(btnModificar))
+                        .addGap(930, 930, 930)
+                        .addComponent(btnAprobar))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lblDesgloseServicios)
                         .addComponent(pnelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -406,9 +401,8 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAprobar)
-                    .addComponent(btnAtras)
-                    .addComponent(btnModificar))
-                .addGap(103, 103, 103))
+                    .addComponent(btnAtras))
+                .addContainerGap())
         );
 
         pack();
@@ -472,7 +466,6 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAprobar;
     private javax.swing.JButton btnAtras;
-    private javax.swing.JButton btnModificar;
     private javax.swing.JLabel lblCalculo;
     private javax.swing.JLabel lblCotizacion;
     private javax.swing.JLabel lblDescuento;

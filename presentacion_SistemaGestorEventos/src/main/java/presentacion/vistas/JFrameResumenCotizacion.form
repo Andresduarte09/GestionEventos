@@ -29,10 +29,8 @@
               <Group type="103" groupAlignment="1" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="btnAtras" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="433" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="930" max="-2" attributes="0"/>
                       <Component id="btnAprobar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="412" max="-2" attributes="0"/>
-                      <Component id="btnModificar" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="lblDesgloseServicios" min="-2" max="-2" attributes="0"/>
@@ -55,11 +53,10 @@
               <Component id="pnelCentral" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnAprobar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnAprobar" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="btnAtras" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnModificar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="103" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -559,11 +556,6 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAprobarActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnModificar">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Modificar"/>
-      </Properties>
     </Component>
   </SubComponents>
 </Form>
