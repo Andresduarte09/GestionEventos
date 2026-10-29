@@ -463,7 +463,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblEvento" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lblMostrarNombreEvento" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblMostrarNombreEvento" max="32767" attributes="0"/>
                   <EmptySpace min="-2" pref="144" max="-2" attributes="0"/>
                   <Component id="lblVersion" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -486,7 +486,7 @@
                       <Component id="lblVersion" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblEstado" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblMostrarIDCotizacion" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblMostrarNombreEvento" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblMostrarNombreEvento" alignment="3" max="32767" attributes="0"/>
                       <Component id="lblMostrarVersionCotizacion" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblMostrarEstadoCotizacion" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>

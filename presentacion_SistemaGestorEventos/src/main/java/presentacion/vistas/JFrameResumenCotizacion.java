@@ -5,16 +5,18 @@
 package presentacion.vistas;
 
 import presentacion.control.controlPresentacion;
+import java.util.List;
 
 /**
  *
  * @author lui
  */
 public class JFrameResumenCotizacion extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameResumenCotizacion.class.getName());
 
     private controlPresentacion control;
+
     /**
      * Creates new form JFrameResumenCotizacion
      */
@@ -333,7 +335,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblEvento)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblMostrarNombreEvento)
+                .addComponent(lblMostrarNombreEvento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(144, 144, 144)
                 .addComponent(lblVersion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -354,7 +356,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                     .addComponent(lblVersion)
                     .addComponent(lblEstado)
                     .addComponent(lblMostrarIDCotizacion)
-                    .addComponent(lblMostrarNombreEvento)
+                    .addComponent(lblMostrarNombreEvento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblMostrarVersionCotizacion)
                     .addComponent(lblMostrarEstadoCotizacion))
                 .addContainerGap(78, Short.MAX_VALUE))
@@ -417,15 +419,38 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnAtrasActionPerformed
-    
+
     public void setEvento(String evento) {
         lblMostrarNombreEvento.setText(evento);
     }
-    
+
     public void setOperacion(String horario) {
         lblMostrarOperacion.setText(horario);
     }
-    
+
+    public void setIDCotizacion(String id) {
+        lblMostrarIDCotizacion.setText(id);
+    }
+
+    public void setVersion(String version) {
+        lblMostrarVersionCotizacion.setText(version);
+    }
+
+    public void setEstado(String estado) {
+        lblMostrarEstadoCotizacion.setText(estado);
+    }
+
+    public void setServicios(List<String> servicios) {
+        lblMostrarServicios.setText(enLineas(servicios));
+    }
+
+    private String enLineas(List<String> textos) {
+        if (textos.isEmpty()) {
+            return "";
+        }
+        return "<html>" + String.join("<br>", textos) + "</html>";
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAprobar;
     private javax.swing.JButton btnAtras;
