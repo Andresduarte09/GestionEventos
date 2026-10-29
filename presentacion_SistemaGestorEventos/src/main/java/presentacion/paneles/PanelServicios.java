@@ -17,6 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import presentacion.validaciones.Validaciones;
 
@@ -73,11 +74,23 @@ public class PanelServicios extends JPanel {
         pnlSuperior.add(pnlBusqueda, BorderLayout.CENTER);
 
         add(pnlSuperior, BorderLayout.NORTH);
-        add(pnlOpcionesServicios, BorderLayout.CENTER);
+        
+        JPanel pnlContenedor = new JPanel(new BorderLayout());
+        pnlContenedor.setOpaque(false);
+        pnlContenedor.add(pnlOpcionesServicios, BorderLayout.NORTH);
+
+        JScrollPane scroll = new JScrollPane(pnlContenedor);
+        scroll.setBorder(null);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
+        scroll.getVerticalScrollBar().setUnitIncrement(16);
+
+        add(scroll, BorderLayout.CENTER);
+        
         add(pnlSur, BorderLayout.SOUTH);
         
         btnBuscar.addActionListener(e -> {
-            if (!Validaciones.soloNumeros(txtBuscar)) {
+            if (!Validaciones.soloLetras(txtBuscar)) {
                 JOptionPane.showMessageDialog(this,
                         "Solo se permiten números.");
                 return;
@@ -89,11 +102,10 @@ public class PanelServicios extends JPanel {
     
     public void mostrarServicios(List<DTOServicio> servicios) {
         pnlOpcionesServicios.removeAll();
-        for (DTOServicio servicio : servicios) {
-            JCheckBox chk = new JCheckBox(servicio.getNombre() + (servicio.isEsAdicional() ? " (adicional)" : ""),
-                    servicio.isSeleccionado());
+        for (DTOServicio s : servicios) {
+            JCheckBox chk = new JCheckBox(s.getNombre(), s.isSeleccionado());
             chk.setOpaque(false);
-            chk.setToolTipText("<html>" + servicio.getDescripcion() + "<br>" + servicio.getObservaciones() + "</html>");
+            chk.setToolTipText(s.getDescripcion());
             pnlOpcionesServicios.add(chk);
         }
         pnlOpcionesServicios.revalidate();

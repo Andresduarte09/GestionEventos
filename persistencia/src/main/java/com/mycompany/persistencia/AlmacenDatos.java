@@ -242,6 +242,12 @@ String unidadCapacidad, String tipoRecurso, String unidadMedida, String estadoEn
         servicios.add(new DTOServicio(7, "Entretenimiento", "Música y espectáculos", false, false, "Sin observaciones"));
         servicios.add(new DTOServicio(8, "Transporte y logística", "Traslado de equipo al lugar del evento", false, true, "Se cobra según la distancia"));
         servicios.add(new DTOServicio(9, "Personal de apoyo", "Personal adicional de montaje y operación", false, true, "Se cobra por hora"));
+        servicios.add(new DTOServicio(10, "Fotografía y video", "Cobertura completa del evento en foto y video", true, false, "Sin observaciones"));
+        servicios.add(new DTOServicio(11, "Seguridad", "Personal de control de acceso y vigilancia", false, false, "Sin observaciones"));
+        servicios.add(new DTOServicio(12, "Coordinación", "Planeación y logística general durante el evento", true, false, "Incluye un coordinador principal"));
+        servicios.add(new DTOServicio(13, "Pirotecnia", "Efectos especiales y fuegos artificiales seguros", false, true, "Requiere permisos especiales del lugar"));
+        servicios.add(new DTOServicio(14, "Souvenirs y recuerdos", "Artículos personalizados para los invitados", false, false, "Sin observaciones"));
+        servicios.add(new DTOServicio(15, "Valet parking", "Servicio de estacionamiento para los asistentes", false, true, "Sujeto a la capacidad del recinto"));
     }
 
     //Inventarios
