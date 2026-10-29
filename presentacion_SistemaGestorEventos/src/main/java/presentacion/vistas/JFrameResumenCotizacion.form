@@ -26,24 +26,21 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="lblDesgloseServicios" min="-2" max="-2" attributes="0"/>
-                          <Component id="pnelCentral" max="32767" attributes="0"/>
-                          <Component id="pnlSuperior" alignment="0" max="32767" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" attributes="0">
                       <Component id="btnAtras" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="428" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="433" max="-2" attributes="0"/>
                       <Component id="btnAprobar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="161" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="412" max="-2" attributes="0"/>
                       <Component id="btnModificar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="244" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="lblDesgloseServicios" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnelCentral" max="32767" attributes="0"/>
+                      <Component id="pnlSuperior" alignment="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
+              <EmptySpace pref="24" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -56,13 +53,13 @@
               <Component id="lblDesgloseServicios" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="pnelCentral" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnAtras" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnAprobar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnAtras" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnModificar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="103" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
