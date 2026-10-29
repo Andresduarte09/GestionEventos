@@ -5,6 +5,7 @@
 package presentacion.paneles;
 
 import dto.DTOCliente;
+import dto.DTODetalleSolicitud;
 import dto.DTOEquipo;
 import dto.DTOEvento;
 import dto.DTOPersonal;
@@ -72,13 +73,24 @@ public class PanelResumen extends JPanel {
 
     }
 
-    //Muestra un resumen con la información que ya existe en los DTO (sin calcular precios)
-    public void mostrarResumen(DTOCliente cliente, DTOEvento evento, List<DTOServicio> servicios, List<DTOEquipo> equipos, List<DTOPersonal> personal) {
+    // Muestra un resumen con la información que ya existe en los DTO (sin calcular precios)
+    public void mostrarResumen(DTOCliente cliente, DTOEvento evento, List<DTOServicio> servicios,
+            List<DTOEquipo> equipos, List<DTOPersonal> personal) {
         StringBuilder sb = new StringBuilder();
         sb.append("Cliente: ").append(cliente.getNombre()).append("\n");
         sb.append("Evento: ").append(evento.getTipoEvento()).append(" - ").append(evento.getFechaEvento()).append("\n");
         sb.append("Ubicación: ").append(evento.getUbicacion()).append("\n");
         sb.append("Asistentes: ").append(evento.getNumAsistentes()).append("\n");
+
+        // Recursos del evento
+        sb.append("\nRecursos del Evento:\n");
+        if (evento.getDetallesSolicitud() != null && !evento.getDetallesSolicitud().isEmpty()) {
+            for (DTODetalleSolicitud d : evento.getDetallesSolicitud()) {
+                sb.append("  - ").append(d.getDescripcionSolicitud()).append(" (x").append(d.getCantidadEstimada()).append(")\n");
+            }
+        } else {
+            sb.append("  - Ninguno\n");
+        }
 
         sb.append("\nServicios seleccionados:\n");
         for (DTOServicio s : servicios) {

@@ -33,11 +33,7 @@ import javax.swing.JScrollPane;
 import presentacion.control.controlPresentacion;
 
 /**
- * Diseño común de los paneles de recursos (Comida, Entretenimiento, etc.),
- * según el Figma: título, combo "Seleccionar:", elementos con imagen y contador (+ / -)
- * y flecha de regreso. Cada panel concreto solo indica su título, su carpeta de imágenes
- * y sus elementos.
- *
+ * Panel general padre que da la estructura general de los paneles de los demas recursos
  * @author andres
  */
 public abstract class PanelCategoriaRecursos extends JPanel {
@@ -53,14 +49,15 @@ public abstract class PanelCategoriaRecursos extends JPanel {
     private final JComboBox<String> cmbTipo = new JComboBox<>();
     private final JPanel pnlElementos = new JPanel(new GridLayout(0, 2, 16, 14));
     private final List<TarjetaElemento> tarjetas = new ArrayList<>();
+    private final String tituloCategoria;
 
     //constructor que arma la UI base de todas las categorias, en el cual las subclases aportan los datos
     protected PanelCategoriaRecursos(controlPresentacion control, String titulo, String carpetaImagenes, String[][] elementos){
         this.control = control;
         this.carpetaImagenes = carpetaImagenes;
+        this.tituloCategoria = titulo;
         setLayout(new BorderLayout());
         setBackground(FONDO);
-        setPreferredSize(new Dimension(900, 700));
 
         JLabel lblTitulo = new JLabel(titulo, JLabel.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.PLAIN, 36));
@@ -81,8 +78,9 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         pnlNorte.add(pnlTipo, BorderLayout.CENTER);
 
         for(String[] elemento : elementos){
-            tarjetas.add(new TarjetaElemento(elemento[0], elemento[1], cargarImagen(elemento[0])));
+            tarjetas.add(new TarjetaElemento(elemento[0], elemento[1], cargarImagen(elemento[0]), this));
         }
+        
         List<String> tipos = new ArrayList<>();
         for(TarjetaElemento tarjeta : tarjetas){
             if (!tipos.contains(tarjeta.tipo)){
@@ -98,7 +96,7 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         pnlElementos.setOpaque(false);
         JPanel pnlContenido = new JPanel(new BorderLayout());
         pnlContenido.setOpaque(false);
-        pnlContenido.setBorder(BorderFactory.createEmptyBorder(6, 24, 6, 24));
+        pnlContenido.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
         pnlContenido.add(pnlElementos, BorderLayout.NORTH);
 
         JScrollPane scroll = new JScrollPane(pnlContenido);
@@ -108,13 +106,13 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         scroll.getVerticalScrollBar().setUnitIncrement(16);
 
         JButton btnRegresar = new JButton("\u2190");
-        btnRegresar.setFont(new Font("Arial", Font.BOLD, 24));
+        btnRegresar.setFont(new Font("Arial", Font.BOLD, 32));
         btnRegresar.setForeground(Color.WHITE);
         btnRegresar.setBackground(new Color(25, 25, 25));
         btnRegresar.setOpaque(true);
         btnRegresar.setBorderPainted(false);
         btnRegresar.setFocusPainted(false);
-        btnRegresar.setPreferredSize(new Dimension(56, 46));
+        btnRegresar.setPreferredSize(new Dimension(80, 60));
         btnRegresar.addActionListener(e -> this.control.mostrarMenuRecursos());
 
         JPanel pnlSur = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 4));
@@ -124,7 +122,8 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         add(pnlNorte, BorderLayout.NORTH);
         add(scroll, BorderLayout.CENTER);
         add(pnlSur, BorderLayout.SOUTH);
-
+        
+        
         mostrarElementos();
     }
 
@@ -152,7 +151,11 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         }
         return cantidades;
     }
-
+    
+   public void notificarCambios() {
+        this.control.actualizarRecursosTemporales(this.tituloCategoria, getCantidades());
+   }
+    
     //busca la imagen para luego cargarla, de no encontrar solo da un lugar vacio con Sin imagen (luego se añadiran)
     private Icon cargarImagen(String nombre){
         URL url = getClass().getResource("/imagenes/" + carpetaImagenes + "/" + aArchivo(nombre) + ".png");
@@ -195,10 +198,12 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         private final BotonMasMenos btnMas = new BotonMasMenos(true);
         private final BotonMasMenos btnMenos = new BotonMasMenos(false);
         private int cantidad = 0;
-
-        TarjetaElemento(String nombre, String tipo, Icon imagen){
+        private final PanelCategoriaRecursos panelPadre;
+        
+        TarjetaElemento(String nombre, String tipo, Icon imagen, PanelCategoriaRecursos panelPadre){
             this.nombre = nombre;
             this.tipo = tipo;
+            this.panelPadre = panelPadre;
             setOpaque(false);
             setLayout(new BorderLayout(8, 4));
 
@@ -240,7 +245,11 @@ public abstract class PanelCategoriaRecursos extends JPanel {
             }
             cantidad = nueva;
             actualizar();
+            if (panelPadre != null) {
+                panelPadre.notificarCambios();
+            }
         }
+        
 
         private void actualizar() {
             lblCantidad.setText(String.valueOf(cantidad));

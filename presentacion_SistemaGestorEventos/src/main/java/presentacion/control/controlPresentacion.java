@@ -1,15 +1,16 @@
 package presentacion.control;
 
-import com.mycompany.persistencia.AlmacenDatos;
+
 import presentacion.vistas.*;
 import dto.*;
 import com.mycompany.persistencia.AlmacenDatos;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.Component;
 import javax.swing.JOptionPane;
 import presentacion.validaciones.Validaciones;
 import java.time.LocalTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
@@ -17,6 +18,7 @@ import java.time.LocalTime;
  */
 public class controlPresentacion {
     private JFrameRecursosEvento recursosEvento;
+    private Map<String, Integer> seleccionTemporalRecursos = new LinkedHashMap<>();
     private JFrameConfigurarPropuesta configurarPropuesta;
     private JFrameResumenCotizacion resumenCotizacion;
     private DTOCotizacion cotizacion;
@@ -68,30 +70,29 @@ public class controlPresentacion {
         return evento;
     }
     
-    public boolean procesarTelefonoIngresado(String telefono, Component padre) {
-        // 1. Validar formato
+    public boolean procesarTelefonoIngresado(String telefono) {
         if (!Validaciones.telefonoValido(telefono)) {
-            JOptionPane.showMessageDialog(padre,
+            JOptionPane.showMessageDialog(null,
                     "Ingresa un teléfono válido de 10 dígitos numéricos.",
                     "Teléfono inválido",
                     JOptionPane.WARNING_MESSAGE);
             return false;
         }
-
-        // 2. Buscar cliente
+        //crea el cliente a buscar si existe o no
         DTOCliente existente = buscarClientePorTelefono(telefono);
 
-        // 3. Decidir flujo
+        //decide el flujo
         if (existente != null) {
             iniciarRegistrarEvento(existente);
         } else {
             DTOCliente nuevo = new DTOCliente();
             nuevo.setTelefono(telefono);
-            iniciarRegistrarClienteNuevo(nuevo);
+            registrarCliente(nuevo);
         }
         return true;
     }
     
+    //busca el cliente en el almacen actualmente para la comunicacion entre patnallas
     private DTOCliente buscarClientePorTelefono(String telefono) {
         for (DTOCliente c : almacen.getClientes()) {
             if (c.getTelefono() != null && c.getTelefono().equals(telefono)) {
@@ -101,66 +102,78 @@ public class controlPresentacion {
         return null;
     }
     
-    public void iniciarRegistrarClienteNuevo(DTOCliente cliente) {
+    private void registrarCliente(DTOCliente cliente) {
         JFrameFormularioRegistro formulario = new JFrameFormularioRegistro(this, cliente);
         formulario.setVisible(true);
     }
     
-    public boolean registrarClienteYContinuar(DTOCliente cliente, Component padre) {
-        if (!Validaciones.telefonoValido(cliente.getTelefono())
-                || cliente.getNombre() == null || cliente.getNombre().isBlank()
-                || !Validaciones.correoValido(cliente.getCorreo())) {
-            JOptionPane.showMessageDialog(padre,
-                    "Revisa los datos del cliente.",
-                    "Datos inválidos",
-                    JOptionPane.WARNING_MESSAGE);
-            return false;
+    //el metodo se encarga de validar, persistir los datos del cliente para el metodo del registro de formulario
+    //me estoy basando en la arquitectura por capas para su creacion, ya que se dividen las responsabilidades
+    public boolean procesarRegistroCliente(DTOCliente cliente) {
+        StringBuilder errores = new StringBuilder();
+        
+        if (!Validaciones.textoValido(cliente.getNombre())) {
+            errores.append("El nombre no puede estar vacío.\n");
+        }
+        if (!Validaciones.telefonoValido(cliente.getTelefono())) {
+            errores.append("El teléfono debe tener 10 dígitos numéricos.\n");
+        }
+        if (!Validaciones.correoValido(cliente.getCorreo())) {
+            errores.append("El correo electrónico no tiene un formato válido.\n");
         }
 
-        // Persistir en memoria (o donde corresponda)
-        almacen.getClientes().add(cliente);
-
-        // Continuar flujo
+        if (errores.length() > 0) {
+            JOptionPane.showMessageDialog(null, errores.toString(),
+                    "Datos invalidos", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+;
+        //Continuar flujo
         iniciarRegistrarEvento(cliente);
         return true;
     }
     
-    //Registra datos del evento (recibe el DTO del cliente)
+    //Inicia el registro de datos del evento 
     public void iniciarRegistrarEvento(DTOCliente cliente){
         this.cliente = cliente;
         JFrameRegistrarDatosEvento registrarEvento = new JFrameRegistrarDatosEvento(this);
         registrarEvento.setVisible(true);
     }
     
-    public void registrarDatosEvento(DTOEvento evento){
+    //guarda el evento y mueve a la siguiente pantalla
+    private void registrarDatosEvento(DTOEvento evento){
         this.evento = evento;
         iniciarRecursosEvento();
     }
     
-    public boolean registrarDatosEventoDesdeFormulario(String tipoEvento,String ubicacion,java.time.LocalDate fecha,java.time.LocalTime hora,
-            String asistentesTexto, Component padre) {
-
+    //este metodo filtra, arma el objeto evento y despues lo manda al metodo que se encarga de guardarlo y cambiar de pantalla
+    //asi separamos la logica con arquitectura por capas dividiendo responsabilidades
+    public boolean procesarDatosEvento(String tipoEvento,String ubicacion,
+            java.time.LocalDate fecha,java.time.LocalTime hora,
+            String asistentesTexto) {
+        //acumula errores por si existen varios en una misma viñeta
         StringBuilder errores = new StringBuilder();
-
+        
+        //validaciones
         if (!Validaciones.textoValido(tipoEvento)) {
-            errores.append("• Selecciona un tipo de evento.\n");
+            errores.append("Selecciona un tipo de evento.\n");
         }
         if (!Validaciones.textoValido(ubicacion)) {
-            errores.append("• Selecciona una ubicación.\n");
+            errores.append("Selecciona una ubicación.\n");
         }
         if (!Validaciones.fechaValida(fecha)) {
-            errores.append("• Selecciona una fecha.\n");
+            errores.append("Selecciona una fecha.\n");
         }
         if (!Validaciones.horaValida(hora)) {
-            errores.append("• Selecciona un horario.\n");
+            errores.append("Selecciona un horario.\n");
         }
         if (!Validaciones.esEnteroPositivo(asistentesTexto)) {
-            errores.append("• El número de asistentes debe ser un entero positivo.\n");
+            errores.append("El número de asistentes debe ser un entero positivo.\n");
         }
 
         if (errores.length() > 0) {
-            JOptionPane.showMessageDialog(padre, errores.toString(),
-                    "Datos inválidos", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, errores.toString(),
+                    "Datos invalidos", JOptionPane.WARNING_MESSAGE);
             return false;
         }
 
@@ -170,17 +183,23 @@ public class controlPresentacion {
         evento.setFechaEvento(fecha);
         evento.setHoraInicio(hora);
         evento.setNumAsistentes(Integer.parseInt(asistentesTexto.trim()));
-
+        
+        //llama al metodo que guarda y mueve pantalla
         registrarDatosEvento(evento);
         return true;
     }
             
     public void cancelarRegistrarEvento(){
+        if (this.cliente != null) {
+            almacen.getClientes().remove(this.cliente);
+        }
+        
         this.cliente = null;
         this.evento = null;
         JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
         inicioSesion.setVisible(true);
     }
+    
     
     //cancelar recursos del evento
     public void cancelarRecursosEvento(){
@@ -189,6 +208,11 @@ public class controlPresentacion {
         
     }
     
+    public void actualizarRecursosTemporales(String categoria, Map<String, Integer> cantidades) {
+    for (java.util.Map.Entry<String, Integer> entry : cantidades.entrySet()) {
+        seleccionTemporalRecursos.put(categoria + "|" + entry.getKey(), entry.getValue());
+    }
+}
     public void CancelarAnalisisEvaluacion(){
         JFrameRecursosEvento recursoEvento = new JFrameRecursosEvento(this);
         recursoEvento.setVisible(true);
@@ -216,8 +240,6 @@ public class controlPresentacion {
                 recomendados.add(local);
             }
         }
-
-        // Opcional: ordenar por capacidad ascendente (el más ajustado primero)
         recomendados.sort((a, b) -> Integer.compare(a.getCapacidad(), b.getCapacidad()));
         return recomendados;
     }
@@ -317,15 +339,39 @@ public class controlPresentacion {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
     }
     
-    // ----
-    public void registrarRecursosEvento(String necesidadesExtra){
-      
-        evento.setNecesidadesIniciales(necesidadesExtra);
+    public void registrarRecursosEvento(String necesidadesExtra) {
+        evento.setNecesidadesIniciales(necesidadesExtra); 
         
+        List<DTODetalleSolicitud> detalles = new java.util.ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : seleccionTemporalRecursos.entrySet()) {
+            String[] partes = entry.getKey().split("\\|"); 
+            //el if es para asegurar formato correcto
+            if (partes.length == 2) {
+                DTODetalleSolicitud detalle = new DTODetalleSolicitud();
+                //inserta en el arreglo la categoria de la comida y la pone en indice 0
+                detalle.setCategoriaSolicitada(partes[0]); 
+                //pone en conjunto a la categoria, el recurso que se selecciono de dicha categoria en indice 1
+                detalle.setDescripcionSolicitud(partes[1]);  
+                detalle.setCantidadEstimada(entry.getValue());
+                detalles.add(detalle);
+                //termina quedando algo como: Comida|Sopa fría
+            }
+        }
+
+        //asigna los detalles de la solicitud al evento
+        evento.setDetallesSolicitud(detalles);
+
+        
+        //termina guardando el cliente si es nuevo
+        //lo pongo aqui de una vez pero probablemente se deba poner a la hora de crear la orden final
+        if (cliente != null && buscarClientePorTelefono(cliente.getTelefono()) == null) {
+            almacen.getClientes().add(cliente);
+        }
+
         iniciarAnalisisEvaluacion();
     }
-    
-    
+       
     public void iniciarAnalisisEvaluacion(){
         JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion(this, cliente, evento);
         analisisEvaluacion.setVisible(true);
@@ -373,7 +419,5 @@ public class controlPresentacion {
     public void iniciarGenerarOrden(){
         JFrameGenerarOrden generarOrden = new JFrameGenerarOrden();
         generarOrden.setVisible(true);
-    }
-    
-    
+    }   
 }   

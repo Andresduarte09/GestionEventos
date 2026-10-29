@@ -6,9 +6,6 @@ package presentacion.vistas;
 
 import dto.DTOEvento;
 import presentacion.control.controlPresentacion;
-import static java.awt.SystemColor.control;
-import java.awt.event.ActionEvent;
-import javax.swing.SwingUtilities;
 
 /**
  * SE MODIFICO ESTA CLASE, SI HAY ALGUN ERROR CHECAR LOGICA DE AQUI

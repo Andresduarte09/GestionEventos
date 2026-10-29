@@ -99,7 +99,7 @@ public class JFrameInicioSesion extends javax.swing.JFrame {
 
     private void btnRegistrarEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarEventoActionPerformed
         String telefono = txtTelefono.getText().trim();
-        if (control.procesarTelefonoIngresado(telefono, this)) {
+        if (control.procesarTelefonoIngresado(telefono)) {
             this.dispose();
         }
     }//GEN-LAST:event_btnRegistrarEventoActionPerformed
