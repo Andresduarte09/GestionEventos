@@ -35,6 +35,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         pnelCentral = new javax.swing.JPanel();
         lblServicioConcepto = new javax.swing.JLabel();
         lblHorariosFases = new javax.swing.JLabel();
@@ -77,10 +78,8 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         lblMostrarEstadoCotizacion = new javax.swing.JLabel();
         btnAtras = new javax.swing.JButton();
         btnAprobar = new javax.swing.JButton();
-        btnModificar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
 
         pnelCentral.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -88,7 +87,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
 
         lblHorariosFases.setText("Horarios y Fases");
 
-        lblPersonalRecurso.setText("Personal / Recurso");
+        lblPersonalRecurso.setText("Material:");
 
         lblImporte.setText("Importe");
 
@@ -124,35 +123,32 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
             pnlServiciosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlServiciosLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblServiciosIntegrales)
-                .addGap(18, 18, 18)
-                .addComponent(lblMostrarServicios)
-                .addGap(68, 68, 68)
                 .addGroup(pnlServiciosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlServiciosLayout.createSequentialGroup()
-                        .addGroup(pnlServiciosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlServiciosLayout.createSequentialGroup()
-                                .addComponent(lblOperacion)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblMostrarOperacion))
-                            .addGroup(pnlServiciosLayout.createSequentialGroup()
-                                .addComponent(lblDesmontaje)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblMostrarDesmontaje)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblServiciosIntegrales)
+                    .addComponent(lblMostrarServicios, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
+                .addGroup(pnlServiciosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(pnlServiciosLayout.createSequentialGroup()
                         .addComponent(lblMontaje)
-                        .addGap(29, 29, 29)
-                        .addComponent(lblMostrarMontaje)
-                        .addGap(120, 120, 120)
-                        .addComponent(lblEquipos)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblMostrarEquipos)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblPesos)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblMostrarImportes)
-                        .addGap(62, 62, 62))))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblMostrarMontaje, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlServiciosLayout.createSequentialGroup()
+                        .addComponent(lblOperacion)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblMostrarOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlServiciosLayout.createSequentialGroup()
+                        .addComponent(lblDesmontaje)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblMostrarDesmontaje, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(139, 139, 139)
+                .addComponent(lblEquipos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lblMostrarEquipos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblPesos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblMostrarImportes)
+                .addGap(62, 62, 62))
         );
         pnlServiciosLayout.setVerticalGroup(
             pnlServiciosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,21 +157,23 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                 .addGroup(pnlServiciosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblServiciosIntegrales)
                     .addComponent(lblMontaje)
-                    .addComponent(lblEquipos)
-                    .addComponent(lblMostrarServicios)
                     .addComponent(lblMostrarMontaje)
-                    .addComponent(lblMostrarEquipos)
                     .addComponent(lblMostrarImportes)
-                    .addComponent(lblPesos))
+                    .addComponent(lblPesos)
+                    .addComponent(lblEquipos)
+                    .addComponent(lblMostrarEquipos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlServiciosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblOperacion)
-                    .addComponent(lblMostrarOperacion))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlServiciosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDesmontaje)
-                    .addComponent(lblMostrarDesmontaje))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addGroup(pnlServiciosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlServiciosLayout.createSequentialGroup()
+                        .addGroup(pnlServiciosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblOperacion)
+                            .addComponent(lblMostrarOperacion))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlServiciosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblDesmontaje)
+                            .addComponent(lblMostrarDesmontaje))
+                        .addContainerGap(20, Short.MAX_VALUE))
+                    .addComponent(lblMostrarServicios, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pnlPersonalOperativo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -202,7 +200,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                 .addGroup(pnlPersonalOperativoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPersonalOperativo)
                     .addComponent(lblMostrarPersonalOperativo))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         lblCalculo.setText("Cálculo Financiero y Descuentos");
@@ -238,17 +236,20 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                                 .addGroup(pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnelCentralLayout.createSequentialGroup()
                                         .addComponent(lblServicioConcepto)
-                                        .addGap(132, 132, 132)
+                                        .addGap(221, 221, 221)
                                         .addComponent(lblHorariosFases)
-                                        .addGap(137, 137, 137)
-                                        .addComponent(lblPersonalRecurso))
+                                        .addGap(239, 239, 239)
+                                        .addComponent(lblPersonalRecurso)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(lblImporte)
+                                        .addGap(19, 19, 19))
                                     .addGroup(pnelCentralLayout.createSequentialGroup()
                                         .addComponent(lblCalculo)
                                         .addGap(159, 159, 159)
                                         .addGroup(pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(pnelCentralLayout.createSequentialGroup()
                                                 .addComponent(lblDescuento)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 573, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 657, Short.MAX_VALUE)
                                                 .addComponent(lblMostrarDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(pnelCentralLayout.createSequentialGroup()
                                                 .addComponent(lblSubtotal)
@@ -262,27 +263,26 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                                                 .addGroup(pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addComponent(lblMostrarTotal)
                                                     .addComponent(lblMostrarIVA))))))
-                                .addGap(24, 24, 24))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnelCentralLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lblImporte)
-                        .addGap(120, 120, 120)))
+                                .addGap(24, 24, 24)))))
                 .addContainerGap())
         );
         pnelCentralLayout.setVerticalGroup(
             pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnelCentralLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblServicioConcepto)
-                    .addComponent(lblHorariosFases)
-                    .addComponent(lblPersonalRecurso))
-                .addGap(14, 14, 14)
-                .addComponent(lblImporte)
+                .addGroup(pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnelCentralLayout.createSequentialGroup()
+                        .addGroup(pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblServicioConcepto)
+                            .addComponent(lblHorariosFases)
+                            .addComponent(lblImporte))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnelCentralLayout.createSequentialGroup()
+                        .addComponent(lblPersonalRecurso)
+                        .addGap(4, 4, 4)))
+                .addComponent(pnlServicios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlServicios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnlPersonalOperativo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(pnlPersonalOperativo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCalculo)
@@ -300,7 +300,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                 .addGroup(pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotal)
                     .addComponent(lblMostrarTotal))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         lblDesgloseServicios.setText("Desglose de servicios y cronograma operativo");
@@ -359,7 +359,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                     .addComponent(lblMostrarNombreEvento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblMostrarVersionCotizacion)
                     .addComponent(lblMostrarEstadoCotizacion))
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         btnAtras.setText("Atrás");
@@ -367,8 +367,6 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
 
         btnAprobar.setText("Aprobar");
         btnAprobar.addActionListener(this::btnAprobarActionPerformed);
-
-        btnModificar.setText("Modificar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -379,15 +377,24 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAtras)
+<<<<<<< Updated upstream
                         .addGap(433, 433, 433)
                         .addComponent(btnAprobar)
                         .addGap(412, 412, 412)
                         .addComponent(btnModificar))
+=======
+                        .addGap(968, 968, 968)
+                        .addComponent(btnAprobar))
+>>>>>>> Stashed changes
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(lblDesgloseServicios)
                         .addComponent(pnelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlSuperior, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+<<<<<<< Updated upstream
                 .addContainerGap(24, Short.MAX_VALUE))
+=======
+                .addContainerGap(12, Short.MAX_VALUE))
+>>>>>>> Stashed changes
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -397,6 +404,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblDesgloseServicios)
                 .addGap(18, 18, 18)
+<<<<<<< Updated upstream
                 .addComponent(pnelCentral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -404,6 +412,14 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                     .addComponent(btnAtras)
                     .addComponent(btnModificar))
                 .addGap(103, 103, 103))
+=======
+                .addComponent(pnelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAtras)
+                    .addComponent(btnAprobar))
+                .addGap(18, 18, 18))
+>>>>>>> Stashed changes
         );
 
         pack();
@@ -415,7 +431,8 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAprobarActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
-        // TODO add your handling code here:
+        control.iniciarConfigurarPropuesta();
+        this.dispose();
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     public void setEvento(String evento) {
@@ -442,6 +459,20 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         lblMostrarServicios.setText(enLineas(servicios));
     }
 
+    public void setEquipos(List<String> equipos) {
+        lblMostrarEquipos.setText(enLineas(equipos));
+    }
+
+    public void setPersonalOperativo(List<String> personal) {
+        lblMostrarPersonalOperativo.setText(enLineas(personal));
+    }
+
+    public void ajustarTamano() {
+        this.revalidate();
+        this.repaint();
+        this.pack();
+    }
+
     private String enLineas(List<String> textos) {
         if (textos.isEmpty()) {
             return "";
@@ -452,7 +483,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAprobar;
     private javax.swing.JButton btnAtras;
-    private javax.swing.JButton btnModificar;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel lblCalculo;
     private javax.swing.JLabel lblCotizacion;
     private javax.swing.JLabel lblDescuento;
