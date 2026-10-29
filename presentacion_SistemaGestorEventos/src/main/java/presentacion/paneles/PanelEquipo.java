@@ -8,7 +8,11 @@ import dto.DTOEquipo;
 import presentacion.control.controlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,20 +27,57 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PanelEquipo extends JPanel {
 
+    private static final int COL_BORRAR = 2;
+    private static final Color GRIS = new Color(220, 220, 220);
+
     private final controlPresentacion control;
-    private JLabel lblEncabezado;
+    private JLabel lblEncabezado, lblLista;
     private JTable tblEquipos;
+    private final JButton btnBasura = new JButton("🗑️");
     private JButton btnConsultarInventario, btnConsultarProveedor, btnVolver, btnContinuar;
+
+    // Equipos que se muestran en la tabla (misma posición que cada fila)
+    private final List<DTOEquipo> seleccionados = new ArrayList<>();
 
     public PanelEquipo(controlPresentacion control) {
         this.control = control;
         setLayout(new BorderLayout(15, 15));
-        setBackground(new Color(220, 220, 220));
+        setBackground(GRIS);
 
         lblEncabezado = new JLabel("Selección De Equipos", JLabel.LEFT);
         lblEncabezado.setFont(new Font("Arial", Font.BOLD, 16));
 
+        lblLista = new JLabel("Lista de equipos seleccionados", JLabel.LEFT);
+
+        btnBasura.setFocusPainted(false);
+
         tblEquipos = new JTable();
+        tblEquipos.setRowHeight(28);
+        tblEquipos.setShowGrid(false);
+        tblEquipos.setBackground(GRIS);
+        tblEquipos.getTableHeader().setReorderingAllowed(false);
+
+        // Clic sobre el botón de basura: quita el equipo de la lista
+        tblEquipos.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int fila = tblEquipos.rowAtPoint(e.getPoint());
+                int col = tblEquipos.columnAtPoint(e.getPoint());
+                if (fila >= 0 && col == COL_BORRAR) {
+                    eliminarEquipo(fila);
+                }
+            }
+        });
+        
+        // Cursor de mano al pasar sobre el botón de basura
+        tblEquipos.addMouseMotionListener(new MouseAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                boolean sobreBasura = tblEquipos.rowAtPoint(e.getPoint()) >= 0
+                        && tblEquipos.columnAtPoint(e.getPoint()) == COL_BORRAR;
+                tblEquipos.setCursor(Cursor.getPredefinedCursor(sobreBasura ? Cursor.HAND_CURSOR : Cursor.DEFAULT_CURSOR));
+            }
+        });
 
         btnConsultarInventario = new JButton("Consultar Inventario");
         btnConsultarProveedor = new JButton("Consultar Proveedor");
@@ -44,9 +85,13 @@ public class PanelEquipo extends JPanel {
         btnConsultarInventario.addActionListener(e -> this.control.mostrarInventario());
         btnConsultarProveedor.addActionListener(e -> this.control.mostrarProveedor());
 
+        JScrollPane scroll = new JScrollPane(tblEquipos);
+        scroll.getViewport().setBackground(GRIS);
+
         JPanel pnlCentro = new JPanel(new BorderLayout(10, 10));
         pnlCentro.setOpaque(false);
-        pnlCentro.add(new JScrollPane(tblEquipos), BorderLayout.CENTER);
+        pnlCentro.add(lblLista, BorderLayout.NORTH);
+        pnlCentro.add(scroll, BorderLayout.CENTER);
 
         JPanel pnlAccionesTabla = new JPanel();
         pnlAccionesTabla.setOpaque(false);
@@ -69,19 +114,35 @@ public class PanelEquipo extends JPanel {
         add(pnlCentro, BorderLayout.CENTER);
         add(pnlSur, BorderLayout.SOUTH);
     }
-    
-    //Muestra los equipos del almacén con su disponibilidad
+
+    // Muestra solo los equipos ya seleccionados (cantidad mayor a 0)
     public void mostrarEquipos(List<DTOEquipo> equipos) {
-        DefaultTableModel modelo = modeloSoloLectura(new String[]{"Equipo", "Disponibilidad", "Cantidad seleccionada"});
+        seleccionados.clear();
+        DefaultTableModel modelo = modeloSoloLectura(new String[]{"Equipo", "Cantidad", ""});
         for (DTOEquipo equipo : equipos) {
-            modelo.addRow(new Object[]{equipo.getNombre(), equipo.getDisponibilidad(), equipo.getCantidadSeleccionada()});
+            if (equipo.getCantidadSeleccionada() > 0) {
+                seleccionados.add(equipo);
+                modelo.addRow(new Object[]{equipo.getNombre(), equipo.getCantidadSeleccionada(), ""});
+            }
         }
         tblEquipos.setModel(modelo);
+
+        // La columna de borrar: angosta y con un botón (el texto lo cambias por tu icono)
+        tblEquipos.getColumnModel().getColumn(COL_BORRAR).setMinWidth(100);
+        tblEquipos.getColumnModel().getColumn(COL_BORRAR).setMaxWidth(100);
+        tblEquipos.getColumnModel().getColumn(COL_BORRAR).setCellRenderer((t, v, sel, foco, fila, col) -> btnBasura);
     }
- 
-    //Modelo de tabla solo de lectura
-    private static javax.swing.table.DefaultTableModel modeloSoloLectura(String[] columnas) {
-        return new javax.swing.table.DefaultTableModel(columnas, 0) {
+
+    // Quita el equipo de la tabla y lo deja en cantidad 0
+    private void eliminarEquipo(int fila) {
+        seleccionados.get(fila).setCantidadSeleccionada(0);
+        seleccionados.remove(fila);
+        ((DefaultTableModel) tblEquipos.getModel()).removeRow(fila);
+    }
+
+    // Modelo de tabla solo de lectura
+    private static DefaultTableModel modeloSoloLectura(String[] columnas) {
+        return new DefaultTableModel(columnas, 0) {
             @Override
             public boolean isCellEditable(int fila, int columna) {
                 return false;

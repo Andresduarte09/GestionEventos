@@ -104,7 +104,6 @@ public class PanelServicios extends JPanel {
         pnlOpcionesServicios.removeAll();
         for (DTOServicio s : servicios) {
             JCheckBox chk = new JCheckBox(s.getNombre(), s.isSeleccionado());
-            chk.setOpaque(false);
             chk.setToolTipText(s.getDescripcion());
             pnlOpcionesServicios.add(chk);
         }
