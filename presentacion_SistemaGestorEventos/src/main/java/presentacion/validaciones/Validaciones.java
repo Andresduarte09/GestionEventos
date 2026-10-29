@@ -81,5 +81,16 @@ public class Validaciones {
             return false;
         }
     }
+    //parecido al de arriba pero este admite 0
+    public static boolean noEsNegativo(String texto) {
+       if (texto == null || texto.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            return Integer.parseInt(texto.trim()) >= 0;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+    }
 
 }

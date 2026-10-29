@@ -82,10 +82,10 @@ public class PanelPersonal extends JPanel {
         DTOPersonal personal = listaPersonal.get(fila);
         String texto = modelo.getValueAt(fila, columna).toString();
 
-        if (Validaciones.esEnteroPositivo(texto)) {
+        if (Validaciones.noEsNegativo(texto)) {
             personal.setCantidad(Integer.parseInt(texto.trim()));
         } else {
-            JOptionPane.showMessageDialog(this, "La cantidad debe ser un número entero mayor a 0.");
+            JOptionPane.showMessageDialog(this, "La cantidad no debe ser un número negativo");
             modelo.setValueAt(personal.getCantidad(), fila, columna); // regresa el valor anterior
         }
     }

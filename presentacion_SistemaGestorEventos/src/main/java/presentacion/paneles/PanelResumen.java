@@ -95,7 +95,7 @@ public class PanelResumen extends JPanel {
         sb.append("\nServicios seleccionados:\n");
         for (DTOServicio s : servicios) {
             if (s.isSeleccionado()) {
-                sb.append("  - ").append(s.getNombre()).append(s.isEsAdicional() ? " (adicional)" : "").append("\n");
+                sb.append("  - ").append(s.getNombre()).append("\n");
             }
         }
 
