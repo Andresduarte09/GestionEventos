@@ -92,6 +92,9 @@
                                           <Component id="lblHorariosFases" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="137" max="-2" attributes="0"/>
                                           <Component id="lblPersonalRecurso" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                          <Component id="lblImporte" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" attributes="0">
                                           <Component id="lblCalculo" min="-2" max="-2" attributes="0"/>
@@ -125,11 +128,6 @@
                               </Group>
                           </Group>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          <Component id="lblImporte" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
-                      </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -143,10 +141,9 @@
                       <Component id="lblServicioConcepto" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblHorariosFases" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblPersonalRecurso" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblImporte" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                  <Component id="lblImporte" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                   <Component id="pnlServicios" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="pnlPersonalOperativo" min="-2" max="-2" attributes="0"/>
@@ -211,10 +208,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="lblServiciosIntegrales" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblServiciosIntegrales" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                              <Component id="lblMostrarServicios" min="-2" pref="251" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="lblMostrarServicios" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="68" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -239,7 +240,7 @@
                               <Component id="lblEquipos" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="lblMostrarEquipos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace pref="390" max="32767" attributes="0"/>
                               <Component id="lblPesos" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="lblMostrarImportes" min="-2" max="-2" attributes="0"/>
@@ -257,23 +258,28 @@
                           <Component id="lblServiciosIntegrales" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblMontaje" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblEquipos" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblMostrarServicios" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblMostrarMontaje" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblMostrarEquipos" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblMostrarImportes" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lblPesos" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblOperacion" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblMostrarOperacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="lblOperacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblMostrarOperacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="lblDesmontaje" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblMostrarDesmontaje" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace min="0" pref="24" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="lblMostrarServicios" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblDesmontaje" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblMostrarDesmontaje" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace pref="34" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -356,8 +362,8 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="lblPersonalOperativo" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="222" max="-2" attributes="0"/>
-                      <Component id="lblMostrarPersonalOperativo" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="lblMostrarPersonalOperativo" min="-2" pref="327" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -366,11 +372,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="lblPersonalOperativo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblMostrarPersonalOperativo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="lblPersonalOperativo" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="14" max="32767" attributes="0"/>
+                          </Group>
+                          <Component id="lblMostrarPersonalOperativo" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="78" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -487,7 +496,7 @@
                       <Component id="lblMostrarVersionCotizacion" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lblMostrarEstadoCotizacion" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="78" max="32767" attributes="0"/>
+                  <EmptySpace pref="23" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

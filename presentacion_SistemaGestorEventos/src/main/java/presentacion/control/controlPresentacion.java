@@ -416,6 +416,9 @@ public class controlPresentacion {
         }
 
         resumenCotizacion.setServicios(serviciosSeleccionados());
+        resumenCotizacion.setEquipos(equiposSeleccionados());
+        resumenCotizacion.setPersonalOperativo(personalSeleccionado());
+        resumenCotizacion.ajustarTamano();
     }
 
     private String formatearHorario(LocalTime inicio, LocalTime fin) {
@@ -442,6 +445,26 @@ public class controlPresentacion {
         for (DTOServicio s : consultarServicios()) {
             if (s.isSeleccionado()) {
                 nombres.add(s.getNombre());
+            }
+        }
+        return nombres;
+    }
+
+    private List<String> equiposSeleccionados() {
+        List<String> nombres = new ArrayList<>();
+        for (DTOEquipo e : consultarEquipos()) {
+            if (e.getCantidadSeleccionada() > 0) {
+                nombres.add(e.getNombre() + " (x" + e.getCantidadSeleccionada() + ")");
+            }
+        }
+        return nombres;
+    }
+
+    private List<String> personalSeleccionado() {
+        List<String> nombres = new ArrayList<>();
+        for (DTOPersonal p : consultarPersonal()) {
+            if (p.getCantidad() > 0) {
+                nombres.add(p.getEspecialidad() + " (x" + p.getCantidad() + ")");
             }
         }
         return nombres;
