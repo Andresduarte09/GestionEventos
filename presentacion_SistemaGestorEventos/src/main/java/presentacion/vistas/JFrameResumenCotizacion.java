@@ -145,7 +145,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                         .addComponent(lblMontaje)
                         .addGap(29, 29, 29)
                         .addComponent(lblMostrarMontaje)
-                        .addGap(120, 120, 120)
+                        .addGap(146, 146, 146)
                         .addComponent(lblEquipos)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblMostrarEquipos)
@@ -244,9 +244,9 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                                 .addGroup(pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnelCentralLayout.createSequentialGroup()
                                         .addComponent(lblServicioConcepto)
-                                        .addGap(132, 132, 132)
+                                        .addGap(172, 172, 172)
                                         .addComponent(lblHorariosFases)
-                                        .addGap(137, 137, 137)
+                                        .addGap(150, 150, 150)
                                         .addComponent(lblPersonalRecurso)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(lblImporte)
@@ -257,7 +257,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                                         .addGroup(pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(pnelCentralLayout.createSequentialGroup()
                                                 .addComponent(lblDescuento)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 573, Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 599, Short.MAX_VALUE)
                                                 .addComponent(lblMostrarDescuento, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(pnelCentralLayout.createSequentialGroup()
                                                 .addComponent(lblSubtotal)
@@ -304,7 +304,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                 .addGroup(pnelCentralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotal)
                     .addComponent(lblMostrarTotal))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         lblDesgloseServicios.setText("Desglose de servicios y cronograma operativo");
@@ -377,7 +377,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAtras)
@@ -387,7 +387,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                         .addComponent(lblDesgloseServicios)
                         .addComponent(pnelCentral, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(pnlSuperior, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
