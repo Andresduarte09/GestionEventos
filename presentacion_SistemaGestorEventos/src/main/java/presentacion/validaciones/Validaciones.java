@@ -62,6 +62,7 @@ public class Validaciones {
     public static boolean textoValido(String texto) {
         return texto != null && !texto.trim().isEmpty();
     }
+    
     public static boolean fechaValida(java.time.LocalDate fecha) {
         return fecha != null;
     }

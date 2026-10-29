@@ -126,7 +126,7 @@ public class JFrameFormularioRegistro extends javax.swing.JFrame {
         cliente.setTelefono(txtTelefonoContacto.getText().trim());
         cliente.setTelefonoAlt(txtRelefonoRespaldo.getText().trim());
 
-        if (control.registrarClienteYContinuar(cliente, this)) {
+        if (control.procesarRegistroCliente(cliente)) {
             this.dispose();
         }
     }//GEN-LAST:event_btnFinalizarRegistroActionPerformed

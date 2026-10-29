@@ -42,23 +42,26 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
 
     //El menu del disenador pasa a ser una carta mas del CardLayout, junto a los 5 paneles
     private void iniciarPaneles() {
-        JPanel pnlMenu = (JPanel) getContentPane();
-        Dimension tamano = pnlMenu.getPreferredSize();
+       JPanel pnlMenu = (JPanel) getContentPane();
+       this.pack(); 
+       Dimension tamano = this.getSize(); // Guardamos el tamaño real de tu menú
 
-        layoutPaneles = new CardLayout();
-        pnlContenido = new JPanel(layoutPaneles);
-        setContentPane(pnlContenido);
+       layoutPaneles = new CardLayout();
+       pnlContenido = new JPanel(layoutPaneles);
+       setContentPane(pnlContenido);
 
-        pnlContenido.add(pnlMenu, PANEL_MENU);
-        agregarPanel(new PanelComida(control), PANEL_COMIDA, tamano);
-        agregarPanel(new PanelEntretenimiento(control), PANEL_ENTRETENIMIENTO, tamano);
-        agregarPanel(new PanelIluminacion(control), PANEL_ILUMINACION, tamano);
-        agregarPanel(new PanelDecoracion(control), PANEL_DECORACION, tamano);
-        agregarPanel(new PanelPantallas(control), PANEL_PANTALLAS, tamano);
+       pnlContenido.add(pnlMenu, PANEL_MENU);
+       agregarPanel(new PanelComida(control), PANEL_COMIDA, tamano);
+       agregarPanel(new PanelEntretenimiento(control), PANEL_ENTRETENIMIENTO, tamano);
+       agregarPanel(new PanelIluminacion(control), PANEL_ILUMINACION, tamano);
+       agregarPanel(new PanelDecoracion(control), PANEL_DECORACION, tamano);
+       agregarPanel(new PanelPantallas(control), PANEL_PANTALLAS, tamano);
 
-        navegarA(PANEL_MENU);
-        pack();
-    }
+       navegarA(PANEL_MENU);
+
+       setSize(tamano); 
+       this.setLocationRelativeTo(null);
+   }
 
     private void agregarPanel(JPanel panel, String nombre, Dimension tamano) {
         panel.setPreferredSize(tamano);
@@ -94,33 +97,41 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(2147, 2147));
-        setPreferredSize(new java.awt.Dimension(500, 560));
         setResizable(false);
 
-        lblTituloRecursosEvento.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
+        lblTituloRecursosEvento.setFont(new java.awt.Font("Segoe UI", 2, 40)); // NOI18N
         lblTituloRecursosEvento.setText("Recursos del evento");
+        lblTituloRecursosEvento.setFocusTraversalPolicyProvider(true);
 
+        btnComida.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         btnComida.setText("Comida");
         btnComida.addActionListener(this::btnComidaActionPerformed);
 
+        btnEntretenimiento.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         btnEntretenimiento.setText("Entretenimiento");
         btnEntretenimiento.addActionListener(this::btnEntretenimientoActionPerformed);
 
+        btnDecoracion.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         btnDecoracion.setText("Decoración");
         btnDecoracion.addActionListener(this::btnDecoracionActionPerformed);
 
+        btnIluminacion.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         btnIluminacion.setText("Iluminación");
         btnIluminacion.addActionListener(this::btnIluminacionActionPerformed);
 
+        btnPantallas.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         btnPantallas.setText("Pantallas");
         btnPantallas.addActionListener(this::btnPantallasActionPerformed);
 
         txtNecesidadesExtra.setText("                                              ");
         txtNecesidadesExtra.addActionListener(this::txtNecesidadesExtraActionPerformed);
 
+        btnContinuar.setBackground(new java.awt.Color(102, 255, 102));
+        btnContinuar.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         btnContinuar.setText("Continuar");
         btnContinuar.addActionListener(this::btnContinuarActionPerformed);
 
+        jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel1.setText("Necesidades extra");
 
         btnCancelar.setText("Cancelar");
@@ -131,59 +142,54 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap(183, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(141, 141, 141)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTituloRecursosEvento, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtNecesidadesExtra, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGap(12, 12, 12)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(btnEntretenimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(btnComida, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(btnIluminacion, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(btnDecoracion, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(btnPantallas, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addGap(20, 20, 20)
-                                                    .addComponent(jLabel1)))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(17, 17, 17)
-                                        .addComponent(btnContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(28, 28, 28))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnCancelar)))
-                .addContainerGap(161, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnDecoracion, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPantallas, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnIluminacion, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEntretenimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnComida, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(232, 232, 232))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(274, 274, 274))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblTituloRecursosEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(172, 172, 172))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtNecesidadesExtra, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51)
+                .addComponent(btnContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(lblTituloRecursosEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addGap(17, 17, 17)
+                .addComponent(lblTituloRecursosEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
                 .addComponent(btnComida)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addComponent(btnEntretenimiento)
-                .addGap(18, 18, 18)
+                .addGap(32, 32, 32)
                 .addComponent(btnIluminacion)
-                .addGap(18, 18, 18)
+                .addGap(27, 27, 27)
                 .addComponent(btnDecoracion)
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
                 .addComponent(btnPantallas)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNecesidadesExtra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
-                .addComponent(btnContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                .addComponent(btnCancelar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNecesidadesExtra, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnContinuar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         pack();

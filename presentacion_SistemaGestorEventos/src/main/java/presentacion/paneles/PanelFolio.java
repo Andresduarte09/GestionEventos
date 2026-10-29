@@ -5,6 +5,7 @@
 package presentacion.paneles;
 
 import dto.DTOCliente;
+import dto.DTODetalleSolicitud;
 import dto.DTOEvento;
 import presentacion.control.controlPresentacion;
 import java.awt.BorderLayout;
@@ -70,6 +71,16 @@ public class PanelFolio extends JPanel {
         sb.append("Asistentes: ").append(evento.getNumAsistentes()).append("\n");
         sb.append("Necesidades: ").append(valor(evento.getNecesidadesIniciales())).append("\n");
         sb.append("Observaciones: ").append(valor(evento.getObservaciones())).append("\n");
+        sb.append("Recursos Solicitados\n");
+        //mostrar recursos
+        if (evento.getDetallesSolicitud() != null && !evento.getDetallesSolicitud().isEmpty()) {
+            for (DTODetalleSolicitud d : evento.getDetallesSolicitud()) {
+                sb.append("- ").append(d.getCategoriaSolicitada()).append(": ")
+                  .append(d.getDescripcionSolicitud()).append(" x").append(d.getCantidadEstimada()).append("\n");
+            }
+        } else {
+            sb.append("Ninguno\n");
+        }
         txtDetalles.setText(sb.toString());
         txtDetalles.setCaretPosition(0);
     }

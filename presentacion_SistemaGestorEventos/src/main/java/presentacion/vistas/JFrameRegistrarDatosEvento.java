@@ -4,12 +4,6 @@
  */
 package presentacion.vistas;
 
-import dto.DTOEvento;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import javax.swing.JOptionPane;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 import presentacion.control.controlPresentacion;
@@ -190,13 +184,12 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        if (control.registrarDatosEventoDesdeFormulario(
+        if (control.procesarDatosEvento(
             (String) jComboBoxTipoEvento.getSelectedItem(),
             (String) jComboBoxUbicacion.getSelectedItem(),
             datePickerFecha.getDate(),
             timePickerHorario.getTime(),
-            txtNumeroAsistentes.getText(),
-            this)) {
+            txtNumeroAsistentes.getText())) {
                 this.dispose();
     }
         

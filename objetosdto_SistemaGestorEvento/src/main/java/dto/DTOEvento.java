@@ -6,6 +6,8 @@ package dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DTOEvento {
 
@@ -111,7 +113,19 @@ public class DTOEvento {
     public void setEstadoAtencion(String estadoAtencion) {
         this.estadoAtencion = estadoAtencion;
     }
+    
+    //para guardar los detalles de los recursos, se utiliza el DTODetalleSolicitud
+    //se pone en DTOEvento porq es el nucleo de las operaciones
+    private List<DTODetalleSolicitud> detallesSolicitud = new ArrayList<>();
 
+    public List<DTODetalleSolicitud> getDetallesSolicitud() {
+        return detallesSolicitud;
+    }
+
+    public void setDetallesSolicitud(List<DTODetalleSolicitud> detallesSolicitud) {
+        this.detallesSolicitud = detallesSolicitud;
+    }    
+    
     @Override
     public String toString() {
         return "DTOEvento{" + "idEvento=" + idEvento + ", tipoEvento=" + tipoEvento + ", fechaEvento=" + fechaEvento + ", ubicacion=" + ubicacion + ", fechaRegistro=" + fechaRegistro + ", numAsistentes=" + numAsistentes + ", necesidadesIniciales=" + necesidadesIniciales + ", horaInicio=" + horaInicio + ", horaFin=" + horaFin + ", observaciones=" + observaciones + ", estadoAtencion=" + estadoAtencion + '}';
