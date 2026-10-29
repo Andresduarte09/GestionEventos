@@ -8,7 +8,6 @@
     <modules>
         <module>../objetosdto_SistemaGestorEvento</module>
         <module>../presentacion_SistemaGestorEventos</module>
-        <module>../../../NetBeansProjects/persistencia</module>
         <module>../persistencia</module>
     </modules>
     <properties>
