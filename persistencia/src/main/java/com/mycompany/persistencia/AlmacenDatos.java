@@ -44,6 +44,7 @@ public class AlmacenDatos {
     private void cargarDatos() {
         cargarClientes();
         cargarLocalesEvento();
+                
         cargarEventos();
         cargarDetallesSolicitud();
         cargarRecursos();
