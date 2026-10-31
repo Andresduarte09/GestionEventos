@@ -41,7 +41,7 @@ public class PanelPersonal extends JPanel {
         lblEncabezado.setFont(new Font("Arial", Font.BOLD, 16));
 
         tblPersonal = new JTable();
-
+        tblPersonal.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         btnVolver = new JButton("Volver");
         btnContinuar = new JButton("Continuar");
 

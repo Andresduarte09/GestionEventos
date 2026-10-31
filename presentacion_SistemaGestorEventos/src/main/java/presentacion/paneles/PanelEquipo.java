@@ -79,7 +79,7 @@ public class PanelEquipo extends JPanel {
             }
         });
 
-        btnConsultarInventario = new JButton("Consultar Inventario");
+        btnConsultarInventario = new JButton("Consultar Inventario Propio");
         btnConsultarProveedor = new JButton("Consultar Proveedor");
 
         btnConsultarInventario.addActionListener(e -> this.control.mostrarInventario());

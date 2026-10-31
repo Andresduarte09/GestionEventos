@@ -92,11 +92,11 @@ public class PanelServicios extends JPanel {
         btnBuscar.addActionListener(e -> {
             if (!Validaciones.soloLetras(txtBuscar)) {
                 JOptionPane.showMessageDialog(this,
-                        "Solo se permiten números.");
+                        "Solo se permiten letras.");
                 return;
             }
 
-            // Realizar la busqueda
+            buscarServicios(txtBuscar);
         });
     }
     
@@ -106,6 +106,20 @@ public class PanelServicios extends JPanel {
             JCheckBox chk = new JCheckBox(s.getNombre(), s.isSeleccionado());
             chk.setToolTipText(s.getDescripcion());
             pnlOpcionesServicios.add(chk);
+        }
+        pnlOpcionesServicios.revalidate();
+        pnlOpcionesServicios.repaint();
+    }
+    
+    public void buscarServicios(JTextField txt) {
+        List<DTOServicio> servicios = control.consultarServicios();
+        pnlOpcionesServicios.removeAll();
+        for (DTOServicio s : servicios) {
+            if(s.getNombre().toLowerCase().contains(txt.getText().toLowerCase())){
+                JCheckBox chk = new JCheckBox(s.getNombre(), s.isSeleccionado()); 
+                chk.setToolTipText(s.getDescripcion());
+                pnlOpcionesServicios.add(chk);
+            }
         }
         pnlOpcionesServicios.revalidate();
         pnlOpcionesServicios.repaint();
