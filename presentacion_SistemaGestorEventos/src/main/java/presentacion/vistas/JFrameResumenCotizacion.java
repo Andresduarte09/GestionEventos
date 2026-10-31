@@ -399,7 +399,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(pnelCentral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnAprobar)
                     .addComponent(btnAtras))
                 .addContainerGap())

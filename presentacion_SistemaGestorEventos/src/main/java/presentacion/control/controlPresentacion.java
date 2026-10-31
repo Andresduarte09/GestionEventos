@@ -3,6 +3,7 @@ package presentacion.control;
 import presentacion.vistas.*;
 import dto.*;
 import com.mycompany.persistencia.AlmacenDatos;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -10,6 +11,7 @@ import presentacion.validaciones.Validaciones;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -28,6 +30,9 @@ public class controlPresentacion {
     private DTOLevantamiento levantamiento;
     private List<DTOPersonal> personalSeleccionado = new ArrayList<>();
     private final AlmacenDatos almacen = new AlmacenDatos();
+    private DTODecisionCliente decisionCliente;
+    private List<DTOServicio> serviciosAceptados = new ArrayList<>();
+    
 
     //DTO´s que se mueven entre las pantallas y solo el control las conserva
     private DTOCliente cliente;
@@ -381,9 +386,32 @@ public class controlPresentacion {
         JFrameRevisarAnalisisEvaluacion revisarAnalisisEvaluacion = new JFrameRevisarAnalisisEvaluacion(this, evento);
         revisarAnalisisEvaluacion.setVisible(true);
     }
+    
+    public DTOCotizacion getCotizacion() {
+        return cotizacion;
+    }
 
+    public DTOVersionCotizacion getVersionCotizacion() {
+        return versionCotizacion;
+    }
+
+    public DTODetalleCotizacion getDetalleCotizacion() {
+        return detalleCotizacion;
+    }
+
+    public DTOLevantamiento getLevantamiento() {
+        return levantamiento;
+    }
+    
     public void iniciarRegistrarCotizacion() {
-        JFrameRegistrarCotizacion registrarCotizacion = new JFrameRegistrarCotizacion(this);
+        
+        if (cotizacion == null || versionCotizacion == null) {
+            generarCotizacion();
+        }
+
+        JFrameRegistrarCotizacion registrarCotizacion =
+                new JFrameRegistrarCotizacion(this);
+
         registrarCotizacion.setVisible(true);
     }
 
@@ -471,7 +499,208 @@ public class controlPresentacion {
     }
 
     public void iniciarGenerarOrden() {
-        JFrameGenerarOrden generarOrden = new JFrameGenerarOrden();
-        generarOrden.setVisible(true);
+            JFrameGenerarOrden generarOrden = new JFrameGenerarOrden();
+            generarOrden.setVisible(true);
+        }
+
+        public List<String> obtenerServiciosCotizadosConPrecio() {
+             List<String> resultado = new ArrayList<>();
+
+        for (DTOServicio servicio : consultarServicios()) {
+
+            if (servicio.isSeleccionado()) {
+                resultado.add(servicio.getNombre());
+            }
+        }
+
+        return resultado;
+    }
+    
+    private String obtenerCategoriaServicio(String nombreServicio) {
+
+        switch (nombreServicio) {
+
+            case "Audio":
+                return "Audio";
+
+            case "Alimentos y bebidas":
+                return "Comida";
+
+            case "Entretenimiento":
+                return "Entretenimiento";
+
+            case "Iluminación":
+                return "Iluminación";
+
+            case "Decoración":
+                return "Decoración";
+
+            case "Pantallas":
+                return "Pantallas";
+
+            default:
+                return null;
+        }
+    }
+    
+    public boolean registrarDecisionCotizacion(
+        String decision, List<String> serviciosSeleccionados) {
+
+        if (decision == null || decision.equals("Selecciona una decisión")) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Selecciona el tipo de decisión del cliente."
+            );
+            return false;
+        }
+
+        serviciosAceptados.clear();
+
+        if (decision.equals("Aceptación total")) {
+
+            for (DTOServicio servicio : consultarServicios()) {
+                if (servicio.isSeleccionado()) {
+                    serviciosAceptados.add(servicio);
+                }
+            }
+
+            if (serviciosAceptados.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "No hay servicios cotizados para aceptar."
+                );
+                return false;
+            }
+
+            cotizacion.setEstadoGeneral("Aceptada");
+            versionCotizacion.setEstado("Aceptada");
+
+        } else if (decision.equals("Aceptación parcial")) {
+
+            if (serviciosSeleccionados == null || serviciosSeleccionados.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Selecciona los servicios que el cliente acepta."
+                );
+                return false;
+            }
+
+            for (String elemento : serviciosSeleccionados) {
+
+                String nombreServicio = elemento.split("\\s\\|\\s")[0];
+
+                for (DTOServicio servicio : consultarServicios()) {
+
+                    if (servicio.isSeleccionado()
+                            && servicio.getNombre().equals(nombreServicio)) {
+
+                        serviciosAceptados.add(servicio);
+                        break;
+                    }
+                }
+            }
+
+            if (serviciosAceptados.isEmpty()) {
+                JOptionPane.showMessageDialog(
+                        null,
+                        "No se encontraron servicios aceptados."
+                );
+                return false;
+            }
+
+            cotizacion.setEstadoGeneral("Aceptada parcialmente");
+            versionCotizacion.setEstado("Aceptada parcialmente");
+
+        } else if (decision.equals("Negación total")) {
+
+            cotizacion.setEstadoGeneral("Rechazada");
+            versionCotizacion.setEstado("Rechazada");
+
+            if (evento != null) {
+                evento.setEstadoAtencion("Cancelado");
+            }
+
+            guardarDecisionCliente(decision, "El cliente rechazó todos los servicios.");
+
+            registrarCotizacionEnAlmacen();
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "La cotización fue rechazada. El evento ha sido cancelado."
+            );
+
+            cliente = null;
+            evento = null;
+            cotizacion = null;
+            versionCotizacion = null;
+            serviciosAceptados.clear();
+
+            iniciarSesion();
+
+            return true;
+        }
+
+        guardarDecisionCliente(
+                decision,
+                decision.equals("Aceptación parcial")
+                        ? "Servicios aceptados: " + obtenerNombresServiciosAceptados()
+                        : "El cliente aceptó todos los servicios cotizados."
+        );
+
+        registrarCotizacionEnAlmacen();
+
+        iniciarGenerarOrden();
+
+        return true;
+    }
+    
+    private String obtenerNombresServiciosAceptados() {
+
+        List<String> nombres = new ArrayList<>();
+
+        for (DTOServicio servicio : serviciosAceptados) {
+            nombres.add(servicio.getNombre());
+        }
+
+        return String.join(", ", nombres);
+    }
+    
+    private void guardarDecisionCliente(String decision, String observaciones) {
+
+        int nuevoID = 1;
+
+        for (DTODecisionCliente d : almacen.getDecisionesCliente()) {
+            if (d.getIdDecision() >= nuevoID) {
+                nuevoID = d.getIdDecision() + 1;
+            }
+        }
+
+        DTODecisionCliente nuevaDecision = new DTODecisionCliente(
+                nuevoID,
+                LocalDate.now(),
+                decision,
+                observaciones
+        );
+
+        almacen.getDecisionesCliente().add(nuevaDecision);
+    }
+    
+    private void registrarCotizacionEnAlmacen() {
+
+        if (cotizacion != null
+                && !almacen.getCotizaciones().contains(cotizacion)) {
+
+            almacen.getCotizaciones().add(cotizacion);
+        }
+
+        if (versionCotizacion != null
+                && !almacen.getVersionesCotizacion().contains(versionCotizacion)) {
+
+            almacen.getVersionesCotizacion().add(versionCotizacion);
+        }
+    }
+    
+    public List<DTOServicio> getServiciosAceptados() {
+        return new ArrayList<>(serviciosAceptados);
     }
 }

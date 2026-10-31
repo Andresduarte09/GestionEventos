@@ -4,6 +4,8 @@
  */
 package presentacion.vistas;
 
+import dto.DTOCliente;
+import dto.DTOCotizacion;
 import presentacion.control.controlPresentacion;
 
 /**
@@ -19,7 +21,28 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
      */
     public JFrameRegistrarCotizacion(controlPresentacion control) {
         this.control = control;
+
         initComponents();
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(
+                new String[]{
+                    "Selecciona una decisión",
+                    "Aceptación total",
+                    "Aceptación parcial",
+                    "Negación total"
+                }
+        ));
+
+        listServicios.setSelectionMode(
+                javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION
+        );
+
+        cargarServiciosCotizados();
+
+        if (control.getCliente() != null) {
+            lblClienteInfo.setText(control.getCliente().getNombre());
+        }
+
         this.setLocationRelativeTo(null);
     }
 
@@ -106,16 +129,16 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lblCliente)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblClienteInfo))
+                                        .addComponent(lblClienteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(lblEstado)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblEstadoInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(lblEstadoInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -163,14 +186,17 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
                 .addComponent(lblMedioRecepcionInfo)
                 .addGap(36, 36, 36)
                 .addComponent(lblServiciosCotizados)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                         .addComponent(btnRegistrarCotización)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnCancelarRegistro))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40))
+                        .addComponent(btnCancelarRegistro)
+                        .addGap(40, 40, 40))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         pack();
@@ -181,8 +207,19 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void btnRegistrarCotizaciónActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCotizaciónActionPerformed
-        control.iniciarGenerarOrden();
-        this.dispose();
+        String decision = (String) jComboBox1.getSelectedItem();
+
+        java.util.List<String> serviciosSeleccionados =
+                listServicios.getSelectedValuesList();
+
+        boolean registrado = control.registrarDecisionCotizacion(
+                decision,
+                serviciosSeleccionados
+        );
+
+        if (registrado) {
+            this.dispose();
+        }
     }//GEN-LAST:event_btnRegistrarCotizaciónActionPerformed
 
     private void btnCancelarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarRegistroActionPerformed
@@ -190,7 +227,33 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCancelarRegistroActionPerformed
 
+    public void mostrarDatos() {
 
+        DTOCliente cliente = control.getCliente();
+        DTOCotizacion cotizacion = control.getCotizacion();
+
+        if (cliente != null) {
+            lblClienteInfo.setText(cliente.getNombre());
+        }
+
+        if (cotizacion != null) {
+            lblEstadoInfo.setText(cotizacion.getEstadoGeneral());
+        }
+
+        lblMedioRecepcionInfo.setText("Presencial");
+    }
+    
+    private void cargarServiciosCotizados() {
+
+        javax.swing.DefaultListModel<String> modelo =
+                new javax.swing.DefaultListModel<>();
+
+        for (String servicio : control.obtenerServiciosCotizadosConPrecio()) {
+            modelo.addElement(servicio);
+        }
+
+        listServicios.setModel(modelo);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelarRegistro;
     private javax.swing.JButton btnRegistrarCotización;

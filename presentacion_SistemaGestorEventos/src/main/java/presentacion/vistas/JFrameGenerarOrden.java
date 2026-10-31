@@ -37,9 +37,6 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
         lblCliente = new javax.swing.JLabel();
         lblCotizacionAutorizada = new javax.swing.JLabel();
         lblFechaEvento = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
         lblConceptosAutorizados = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listConceptosAutorizados = new javax.swing.JList<>();
@@ -47,6 +44,9 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
         lblTotalInfo = new javax.swing.JLabel();
         btnGenerarOrden = new javax.swing.JButton();
         lblTituloGenerarOrden = new javax.swing.JLabel();
+        lblClienteInfo = new javax.swing.JLabel();
+        lblCotizacionAutorizadaInfo = new javax.swing.JLabel();
+        lblFechaEventoInfo = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -57,10 +57,6 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
         lblCotizacionAutorizada.setText("Cotización Autorizada:");
 
         lblFechaEvento.setText("Fecha del Evento:");
-
-        jTextField2.addActionListener(this::jTextField2ActionPerformed);
-
-        jTextField3.addActionListener(this::jTextField3ActionPerformed);
 
         lblConceptosAutorizados.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblConceptosAutorizados.setText("Conceptos Autorizados");
@@ -84,6 +80,12 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
         lblTituloGenerarOrden.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         lblTituloGenerarOrden.setText("Generar Orden");
 
+        lblClienteInfo.setText("Cliente");
+
+        lblCotizacionAutorizadaInfo.setText("Cotización Autorizada");
+
+        lblFechaEventoInfo.setText("Fecha del evento");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,21 +98,21 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblTotalInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblTotalInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblFechaEvento)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblFechaEventoInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblClienteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblCotizacionAutorizada)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblCotizacionAutorizadaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblConceptosAutorizados))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(318, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
@@ -126,18 +128,18 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(lblTituloGenerarOrden)
-                .addGap(40, 40, 40)
+                .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCliente)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                    .addComponent(lblClienteInfo))
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCotizacionAutorizada)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                    .addComponent(lblCotizacionAutorizadaInfo))
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFechaEvento)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblFechaEventoInfo))
                 .addGap(18, 18, 18)
                 .addComponent(lblConceptosAutorizados)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -148,36 +150,28 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTotal)
                     .addComponent(lblTotalInfo))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
-
     private void btnGenerarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarOrdenActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnGenerarOrdenActionPerformed
-
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerarOrden;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel lblCliente;
+    private javax.swing.JLabel lblClienteInfo;
     private javax.swing.JLabel lblConceptosAutorizados;
     private javax.swing.JLabel lblCotizacionAutorizada;
+    private javax.swing.JLabel lblCotizacionAutorizadaInfo;
     private javax.swing.JLabel lblFechaEvento;
+    private javax.swing.JLabel lblFechaEventoInfo;
     private javax.swing.JLabel lblTituloGenerarOrden;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JLabel lblTotalInfo;

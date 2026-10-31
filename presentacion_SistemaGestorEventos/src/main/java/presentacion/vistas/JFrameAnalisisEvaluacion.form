@@ -91,9 +91,9 @@
               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
               <Component id="lblTituloAnalisisEvaluacion" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="lblNombreCliente" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblNombreClienteInfo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblNombreClienteInfo" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">

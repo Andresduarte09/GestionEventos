@@ -176,7 +176,7 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(lblTituloAnalisisEvaluacion)
                 .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblNombreCliente)
                     .addComponent(lblNombreClienteInfo))
                 .addGap(27, 27, 27)
