@@ -499,9 +499,9 @@ public class controlPresentacion {
     }
 
     public void iniciarGenerarOrden() {
-            JFrameGenerarOrden generarOrden = new JFrameGenerarOrden();
-            generarOrden.setVisible(true);
-        }
+        JFrameGenerarOrden generarOrden = new JFrameGenerarOrden(this);
+        generarOrden.setVisible(true);
+    }
 
         public List<String> obtenerServiciosCotizadosConPrecio() {
              List<String> resultado = new ArrayList<>();
@@ -547,10 +547,7 @@ public class controlPresentacion {
         String decision, List<String> serviciosSeleccionados) {
 
         if (decision == null || decision.equals("Selecciona una decisión")) {
-            JOptionPane.showMessageDialog(
-                    null,
-                    "Selecciona el tipo de decisión del cliente."
-            );
+            JOptionPane.showMessageDialog(null, "Selecciona el tipo de decisión del cliente.");
             return false;
         }
 
@@ -565,10 +562,7 @@ public class controlPresentacion {
             }
 
             if (serviciosAceptados.isEmpty()) {
-                JOptionPane.showMessageDialog(
-                        null,
-                        "No hay servicios cotizados para aceptar."
-                );
+                JOptionPane.showMessageDialog(null, "No hay servicios cotizados para aceptar.");
                 return false;
             }
 
@@ -578,10 +572,7 @@ public class controlPresentacion {
         } else if (decision.equals("Aceptación parcial")) {
 
             if (serviciosSeleccionados == null || serviciosSeleccionados.isEmpty()) {
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Selecciona los servicios que el cliente acepta."
-                );
+                JOptionPane.showMessageDialog(null, "Selecciona los servicios que el cliente acepta.");
                 return false;
             }
 
@@ -591,8 +582,7 @@ public class controlPresentacion {
 
                 for (DTOServicio servicio : consultarServicios()) {
 
-                    if (servicio.isSeleccionado()
-                            && servicio.getNombre().equals(nombreServicio)) {
+                    if (servicio.isSeleccionado() && servicio.getNombre().equals(nombreServicio)) {
 
                         serviciosAceptados.add(servicio);
                         break;
@@ -601,10 +591,7 @@ public class controlPresentacion {
             }
 
             if (serviciosAceptados.isEmpty()) {
-                JOptionPane.showMessageDialog(
-                        null,
-                        "No se encontraron servicios aceptados."
-                );
+                JOptionPane.showMessageDialog(null, "No se encontraron servicios aceptados.");
                 return false;
             }
 
@@ -624,10 +611,7 @@ public class controlPresentacion {
 
             registrarCotizacionEnAlmacen();
 
-            JOptionPane.showMessageDialog(
-                    null,
-                    "La cotización fue rechazada. El evento ha sido cancelado."
-            );
+            JOptionPane.showMessageDialog(null, "La cotización fue rechazada. El evento ha sido cancelado.");
 
             cliente = null;
             evento = null;
@@ -640,9 +624,7 @@ public class controlPresentacion {
             return true;
         }
 
-        guardarDecisionCliente(
-                decision,
-                decision.equals("Aceptación parcial")
+        guardarDecisionCliente(decision, decision.equals("Aceptación parcial")
                         ? "Servicios aceptados: " + obtenerNombresServiciosAceptados()
                         : "El cliente aceptó todos los servicios cotizados."
         );
@@ -675,26 +657,19 @@ public class controlPresentacion {
             }
         }
 
-        DTODecisionCliente nuevaDecision = new DTODecisionCliente(
-                nuevoID,
-                LocalDate.now(),
-                decision,
-                observaciones
-        );
+        DTODecisionCliente nuevaDecision = new DTODecisionCliente(nuevoID, LocalDate.now(), decision, observaciones);
 
         almacen.getDecisionesCliente().add(nuevaDecision);
     }
     
     private void registrarCotizacionEnAlmacen() {
 
-        if (cotizacion != null
-                && !almacen.getCotizaciones().contains(cotizacion)) {
+        if (cotizacion != null && !almacen.getCotizaciones().contains(cotizacion)) {
 
             almacen.getCotizaciones().add(cotizacion);
         }
 
-        if (versionCotizacion != null
-                && !almacen.getVersionesCotizacion().contains(versionCotizacion)) {
+        if (versionCotizacion != null && !almacen.getVersionesCotizacion().contains(versionCotizacion)) {
 
             almacen.getVersionesCotizacion().add(versionCotizacion);
         }
@@ -703,4 +678,6 @@ public class controlPresentacion {
     public List<DTOServicio> getServiciosAceptados() {
         return new ArrayList<>(serviciosAceptados);
     }
+    
+    
 }

@@ -4,6 +4,8 @@
  */
 package presentacion.vistas;
 
+import dto.DTOServicio;
+import javax.swing.JOptionPane;
 import presentacion.control.controlPresentacion;
 
 /**
@@ -13,15 +15,17 @@ import presentacion.control.controlPresentacion;
 public class JFrameGenerarOrden extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameGenerarOrden.class.getName());
-    //private controlPresentacion control;
-    /**
-     * Creates new form JFrameGenerarOrden
-     */
-    public JFrameGenerarOrden() {
-        //this.control = control;
-        initComponents();
-        this.setLocationRelativeTo(null);
+    private controlPresentacion control;
+    
+    public JFrameGenerarOrden(controlPresentacion control) {
         
+        this.control = control;
+
+        initComponents();
+
+        mostrarDatos();
+
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -40,8 +44,6 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
         lblConceptosAutorizados = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listConceptosAutorizados = new javax.swing.JList<>();
-        lblTotal = new javax.swing.JLabel();
-        lblTotalInfo = new javax.swing.JLabel();
         btnGenerarOrden = new javax.swing.JButton();
         lblTituloGenerarOrden = new javax.swing.JLabel();
         lblClienteInfo = new javax.swing.JLabel();
@@ -68,11 +70,6 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(listConceptosAutorizados);
 
-        lblTotal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblTotal.setText("Total:");
-
-        lblTotalInfo.setText("Total");
-
         btnGenerarOrden.setBackground(new java.awt.Color(153, 255, 153));
         btnGenerarOrden.setText("Generar Orden");
         btnGenerarOrden.addActionListener(this::btnGenerarOrdenActionPerformed);
@@ -96,26 +93,22 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblTotalInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblFechaEvento)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblFechaEventoInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblFechaEventoInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblClienteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblClienteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblCotizacionAutorizada)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblCotizacionAutorizadaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblCotizacionAutorizadaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(lblConceptosAutorizados))
-                        .addContainerGap(318, Short.MAX_VALUE))
+                        .addContainerGap(155, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1)
+                        .addGap(18, 18, 18)
                         .addComponent(btnGenerarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(69, 69, 69))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -146,20 +139,45 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGenerarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTotal)
-                    .addComponent(lblTotalInfo))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGenerarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarOrdenActionPerformed
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "¡La orden fue generada con éxito!", "Orden generada", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnGenerarOrdenActionPerformed
 
+    private void mostrarDatos() {
+
+    if (control.getCliente() != null) {
+        lblClienteInfo.setText(control.getCliente().getNombre());
+    }
+
+    if (control.getCotizacion() != null) {
+        lblCotizacionAutorizadaInfo.setText(
+                String.valueOf(control.getCotizacion().getID())
+        );
+    }
+
+    if (control.getEvento() != null
+            && control.getEvento().getFechaEvento() != null) {
+
+        lblFechaEventoInfo.setText(
+                control.getEvento().getFechaEvento().toString()
+        );
+    }
+
+    javax.swing.DefaultListModel<String> modelo =
+            new javax.swing.DefaultListModel<>();
+
+    for (DTOServicio servicio : control.getServiciosAceptados()) {
+        modelo.addElement(servicio.getNombre());
+    }
+
+    listConceptosAutorizados.setModel(modelo);
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerarOrden;
@@ -173,8 +191,6 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
     private javax.swing.JLabel lblFechaEvento;
     private javax.swing.JLabel lblFechaEventoInfo;
     private javax.swing.JLabel lblTituloGenerarOrden;
-    private javax.swing.JLabel lblTotal;
-    private javax.swing.JLabel lblTotalInfo;
     private javax.swing.JList<String> listConceptosAutorizados;
     // End of variables declaration//GEN-END:variables
 }
