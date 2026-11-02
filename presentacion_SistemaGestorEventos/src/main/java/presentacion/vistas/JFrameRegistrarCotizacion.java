@@ -29,6 +29,7 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
                     "Selecciona una decisión",
                     "Aceptación total",
                     "Aceptación parcial",
+                    "Solicitud de modificacion",
                     "Negación total"
                 }
         ));

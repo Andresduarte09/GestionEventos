@@ -107,6 +107,7 @@ public class controlPresentacion {
         return null;
     }
 
+    //muestra el frame para registrar cliente
     private void registrarCliente(DTOCliente cliente) {
         JFrameFormularioRegistro formulario = new JFrameFormularioRegistro(this, cliente);
         formulario.setVisible(true);
@@ -205,6 +206,37 @@ public class controlPresentacion {
         inicioSesion.setVisible(true);
     }
 
+        public void registrarRecursosEvento(String necesidadesExtra) {
+        evento.setNecesidadesIniciales(necesidadesExtra);
+
+        List<DTODetalleSolicitud> detalles = new java.util.ArrayList<>();
+
+        for (Map.Entry<String, Integer> entry : seleccionTemporalRecursos.entrySet()) {
+            String[] partes = entry.getKey().split("\\|");
+            //el if es para asegurar formato correcto
+            if (partes.length == 2) {
+                DTODetalleSolicitud detalle = new DTODetalleSolicitud();
+                //inserta en el arreglo la categoria de la comida y la pone en indice 0
+                detalle.setCategoriaSolicitada(partes[0]);
+                //pone en conjunto a la categoria, el recurso que se selecciono de dicha categoria en indice 1
+                detalle.setDescripcionSolicitud(partes[1]);
+                detalle.setCantidadEstimada(entry.getValue());
+                detalles.add(detalle);
+                //termina quedando algo como: Comida|Sopa fría
+            }
+        }
+
+        //asigna los detalles de la solicitud al evento
+        evento.setDetallesSolicitud(detalles);
+
+        //termina guardando el cliente si es nuevo
+        //lo pongo aqui de una vez pero probablemente se deba poner a la hora de crear la orden final
+        if (cliente != null && buscarClientePorTelefono(cliente.getTelefono()) == null) {
+            almacen.getClientes().add(cliente);
+        }
+
+        iniciarAnalisisEvaluacion();
+    }
     //cancelar recursos del evento
     public void cancelarRecursosEvento() {
         JFrameRegistrarDatosEvento registrarDatos = new JFrameRegistrarDatosEvento(this);
@@ -345,37 +377,6 @@ public class controlPresentacion {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
     }
 
-    public void registrarRecursosEvento(String necesidadesExtra) {
-        evento.setNecesidadesIniciales(necesidadesExtra);
-
-        List<DTODetalleSolicitud> detalles = new java.util.ArrayList<>();
-
-        for (Map.Entry<String, Integer> entry : seleccionTemporalRecursos.entrySet()) {
-            String[] partes = entry.getKey().split("\\|");
-            //el if es para asegurar formato correcto
-            if (partes.length == 2) {
-                DTODetalleSolicitud detalle = new DTODetalleSolicitud();
-                //inserta en el arreglo la categoria de la comida y la pone en indice 0
-                detalle.setCategoriaSolicitada(partes[0]);
-                //pone en conjunto a la categoria, el recurso que se selecciono de dicha categoria en indice 1
-                detalle.setDescripcionSolicitud(partes[1]);
-                detalle.setCantidadEstimada(entry.getValue());
-                detalles.add(detalle);
-                //termina quedando algo como: Comida|Sopa fría
-            }
-        }
-
-        //asigna los detalles de la solicitud al evento
-        evento.setDetallesSolicitud(detalles);
-
-        //termina guardando el cliente si es nuevo
-        //lo pongo aqui de una vez pero probablemente se deba poner a la hora de crear la orden final
-        if (cliente != null && buscarClientePorTelefono(cliente.getTelefono()) == null) {
-            almacen.getClientes().add(cliente);
-        }
-
-        iniciarAnalisisEvaluacion();
-    }
 
     public void iniciarAnalisisEvaluacion() {
         JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion(this, cliente, evento);
@@ -543,8 +544,7 @@ public class controlPresentacion {
         }
     }
     
-    public boolean registrarDecisionCotizacion(
-        String decision, List<String> serviciosSeleccionados) {
+    public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
 
         if (decision == null || decision.equals("Selecciona una decisión")) {
             JOptionPane.showMessageDialog(null, "Selecciona el tipo de decisión del cliente.");
@@ -554,36 +554,27 @@ public class controlPresentacion {
         serviciosAceptados.clear();
 
         if (decision.equals("Aceptación total")) {
-
             for (DTOServicio servicio : consultarServicios()) {
                 if (servicio.isSeleccionado()) {
                     serviciosAceptados.add(servicio);
                 }
             }
-
             if (serviciosAceptados.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "No hay servicios cotizados para aceptar.");
                 return false;
             }
-
             cotizacion.setEstadoGeneral("Aceptada");
             versionCotizacion.setEstado("Aceptada");
 
         } else if (decision.equals("Aceptación parcial")) {
-
             if (serviciosSeleccionados == null || serviciosSeleccionados.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Selecciona los servicios que el cliente acepta.");
                 return false;
             }
 
-            for (String elemento : serviciosSeleccionados) {
-
-                String nombreServicio = elemento.split("\\s\\|\\s")[0];
-
+            for (String nombreServicio : serviciosSeleccionados) {
                 for (DTOServicio servicio : consultarServicios()) {
-
                     if (servicio.isSeleccionado() && servicio.getNombre().equals(nombreServicio)) {
-
                         serviciosAceptados.add(servicio);
                         break;
                     }
@@ -594,12 +585,18 @@ public class controlPresentacion {
                 JOptionPane.showMessageDialog(null, "No se encontraron servicios aceptados.");
                 return false;
             }
-
             cotizacion.setEstadoGeneral("Aceptada parcialmente");
             versionCotizacion.setEstado("Aceptada parcialmente");
 
-        } else if (decision.equals("Negación total")) {
+        } else if (decision.equals("Solicitud de modificación")) {
+            JOptionPane.showMessageDialog(null, "El cliente solicita modificaciones. Regresando a la configuración de la propuesta.");
 
+            //abre f3 nuevamente
+            iniciarConfigurarPropuesta(); 
+
+            return true; 
+
+        } else if (decision.equals("Negación total")) {
             cotizacion.setEstadoGeneral("Rechazada");
             versionCotizacion.setEstado("Rechazada");
 
@@ -608,7 +605,6 @@ public class controlPresentacion {
             }
 
             guardarDecisionCliente(decision, "El cliente rechazó todos los servicios.");
-
             registrarCotizacionEnAlmacen();
 
             JOptionPane.showMessageDialog(null, "La cotización fue rechazada. El evento ha sido cancelado.");
@@ -620,10 +616,10 @@ public class controlPresentacion {
             serviciosAceptados.clear();
 
             iniciarSesion();
-
             return true;
         }
 
+        // Si llegó aquí es porque fue una aceptación (total o parcial)
         guardarDecisionCliente(decision, decision.equals("Aceptación parcial")
                         ? "Servicios aceptados: " + obtenerNombresServiciosAceptados()
                         : "El cliente aceptó todos los servicios cotizados."
@@ -631,11 +627,11 @@ public class controlPresentacion {
 
         registrarCotizacionEnAlmacen();
 
+        // Al aceptar, se pasa a generar la orden
         iniciarGenerarOrden();
 
         return true;
     }
-    
     private String obtenerNombresServiciosAceptados() {
 
         List<String> nombres = new ArrayList<>();

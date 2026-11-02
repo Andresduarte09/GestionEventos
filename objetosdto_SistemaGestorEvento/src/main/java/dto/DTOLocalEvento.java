@@ -17,13 +17,14 @@ public class DTOLocalEvento {
     String restriccionesLocal;
     String necesidadesDetectadas;
     int capacidad;
+    int duracionHoras;
 
     public DTOLocalEvento(){
     }
 
     public DTOLocalEvento(int idLocalEvento, String tipoLocal, String dimensionesLugar, 
             String dimensionesEspacios, String condicionesAcceso, String restriccionesLocal,
-            String necesidadesDetectadas, int capacidad) {
+            String necesidadesDetectadas, int capacidad, int duracionHoras) {
         this.idLocalEvento = idLocalEvento;
         this.tipoLocal = tipoLocal;
         this.dimensionesLugar = dimensionesLugar;
@@ -32,6 +33,7 @@ public class DTOLocalEvento {
         this.restriccionesLocal = restriccionesLocal;
         this.necesidadesDetectadas = necesidadesDetectadas;
         this.capacidad = capacidad;
+        this.duracionHoras = duracionHoras;
     }
     
     
@@ -97,6 +99,14 @@ public class DTOLocalEvento {
 
     public void setCapacidad(int capacidad) {
         this.capacidad = capacidad;
+    }
+
+    public int getDuracionHoras() {
+        return duracionHoras;
+    }
+
+    public void setDuracionHoras(int duracionHoras) {
+        this.duracionHoras = duracionHoras;
     }
     
 }
