@@ -18,7 +18,6 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import presentacion.validaciones.Validaciones;
 
 public class PanelPersonal extends JPanel {
 
@@ -45,8 +44,20 @@ public class PanelPersonal extends JPanel {
         btnVolver = new JButton("Volver");
         btnContinuar = new JButton("Continuar");
 
-        btnVolver.addActionListener(e -> this.control.mostrarEquipo());
-        btnContinuar.addActionListener(e -> this.control.mostrarResumen());
+        btnVolver.addActionListener(e -> this.control.solicitarEquipos());
+        btnContinuar.addActionListener(e -> {
+            if (!control.verificarSeleccionPersonal()) {
+                int opcion = JOptionPane.showConfirmDialog(this,
+                        "No hay personal asignado. ¿Deseas continuar de todos modos?",
+                        "Sin personal",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                if (opcion != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+            control.obtenerResumen();
+        });
 
         JPanel pnlSur = new JPanel();
         pnlSur.setOpaque(false);
@@ -59,7 +70,7 @@ public class PanelPersonal extends JPanel {
     }
 
     // Muestra el personal del almacén; la cantidad se puede escribir en la tabla
-    public void mostrarPersonal(List<DTOPersonal> personal) {
+    public void solicitarPersonal(List<DTOPersonal> personal) {
         listaPersonal.clear();
         listaPersonal.addAll(personal);
 
@@ -82,8 +93,8 @@ public class PanelPersonal extends JPanel {
         DTOPersonal personal = listaPersonal.get(fila);
         String texto = modelo.getValueAt(fila, columna).toString();
 
-        if (Validaciones.noEsNegativo(texto)) {
-            personal.setCantidad(Integer.parseInt(texto.trim()));
+        if (control.esCantidadPersonalValida(texto)) {
+            control.seleccionarPersonal(personal.getIdEspecialidad(), Integer.parseInt(texto.trim()));
         } else {
             JOptionPane.showMessageDialog(this, "La cantidad no debe ser un número negativo");
             modelo.setValueAt(personal.getCantidad(), fila, columna); // regresa el valor anterior

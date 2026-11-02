@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import presentacion.vistas.JFrameConfigurarPropuesta;
 
 /**
@@ -33,6 +34,7 @@ public class PanelResumen extends JPanel {
     private final controlPresentacion control;
     private JLabel lblEncabezado;
     private JTextArea txtResumenPropuesta, txtComentarios;
+    private JTextField txtHorarioMontaje, txtHorarioDesmontaje;
     private JButton btnVolver, btnEnviarCotizacion;
     private JFrameConfigurarPropuesta configurarPropuesta;
 
@@ -50,15 +52,29 @@ public class PanelResumen extends JPanel {
         txtComentarios = new JTextArea(4, 20);
         txtComentarios.setBorder(BorderFactory.createTitledBorder("Comentarios:"));
 
+        txtHorarioMontaje = new JTextField(6);
+        txtHorarioDesmontaje = new JTextField(6);
+        JPanel pnlHorarios = new JPanel();
+        pnlHorarios.setOpaque(false);
+        pnlHorarios.add(new JLabel("Horario de montaje (HH:mm):"));
+        pnlHorarios.add(txtHorarioMontaje);
+        pnlHorarios.add(new JLabel("Horario de desmontaje (HH:mm):"));
+        pnlHorarios.add(txtHorarioDesmontaje);
+
+        JPanel pnlInferior = new JPanel(new BorderLayout(5, 5));
+        pnlInferior.setOpaque(false);
+        pnlInferior.add(pnlHorarios, BorderLayout.NORTH);
+        pnlInferior.add(txtComentarios, BorderLayout.CENTER);
+
         JPanel pnlCentro = new JPanel(new BorderLayout(10, 10));
         pnlCentro.setOpaque(false);
         pnlCentro.add(new JScrollPane(txtResumenPropuesta), BorderLayout.CENTER);
-        pnlCentro.add(txtComentarios, BorderLayout.SOUTH);
+        pnlCentro.add(pnlInferior, BorderLayout.SOUTH);
 
         btnVolver = new JButton("Volver");
         btnEnviarCotizacion = new JButton("Enviar a cotización");
 
-        btnVolver.addActionListener(e -> this.control.mostrarPersonal());
+        btnVolver.addActionListener(e -> this.control.solicitarPersonal());
 
         JPanel pnlSur = new JPanel();
         pnlSur.setOpaque(false);
@@ -69,12 +85,13 @@ public class PanelResumen extends JPanel {
         add(pnlCentro, BorderLayout.CENTER);
         add(pnlSur, BorderLayout.SOUTH);
 
-        btnEnviarCotizacion.addActionListener(e -> this.control.iniciarResumenCotizacion());
+        btnEnviarCotizacion.addActionListener(e -> this.control.enviarPropuestaHaciaCotizacion(
+                txtHorarioMontaje.getText(), txtHorarioDesmontaje.getText(), txtComentarios.getText()));
 
     }
 
     // Muestra un resumen con la información que ya existe en los DTO (sin calcular precios)
-    public void mostrarResumen(DTOCliente cliente, DTOEvento evento, List<DTOServicio> servicios,
+    public void solicitarResumen(DTOCliente cliente, DTOEvento evento, List<DTOServicio> servicios,
             List<DTOEquipo> equipos, List<DTOPersonal> personal) {
         StringBuilder sb = new StringBuilder();
         sb.append("Cliente: ").append(cliente.getNombre()).append("\n");

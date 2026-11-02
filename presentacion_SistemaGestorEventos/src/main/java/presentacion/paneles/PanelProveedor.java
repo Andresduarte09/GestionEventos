@@ -18,7 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import presentacion.validaciones.Validaciones;
 
 /**
  *
@@ -52,8 +51,8 @@ public class PanelProveedor extends JPanel {
         btnCerrar = new JButton("Cerrar");
         btnUsarCantidad = new JButton("Usar cantidad");
 
-        btnCerrar.addActionListener(e -> this.control.mostrarEquipo());
-        btnUsarCantidad.addActionListener(e -> this.control.mostrarEquipo());
+        btnCerrar.addActionListener(e -> this.control.solicitarEquipos());
+        btnUsarCantidad.addActionListener(e -> usarCantidad());
 
         JPanel pnlSur = new JPanel();
         pnlSur.setOpaque(false);
@@ -70,23 +69,50 @@ public class PanelProveedor extends JPanel {
         add(pnlSur, BorderLayout.SOUTH);
         
         btnBuscar.addActionListener(e -> {
-            if (!Validaciones.soloLetras(txtBuscar)) {
+            if (!control.busquedaValida(txtBuscar)) {
                 JOptionPane.showMessageDialog(this,
                         "El nombre solo debe contener letras y espacios.");
                 return;
             }
 
-            // Realizar búsqueda de proveedor
+            List<DTOEquipo> resultado = control.buscarEquiposExternos(txtBuscar.getText());
+            solicitarEquiposExternos(resultado);
+            if (resultado.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No se encontraron equipos del proveedor con ese nombre.");
+            }
         });
     }
     
-    //Muestra los equipos del proveedor externo (cuando el almacén los tenga)
-    public void mostrarEquiposProveedor(List<DTOEquipo> equipos) {
-        DefaultTableModel modelo = modeloSoloLectura(new String[]{"Equipo", "Disponibilidad", "Cantidad seleccionada"});
+    public void solicitarEquiposExternos(List<DTOEquipo> equipos) {
+        DefaultTableModel modelo = modeloSoloLectura(new String[]{"ID", "Equipo", "Disponibilidad", "Cantidad seleccionada"});
         for (DTOEquipo equipo : equipos) {
-            modelo.addRow(new Object[]{equipo.getNombre(), equipo.getDisponibilidad(), equipo.getCantidadSeleccionada()});
+            modelo.addRow(new Object[]{equipo.getIdEquipo(), equipo.getNombre(), equipo.getDisponibilidad(), equipo.getCantidadSeleccionada()});
         }
         tblConsulta.setModel(modelo);
+    }
+
+    public void usarCantidad() {
+        int fila = tblConsulta.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un equipo de la tabla.");
+            return;
+        }
+        int idEquipo = (int) tblConsulta.getValueAt(fila, 0);
+        String nombre = String.valueOf(tblConsulta.getValueAt(fila, 1));
+        Object disponibilidad = tblConsulta.getValueAt(fila, 2);
+
+        String texto = JOptionPane.showInputDialog(this,
+                "Cantidad de " + nombre + " (disponibles: " + disponibilidad + "):");
+        if (texto == null) {
+            return;
+        }
+        if (!control.esCantidadEquipoValida(idEquipo, texto)) {
+            JOptionPane.showMessageDialog(this,
+                    "La cantidad debe ser un entero entre 1 y " + disponibilidad + ".");
+            return;
+        }
+        control.seleccionarEquipos(idEquipo, Integer.parseInt(texto.trim()));
+        control.solicitarEquipos();
     }
  
     //Modelo de tabla solo de lectura
@@ -99,4 +125,3 @@ public class PanelProveedor extends JPanel {
         };
     }
 }
-

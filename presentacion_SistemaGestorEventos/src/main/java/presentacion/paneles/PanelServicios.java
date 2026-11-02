@@ -19,7 +19,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import presentacion.validaciones.Validaciones;
 
 public class PanelServicios extends JPanel {
 
@@ -29,7 +28,7 @@ public class PanelServicios extends JPanel {
     private JPanel pnlBusqueda;
     private JTextField txtBuscar;
     private JButton btnBuscar;
-    private JButton btnVolver, btnGuardar, btnContinuar;
+    private JButton btnVolver, btnContinuar;
 
     public PanelServicios(controlPresentacion control) {
         this.control = control;
@@ -55,16 +54,26 @@ public class PanelServicios extends JPanel {
 
         // Botones inferiores
         btnVolver = new JButton("Volver");
-        btnGuardar = new JButton("Guardar");
         btnContinuar = new JButton("Continuar");
 
-        btnVolver.addActionListener(e -> this.control.mostrarFolio());
-        btnContinuar.addActionListener(e -> this.control.mostrarEquipo());
+        btnVolver.addActionListener(e -> this.control.solicitarFolio());
+        btnContinuar.addActionListener(e -> {
+            if (!control.verificarSeleccionServicios()) {
+                int opcion = JOptionPane.showConfirmDialog(this,
+                        "No hay servicios seleccionados. ¿Deseas continuar de todos modos?",
+                        "Sin servicios",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                if (opcion != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+            control.solicitarEquipos();
+        });
 
         JPanel pnlSur = new JPanel();
         pnlSur.setOpaque(false);
         pnlSur.add(btnVolver);
-        pnlSur.add(btnGuardar);
         pnlSur.add(btnContinuar);
 
         JPanel pnlSuperior = new JPanel(new BorderLayout(5, 10));
@@ -90,7 +99,7 @@ public class PanelServicios extends JPanel {
         add(pnlSur, BorderLayout.SOUTH);
         
         btnBuscar.addActionListener(e -> {
-            if (!Validaciones.soloLetras(txtBuscar)) {
+            if (!control.busquedaValida(txtBuscar)) {
                 JOptionPane.showMessageDialog(this,
                         "Solo se permiten letras.");
                 return;
@@ -100,11 +109,12 @@ public class PanelServicios extends JPanel {
         });
     }
     
-    public void mostrarServicios(List<DTOServicio> servicios) {
+    public void solicitarServicios(List<DTOServicio> servicios) {
         pnlOpcionesServicios.removeAll();
         for (DTOServicio s : servicios) {
             JCheckBox chk = new JCheckBox(s.getNombre(), s.isSeleccionado());
             chk.setToolTipText(s.getDescripcion());
+            chk.addActionListener(e -> control.seleccionarServicios(s.getIdServicio(), chk.isSelected()));
             pnlOpcionesServicios.add(chk);
         }
         pnlOpcionesServicios.revalidate();
@@ -112,12 +122,13 @@ public class PanelServicios extends JPanel {
     }
     
     public void buscarServicios(JTextField txt) {
-        List<DTOServicio> servicios = control.consultarServicios();
+        List<DTOServicio> servicios = control.consultarServiciosDisponibles();
         pnlOpcionesServicios.removeAll();
         for (DTOServicio s : servicios) {
             if(s.getNombre().toLowerCase().contains(txt.getText().toLowerCase())){
                 JCheckBox chk = new JCheckBox(s.getNombre(), s.isSeleccionado()); 
                 chk.setToolTipText(s.getDescripcion());
+                chk.addActionListener(e -> control.seleccionarServicios(s.getIdServicio(), chk.isSelected()));
                 pnlOpcionesServicios.add(chk);
             }
         }

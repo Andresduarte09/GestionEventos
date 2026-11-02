@@ -19,7 +19,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import presentacion.control.controlPresentacion;
-import presentacion.validaciones.Validaciones;
 
 /**
  *
@@ -53,7 +52,7 @@ public class PanelInventario extends JPanel{
         btnCerrar = new JButton("Cerrar");
         btnUsarCantidad = new JButton("Usar cantidad");
 
-        btnCerrar.addActionListener(e -> this.control.mostrarEquipo());
+        btnCerrar.addActionListener(e -> this.control.solicitarEquipos());
 
         JPanel pnlSur = new JPanel();
         pnlSur.setOpaque(false);
@@ -70,7 +69,7 @@ public class PanelInventario extends JPanel{
         add(pnlSur, BorderLayout.SOUTH);
         
         btnBuscar.addActionListener(e -> {
-            if (!Validaciones.soloLetras(txtBuscar)) {
+            if (!control.busquedaValida(txtBuscar)) {
                 JOptionPane.showMessageDialog(this,
                         "El folio solo debe contener letras.");
                 return;
@@ -85,7 +84,7 @@ public class PanelInventario extends JPanel{
     }
 
     //Muestra el equipo de cada inventario guardado en el almacén
-    public void mostrarInventario(List<DTOInventario> inventarios) {
+    public void solicitarInventario(List<DTOInventario> inventarios) {
         DefaultTableModel modelo = modeloSoloLectura(new String[]{"ID", "Equipo", "Disponibilidad", "Cantidad seleccionada"});
         for (DTOInventario inventario : inventarios) {
             for (DTOEquipo equipo : inventario.getEquipos()) {
@@ -98,9 +97,9 @@ public class PanelInventario extends JPanel{
     public void buscarInventario(JTextField txt){
         tblConsulta.clearSelection();
         DefaultTableModel modelo = modeloSoloLectura(new String[]{"ID", "Equipo", "Disponibilidad", "Cantidad seleccionada"});
-        List<DTOEquipo> equipoPropio = control.consultarEquipos();
+        List<DTOEquipo> equipoPropio = control.obtenerEquiposDisponibles();
         for (DTOEquipo equipo : equipoPropio){
-            List<DTOEquipo> equipos = control.consultarEquipos();
+            List<DTOEquipo> equipos = control.obtenerEquiposDisponibles();
             if(equipo.getNombre().toLowerCase().contains(txt.getText().toLowerCase())){
                 modelo.addRow(new Object[]{equipo.getIdEquipo(), equipo.getNombre(), equipo.getDisponibilidad(), equipo.getCantidadSeleccionada()});
             }
@@ -119,6 +118,10 @@ public class PanelInventario extends JPanel{
         int idEquipo =  (int) tblConsulta.getValueAt(fila, 0);
         
         DTOEquipo equipo = buscarEquipoPorId(idEquipo);
+        if (equipo == null) {
+            JOptionPane.showMessageDialog(this, "El equipo seleccionado ya no se encuentra en el inventario.");
+            return;
+        }
 
         // 3. Pedir la cantidad
         String texto = JOptionPane.showInputDialog(this,
@@ -128,19 +131,19 @@ public class PanelInventario extends JPanel{
         }
 
         // 4. Validar: entero mayor a 0 y que no pase de la disponibilidad
-        if (!Validaciones.esEnteroPositivo(texto) || Integer.parseInt(texto.trim()) > equipo.getDisponibilidad()) {
+        if (!control.esCantidadEquipoValida(idEquipo, texto)) {
             JOptionPane.showMessageDialog(this,
                     "La cantidad debe ser un entero entre 1 y " + equipo.getDisponibilidad() + ".");
             return;
         }
 
         // 5. Guardar y volver a la pantalla de equipo
-        equipo.setCantidadSeleccionada(Integer.parseInt(texto.trim()));
-        control.mostrarEquipo();
+        control.seleccionarEquipos(idEquipo, Integer.parseInt(texto.trim()));
+        control.solicitarEquipos();
     }
     
     private DTOEquipo buscarEquipoPorId(int id) {
-        for (DTOEquipo equipo : control.consultarEquipos()) {
+        for (DTOEquipo equipo : control.obtenerEquiposDisponibles()) {
             if (equipo.getIdEquipo() == id) {
                 return equipo;
             }

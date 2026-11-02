@@ -3,6 +3,7 @@ package presentacion.control;
 import presentacion.vistas.*;
 import dto.*;
 import com.mycompany.persistencia.AlmacenDatos;
+import infraestructura.ProveedorExterno;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +31,12 @@ public class controlPresentacion {
     private DTOLevantamiento levantamiento;
     private List<DTOPersonal> personalSeleccionado = new ArrayList<>();
     private final AlmacenDatos almacen = new AlmacenDatos();
+    private final ProveedorExterno proveedorExterno = new ProveedorExterno();
     private DTODecisionCliente decisionCliente;
     private List<DTOServicio> serviciosAceptados = new ArrayList<>();
+    private LocalTime horarioMontajePropuesta;
+    private LocalTime horarioDesmontajePropuesta;
+    private String comentariosPropuesta = "";
     
 
     //DTO´s que se mueven entre las pantallas y solo el control las conserva
@@ -46,25 +51,30 @@ public class controlPresentacion {
     /*
     Consulta lo del almacen para mostrarlo unicamente
      */
-    public List<DTOServicio> consultarServicios() {
+    public List<DTOServicio> consultarServiciosDisponibles() {
         return new ArrayList<>(almacen.getServicios());
     }
 
-    public List<DTOEquipo> consultarEquipos() {
+    public List<DTOEquipo> obtenerEquiposDisponibles() {
         return new ArrayList<>(almacen.getEquipos());
     }
 
-    public List<DTOInventario> consultarInventarios() {
+    public List<DTOInventario> obtenerInventarioDisponible() {
         return new ArrayList<>(almacen.getInventario());
     }
 
-    public List<DTOPersonal> consultarPersonal() {
+    public List<DTOPersonal> obtenerPersonalDisponible() {
         return new ArrayList<>(almacen.getPersonal());
     }
 
-    //Por ahora el almacén no guarda inventario de proveedor externo, por eso la lista va vacía
-    public List<DTOEquipo> consultarEquiposProveedor() {
-        return new ArrayList<>();
+    public List<DTOEquipo> consultarEquiposExternos() {
+        return new ArrayList<>(proveedorExterno.getEquipos());
+    }
+
+    private List<DTOEquipo> consultarTodosLosEquipos() {
+        List<DTOEquipo> todos = new ArrayList<>(obtenerEquiposDisponibles());
+        todos.addAll(consultarEquiposExternos());
+        return todos;
     }
 
     public DTOCliente getCliente() {
@@ -293,7 +303,7 @@ public class controlPresentacion {
         if (configurarPropuesta == null) {
             configurarPropuesta = new JFrameConfigurarPropuesta(this);
         }
-        mostrarFolio();
+        solicitarFolio();
         configurarPropuesta.setVisible(true);
     }
 
@@ -328,51 +338,51 @@ public class controlPresentacion {
     }
 
     //Cada método carga en su panel la información del almacén y luego lo muestra
-    public void mostrarFolio() {
+    public void solicitarFolio() {
         if (configurarPropuesta != null) {
-            configurarPropuesta.cargarFolio(cliente, evento);
+            configurarPropuesta.solicitarFolio(cliente, evento);
         }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_FOLIO);
     }
 
-    public void mostrarServicios() {
+    public void solicitarServicios() {
         if (configurarPropuesta != null) {
-            configurarPropuesta.cargarServicios(consultarServicios());
+            configurarPropuesta.solicitarServicios(consultarServiciosDisponibles());
         }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_SERVICIOS);
     }
 
-    public void mostrarEquipo() {
+    public void solicitarEquipos() {
         if (configurarPropuesta != null) {
-            configurarPropuesta.cargarEquipos(consultarEquipos());
+            configurarPropuesta.solicitarEquipos(consultarTodosLosEquipos());
         }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_EQUIPO);
     }
 
-    public void mostrarInventario() {
+    public void solicitarInventario() {
         if (configurarPropuesta != null) {
-            configurarPropuesta.cargarInventario(consultarInventarios());
+            configurarPropuesta.solicitarInventario(obtenerInventarioDisponible());
         }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_INVENTARIO);
     }
 
-    public void mostrarProveedor() {
+    public void solicitarEquiposExternos() {
         if (configurarPropuesta != null) {
-            configurarPropuesta.cargarProveedor(consultarEquiposProveedor());
+            configurarPropuesta.solicitarEquiposExternos(consultarEquiposExternos());
         }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_PROVEEDOR);
     }
 
-    public void mostrarPersonal() {
+    public void solicitarPersonal() {
         if (configurarPropuesta != null) {
-            configurarPropuesta.cargarPersonal(consultarPersonal());
+            configurarPropuesta.solicitarPersonal(obtenerPersonalDisponible());
         }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_PERSONAL);
     }
 
-    public void mostrarResumen() {
+    public void obtenerResumen() {
         if (configurarPropuesta != null) {
-            configurarPropuesta.cargarResumen(cliente, evento, consultarServicios(), consultarEquipos(), consultarPersonal());
+            configurarPropuesta.solicitarResumen(cliente, evento, consultarServiciosDisponibles(), consultarTodosLosEquipos(), obtenerPersonalDisponible());
         }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
     }
@@ -471,7 +481,7 @@ public class controlPresentacion {
 
     private List<String> serviciosSeleccionados() {
         List<String> nombres = new ArrayList<>();
-        for (DTOServicio s : consultarServicios()) {
+        for (DTOServicio s : consultarServiciosDisponibles()) {
             if (s.isSeleccionado()) {
                 nombres.add(s.getNombre());
             }
@@ -481,7 +491,7 @@ public class controlPresentacion {
 
     private List<String> equiposSeleccionados() {
         List<String> nombres = new ArrayList<>();
-        for (DTOEquipo e : consultarEquipos()) {
+        for (DTOEquipo e : consultarTodosLosEquipos()) {
             if (e.getCantidadSeleccionada() > 0) {
                 nombres.add(e.getNombre() + " (x" + e.getCantidadSeleccionada() + ")");
             }
@@ -491,7 +501,7 @@ public class controlPresentacion {
 
     private List<String> personalSeleccionado() {
         List<String> nombres = new ArrayList<>();
-        for (DTOPersonal p : consultarPersonal()) {
+        for (DTOPersonal p : obtenerPersonalDisponible()) {
             if (p.getCantidad() > 0) {
                 nombres.add(p.getEspecialidad() + " (x" + p.getCantidad() + ")");
             }
@@ -507,7 +517,7 @@ public class controlPresentacion {
         public List<String> obtenerServiciosCotizadosConPrecio() {
              List<String> resultado = new ArrayList<>();
 
-        for (DTOServicio servicio : consultarServicios()) {
+        for (DTOServicio servicio : consultarServiciosDisponibles()) {
 
             if (servicio.isSeleccionado()) {
                 resultado.add(servicio.getNombre());
@@ -554,7 +564,7 @@ public class controlPresentacion {
         serviciosAceptados.clear();
 
         if (decision.equals("Aceptación total")) {
-            for (DTOServicio servicio : consultarServicios()) {
+            for (DTOServicio servicio : consultarServiciosDisponibles()) {
                 if (servicio.isSeleccionado()) {
                     serviciosAceptados.add(servicio);
                 }
@@ -573,7 +583,7 @@ public class controlPresentacion {
             }
 
             for (String nombreServicio : serviciosSeleccionados) {
-                for (DTOServicio servicio : consultarServicios()) {
+                for (DTOServicio servicio : consultarServiciosDisponibles()) {
                     if (servicio.isSeleccionado() && servicio.getNombre().equals(nombreServicio)) {
                         serviciosAceptados.add(servicio);
                         break;
@@ -674,6 +684,125 @@ public class controlPresentacion {
     public List<DTOServicio> getServiciosAceptados() {
         return new ArrayList<>(serviciosAceptados);
     }
-    
-    
+
+    public boolean verificarSeleccionServicios() {
+        for (DTOServicio s : consultarServiciosDisponibles()) {
+            if (s.isSeleccionado()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Este metodo verifica si se selecciono al menos un equipo
+    public boolean verificarSeleccionEquipos() {
+        for (DTOEquipo e : consultarTodosLosEquipos()) {
+            if (e.getCantidadSeleccionada() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void seleccionarEquipos(int idEquipo, int cantidad) {
+        for (DTOEquipo e : consultarTodosLosEquipos()) {
+            if (e.getIdEquipo() == idEquipo) {
+                e.setCantidadSeleccionada(cantidad);
+                return;
+            }
+        }
+    }
+
+    public boolean verificarSeleccionPersonal() {
+        for (DTOPersonal p : obtenerPersonalDisponible()) {
+            if (p.getCantidad() > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean enviarPropuestaHaciaCotizacion(String horarioMontaje, String horarioDesmontaje, String comentarios) {
+        LocalTime montaje = null;
+        LocalTime desmontaje = null;
+        try {
+            if (horarioMontaje != null && !horarioMontaje.trim().isEmpty()) {
+                montaje = LocalTime.parse(horarioMontaje.trim());
+            }
+            if (horarioDesmontaje != null && !horarioDesmontaje.trim().isEmpty()) {
+                desmontaje = LocalTime.parse(horarioDesmontaje.trim());
+            }
+        } catch (java.time.format.DateTimeParseException ex) {
+            JOptionPane.showMessageDialog(null, "Los horarios deben tener el formato HH:mm, por ejemplo 08:30.");
+            return false;
+        }
+        this.horarioMontajePropuesta = montaje;
+        this.horarioDesmontajePropuesta = desmontaje;
+        this.comentariosPropuesta = comentarios == null ? "" : comentarios.trim();
+        iniciarResumenCotizacion();
+        return true;
+    }
+
+    public LocalTime getHorarioMontajePropuesta() {
+        return horarioMontajePropuesta;
+    }
+
+    public LocalTime getHorarioDesmontajePropuesta() {
+        return horarioDesmontajePropuesta;
+    }
+
+    public String getComentariosPropuesta() {
+        return comentariosPropuesta;
+    }
+
+    public void eliminarEquipoSeleccionado(int idEquipo) {
+        seleccionarEquipos(idEquipo, 0);
+    }
+
+    public boolean busquedaValida(javax.swing.JTextField txt) {
+        return Validaciones.soloLetras(txt);
+    }
+
+    public boolean esCantidadPersonalValida(String texto) {
+        return Validaciones.noEsNegativo(texto);
+    }
+
+    public boolean esCantidadEquipoValida(int idEquipo, String texto) {
+        for (DTOEquipo e : consultarTodosLosEquipos()) {
+            if (e.getIdEquipo() == idEquipo) {
+                return Validaciones.esEnteroPositivo(texto)
+                        && Integer.parseInt(texto.trim()) <= e.getDisponibilidad();
+            }
+        }
+        return false;
+    }
+
+    public List<DTOEquipo> buscarEquiposExternos(String texto) {
+        List<DTOEquipo> resultado = new ArrayList<>();
+        for (DTOEquipo e : consultarEquiposExternos()) {
+            if (e.getNombre() != null && e.getNombre().toLowerCase().contains(texto.trim().toLowerCase())) {
+                resultado.add(e);
+            }
+        }
+        return resultado;
+    }
+
+    public void seleccionarPersonal(int idPersonal, int cantidad) {
+        for (DTOPersonal p : almacen.getPersonal()) {
+            if (p.getIdEspecialidad() == idPersonal) {
+                p.setCantidad(cantidad);
+                return;
+            }
+        }
+    }
+
+    public void seleccionarServicios(int idServicio, boolean seleccionado) {
+        for (DTOServicio s : almacen.getServicios()) {
+            if (s.getIdServicio() == idServicio) {
+                s.setSeleccionado(seleccionado);
+                return;
+            }
+        }
+    }
+
 }

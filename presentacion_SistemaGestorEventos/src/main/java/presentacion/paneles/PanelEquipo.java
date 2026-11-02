@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -36,7 +37,6 @@ public class PanelEquipo extends JPanel {
     private final JButton btnBasura = new JButton("🗑️");
     private JButton btnConsultarInventario, btnConsultarProveedor, btnVolver, btnContinuar;
 
-    // Equipos que se muestran en la tabla (misma posición que cada fila)
     private final List<DTOEquipo> seleccionados = new ArrayList<>();
 
     public PanelEquipo(controlPresentacion control) {
@@ -82,8 +82,8 @@ public class PanelEquipo extends JPanel {
         btnConsultarInventario = new JButton("Consultar Inventario Propio");
         btnConsultarProveedor = new JButton("Consultar Proveedor");
 
-        btnConsultarInventario.addActionListener(e -> this.control.mostrarInventario());
-        btnConsultarProveedor.addActionListener(e -> this.control.mostrarProveedor());
+        btnConsultarInventario.addActionListener(e -> this.control.solicitarInventario());
+        btnConsultarProveedor.addActionListener(e -> this.control.solicitarEquiposExternos());
 
         JScrollPane scroll = new JScrollPane(tblEquipos);
         scroll.getViewport().setBackground(GRIS);
@@ -102,8 +102,20 @@ public class PanelEquipo extends JPanel {
         btnVolver = new JButton("Volver");
         btnContinuar = new JButton("Continuar");
 
-        btnVolver.addActionListener(e -> this.control.mostrarServicios());
-        btnContinuar.addActionListener(e -> this.control.mostrarPersonal());
+        btnVolver.addActionListener(e -> this.control.solicitarServicios());
+        btnContinuar.addActionListener(e -> {
+            if (!control.verificarSeleccionEquipos()) {
+                int opcion = JOptionPane.showConfirmDialog(this,
+                        "No hay equipos seleccionados. ¿Deseas continuar de todos modos?",
+                        "Sin equipos",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE);
+                if (opcion != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+            control.solicitarPersonal();
+        });
 
         JPanel pnlSur = new JPanel();
         pnlSur.setOpaque(false);
@@ -116,7 +128,7 @@ public class PanelEquipo extends JPanel {
     }
 
     // Muestra solo los equipos ya seleccionados (cantidad mayor a 0)
-    public void mostrarEquipos(List<DTOEquipo> equipos) {
+    public void solicitarEquipos(List<DTOEquipo> equipos) {
         seleccionados.clear();
         DefaultTableModel modelo = modeloSoloLectura(new String[]{"Equipo", "Cantidad", ""});
         for (DTOEquipo equipo : equipos) {
@@ -127,7 +139,6 @@ public class PanelEquipo extends JPanel {
         }
         tblEquipos.setModel(modelo);
 
-        // La columna de borrar: angosta y con un botón (el texto lo cambias por tu icono)
         tblEquipos.getColumnModel().getColumn(COL_BORRAR).setMinWidth(100);
         tblEquipos.getColumnModel().getColumn(COL_BORRAR).setMaxWidth(100);
         tblEquipos.getColumnModel().getColumn(COL_BORRAR).setCellRenderer((t, v, sel, foco, fila, col) -> btnBasura);
@@ -135,7 +146,11 @@ public class PanelEquipo extends JPanel {
 
     // Quita el equipo de la tabla y lo deja en cantidad 0
     private void eliminarEquipo(int fila) {
-        seleccionados.get(fila).setCantidadSeleccionada(0);
+        if (fila < 0 || fila >= seleccionados.size()) {
+            return;
+        }
+        DTOEquipo eq = seleccionados.get(fila);
+        control.eliminarEquipoSeleccionado(eq.getIdEquipo());
         seleccionados.remove(fila);
         ((DefaultTableModel) tblEquipos.getModel()).removeRow(fila);
     }

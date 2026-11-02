@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 import presentacion.paneles.PanelInventario;
 import dto.*;
 
-
 /**
  * 
  * @author Andre
@@ -66,8 +65,8 @@ public class JFrameConfigurarPropuesta extends JFrame {
 
     private void iniciarComponentes() {
         // Configuración de la pantalla principal
-        setTitle("Configuración de Evento");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Configurar Propuesta");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(1000, 650);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -116,12 +115,12 @@ public class JFrameConfigurarPropuesta extends JFrame {
         add(pnlContenido, BorderLayout.CENTER);
 
         // Eventos de los botones laterales para cambio de panel
-        btnFolio.addActionListener(e -> control.mostrarFolio());
-        btnServicios.addActionListener(e -> control.mostrarServicios());
-        btnEquipo.addActionListener(e -> control.mostrarEquipo());
-        btnProveedor.addActionListener(e -> control.mostrarProveedor());
-        btnPersonal.addActionListener(e -> control.mostrarPersonal());
-        btnResumen.addActionListener(e -> control.mostrarResumen());
+        btnFolio.addActionListener(e -> control.solicitarFolio());
+        btnServicios.addActionListener(e -> control.solicitarServicios());
+        btnEquipo.addActionListener(e -> control.solicitarEquipos());
+        btnProveedor.addActionListener(e -> control.solicitarEquiposExternos());
+        btnPersonal.addActionListener(e -> control.solicitarPersonal());
+        btnResumen.addActionListener(e -> control.obtenerResumen());
 
         // Abrir panel predilecto
         navegarA(PANEL_FOLIO);
@@ -136,33 +135,33 @@ public class JFrameConfigurarPropuesta extends JFrame {
         return btn;
     }
     
-    public void cargarFolio(DTOCliente cliente, DTOEvento evento) {
-        pnlFolio.mostrarFolio(cliente, evento);
+    public void solicitarFolio(DTOCliente cliente, DTOEvento evento) {
+        pnlFolio.solicitarFolio(cliente, evento);
     }
  
-    public void cargarServicios(List<DTOServicio> servicios) {
-        pnlServicios.mostrarServicios(servicios);
+    public void solicitarServicios(List<DTOServicio> servicios) {
+        pnlServicios.solicitarServicios(servicios);
     }
  
-    public void cargarEquipos(List<DTOEquipo> equipos) {
-        pnlEquipo.mostrarEquipos(equipos);
+    public void solicitarEquipos(List<DTOEquipo> equipos) {
+        pnlEquipo.solicitarEquipos(equipos);
     }
  
-    public void cargarInventario(List<DTOInventario> inventarios) {
-        pnlInventario.mostrarInventario(inventarios);
+    public void solicitarInventario(List<DTOInventario> inventarios) {
+        pnlInventario.solicitarInventario(inventarios);
     }
  
-    public void cargarProveedor(List<DTOEquipo> equiposProveedor) {
-        pnlProveedor.mostrarEquiposProveedor(equiposProveedor);
+    public void solicitarEquiposExternos(List<DTOEquipo> equiposProveedor) {
+        pnlProveedor.solicitarEquiposExternos(equiposProveedor);
     }
  
-    public void cargarPersonal(List<DTOPersonal> personal) {
-        pnlPersonal.mostrarPersonal(personal);
+    public void solicitarPersonal(List<DTOPersonal> personal) {
+        pnlPersonal.solicitarPersonal(personal);
     }
  
-    public void cargarResumen(DTOCliente cliente, DTOEvento evento, List<DTOServicio> servicios,
+    public void solicitarResumen(DTOCliente cliente, DTOEvento evento, List<DTOServicio> servicios,
             List<DTOEquipo> equipos, List<DTOPersonal> personal) {
-        pnlResumen.mostrarResumen(cliente, evento, servicios, equipos, personal);
+        pnlResumen.solicitarResumen(cliente, evento, servicios, equipos, personal);
     }
 
     public void navegarA(String nombrePanel) {

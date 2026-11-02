@@ -43,7 +43,7 @@ public class PanelFolio extends JPanel {
         btnContinuar.setFont(new Font("Arial", Font.BOLD, 14));
         btnContinuar.setBackground(new Color(30, 30, 30));
         btnContinuar.setForeground(Color.WHITE);
-        btnContinuar.addActionListener(e -> this.control.mostrarServicios());
+        btnContinuar.addActionListener(e -> this.control.solicitarServicios());
 
         JPanel pnlSur = new JPanel();
         pnlSur.setOpaque(false);
@@ -54,7 +54,7 @@ public class PanelFolio extends JPanel {
         add(pnlSur, BorderLayout.SOUTH);
     }
     
-    public void mostrarFolio(DTOCliente cliente, DTOEvento evento) {
+    public void solicitarFolio(DTOCliente cliente, DTOEvento evento) {
         StringBuilder sb = new StringBuilder();
         
         sb.append("Cliente\n");
