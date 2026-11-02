@@ -27,6 +27,8 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         mostrarDatos(cliente, evento);
+        
+        lblNecesidadesExtraInfo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
     }
     
     private void mostrarDatos(DTOCliente cliente, DTOEvento evento) {
@@ -73,29 +75,32 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Análisis y Evaluación del espacio");
+        setMaximumSize(new java.awt.Dimension(700, 600));
+        setPreferredSize(new java.awt.Dimension(700, 600));
         setResizable(false);
 
-        lblNombreCliente.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblNombreCliente.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblNombreCliente.setText("Nombre del cliente:");
 
-        lblUbicacion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblUbicacion.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblUbicacion.setText("Ubicación:");
 
-        lblTipo.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblTipo.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblTipo.setText("Tipo:");
 
-        lblFecha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblFecha.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblFecha.setText("Fecha:");
 
-        lblAsistentes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblAsistentes.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblAsistentes.setText("Asistentes:");
 
-        lblRecursosEvento.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblRecursosEvento.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblRecursosEvento.setText("Recursos del Evento:");
 
-        lblNecesidadesExtra.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblNecesidadesExtra.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblNecesidadesExtra.setText("Necesidades/requerimientos extra:");
 
+        btnRevisar.setBackground(new java.awt.Color(101, 255, 101));
         btnRevisar.setText("Revisar");
         btnRevisar.setMaximumSize(new java.awt.Dimension(60, 20));
         btnRevisar.addActionListener(this::btnRevisarActionPerformed);
@@ -112,7 +117,7 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
 
         lblNecesidadesExtraInfo.setText("Requerimientos extra");
 
-        lblTituloAnalisisEvaluacion.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
+        lblTituloAnalisisEvaluacion.setFont(new java.awt.Font("Segoe UI", 2, 38)); // NOI18N
         lblTituloAnalisisEvaluacion.setText("Análisis y evaluación del espacio");
 
         btnAtras.setText("Atrás");
@@ -128,84 +133,88 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(190, 190, 190)
+                .addGap(59, 59, 59)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNecesidadesExtraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(45, 45, 45)
-                                .addComponent(btnRevisar, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblUbicacion)
+                                    .addComponent(lblFecha)
+                                    .addComponent(lblAsistentes)
+                                    .addComponent(lblTipo))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblRecursosEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnVerRecursos)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(lblTituloAnalisisEvaluacion)))
+                        .addGap(38, 38, 38))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNecesidadesExtraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNecesidadesExtra))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(62, 62, 62)
+                                .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(65, 65, 65)
+                                .addComponent(btnRevisar, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(179, 179, 179)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblNombreCliente)
-                                    .addComponent(lblTipo)
-                                    .addComponent(lblUbicacion)
-                                    .addComponent(lblFecha)
-                                    .addComponent(lblAsistentes))
-                                .addGap(53, 53, 53)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblNombreClienteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblTipoInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblUbicacionInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lblFechaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(lblAsistentesInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(37, 37, 37)
-                                                .addComponent(lblRecursosEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(18, 18, 18)
-                                                .addComponent(btnVerRecursos))))))
-                            .addComponent(lblNecesidadesExtra))
-                        .addContainerGap(81, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(231, 231, 231)
-                .addComponent(lblTituloAnalisisEvaluacion, javax.swing.GroupLayout.PREFERRED_SIZE, 358, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(lblNombreClienteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblUbicacionInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblFechaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblAsistentesInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(lblNombreCliente))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(34, 34, 34)
                 .addComponent(lblTituloAnalisisEvaluacion)
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombreCliente)
                     .addComponent(lblNombreClienteInfo))
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTipoInfo)
-                    .addComponent(lblTipo))
-                .addGap(33, 33, 33)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblTipo)
+                            .addComponent(lblTipoInfo))
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblRecursosEvento)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnVerRecursos)
+                        .addGap(1, 1, 1)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUbicacion)
-                    .addComponent(lblUbicacionInfo)
-                    .addComponent(lblRecursosEvento))
-                .addGap(28, 28, 28)
+                    .addComponent(lblUbicacionInfo))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFecha)
-                    .addComponent(lblFechaInfo)
-                    .addComponent(btnVerRecursos))
-                .addGap(39, 39, 39)
+                    .addComponent(lblFechaInfo))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAsistentesInfo)
-                    .addComponent(lblAsistentes))
-                .addGap(34, 34, 34)
+                    .addComponent(lblAsistentes)
+                    .addComponent(lblAsistentesInfo))
+                .addGap(18, 18, 18)
                 .addComponent(lblNecesidadesExtra)
-                .addGap(36, 36, 36)
-                .addComponent(lblNecesidadesExtraInfo)
-                .addGap(34, 34, 34)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblNecesidadesExtraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRevisar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(54, Short.MAX_VALUE))
+                    .addComponent(btnRevisar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
