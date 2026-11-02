@@ -262,7 +262,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        control.CancelarRevisarAnalisisEvaluacion();
+        control.cancelarRevisarAnalisisEvaluacion();
         this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCancelarActionPerformed

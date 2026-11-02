@@ -68,26 +68,26 @@ public class AlmacenDatos {
     //Locales de evento (id, tipoLocal, dimensionesLugar,
     //dimensionesEspacios, condicionesAcceso, restricciones, necesidades y duracionHoras
     private void cargarLocalesEvento() {
-    localesEvento.add(new DTOLocalEvento(1, "Salón", "30 x 20 m", "Escenario y pista",
-            "Acceso por entrada principal", "No fumar",
-            "Se necesita conexión eléctrica", 200, 8));
+        localesEvento.add(new DTOLocalEvento(1, "Salón", "30 x 20 m", "Escenario y pista",
+                "Acceso por entrada principal", "No fumar",
+                "Se necesita conexión eléctrica", 200, 8));
 
-    localesEvento.add(new DTOLocalEvento(2, "Jardín", "40 x 25 m", "Área de mesas y pista al aire libre",
-            "Acceso por portón lateral; piso de pasto", "Música permitida hasta las 23:00",
-            "Se requieren extensiones de 50 m o planta eléctrica", 350,6));
+        localesEvento.add(new DTOLocalEvento(2, "Jardín", "40 x 25 m", "Área de mesas y pista al aire libre",
+                "Acceso por portón lateral; piso de pasto", "Música permitida hasta las 23:00",
+                "Se requieren extensiones de 50 m o planta eléctrica", 350,6));
 
-    localesEvento.add(new DTOLocalEvento(3, "Auditorio", "35 x 22 m", "Escenario fijo y butacas",
-            "Rampa de carga y elevador de equipo", "No pegar elementos en las paredes",
-            "Tomas trifásicas disponibles en el escenario", 400,7));
+        localesEvento.add(new DTOLocalEvento(3, "Auditorio", "35 x 22 m", "Escenario fijo y butacas",
+                "Rampa de carga y elevador de equipo", "No pegar elementos en las paredes",
+                "Tomas trifásicas disponibles en el escenario", 400,7));
 
-    localesEvento.add(new DTOLocalEvento(4, "Terraza", "25 x 15 m", "Zona de mesas y barra",
-            "Acceso por escalera, sin elevador", "Máximo 220 personas",
-            "Cubrir las instalaciones por posible lluvia", 220,8));
+        localesEvento.add(new DTOLocalEvento(4, "Terraza", "25 x 15 m", "Zona de mesas y barra",
+                "Acceso por escalera, sin elevador", "Máximo 220 personas",
+                "Cubrir las instalaciones por posible lluvia", 220,8));
 
-    localesEvento.add(new DTOLocalEvento(5, "Salón de hotel", "28 x 18 m", "Salón con pista y mesa principal",
-            "Acceso de carga por la parte trasera", "Montaje solo a partir de las 8:00",
-            "El aire acondicionado limita el uso de humo", 180,6));
-}
+        localesEvento.add(new DTOLocalEvento(5, "Salón de hotel", "28 x 18 m", "Salón con pista y mesa principal",
+                "Acceso de carga por la parte trasera", "Montaje solo a partir de las 8:00",
+                "El aire acondicionado limita el uso de humo", 180,6));
+    }
 
     //Eventos
     private void cargarEventos() {

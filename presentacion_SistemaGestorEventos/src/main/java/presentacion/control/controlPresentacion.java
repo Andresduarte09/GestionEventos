@@ -4,7 +4,6 @@ import presentacion.vistas.*;
 import dto.*;
 import com.mycompany.persistencia.AlmacenDatos;
 import infraestructura.ProveedorExterno;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -12,7 +11,6 @@ import presentacion.validaciones.Validaciones;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -84,7 +82,14 @@ public class controlPresentacion {
     public DTOEvento getEvento() {
         return evento;
     }
-
+    
+    
+    
+    
+    //METODOS DE INICIO DE SESION/REGISTRO DE CLIENTE
+    
+    
+    
     public boolean procesarTelefonoIngresado(String telefono) {
         if (!Validaciones.telefonoValido(telefono)) {
             JOptionPane.showMessageDialog(null,
@@ -149,6 +154,17 @@ public class controlPresentacion {
         return true;
     }
 
+    
+    
+    
+    
+    //METODOS PARA REGISTRAR EVENTOS
+    
+    
+    
+    
+    
+    
     //Inicia el registro de datos del evento 
     public void iniciarRegistrarEvento(DTOCliente cliente) {
         this.cliente = cliente;
@@ -216,7 +232,13 @@ public class controlPresentacion {
         inicioSesion.setVisible(true);
     }
 
-        public void registrarRecursosEvento(String necesidadesExtra) {
+    
+    
+    
+    //RECURSOS EVENTO
+    
+    
+    public void registrarRecursosEvento(String necesidadesExtra) {
         evento.setNecesidadesIniciales(necesidadesExtra);
 
         List<DTODetalleSolicitud> detalles = new java.util.ArrayList<>();
@@ -247,6 +269,12 @@ public class controlPresentacion {
 
         iniciarAnalisisEvaluacion();
     }
+    
+    public void iniciarRecursosEvento() {
+        recursosEvento = new JFrameRecursosEvento(this);
+        recursosEvento.setVisible(true);
+    }
+    
     //cancelar recursos del evento
     public void cancelarRecursosEvento() {
         JFrameRegistrarDatosEvento registrarDatos = new JFrameRegistrarDatosEvento(this);
@@ -260,19 +288,33 @@ public class controlPresentacion {
         }
     }
 
-    public void CancelarAnalisisEvaluacion() {
-        JFrameRecursosEvento recursoEvento = new JFrameRecursosEvento(this);
-        recursoEvento.setVisible(true);
+    //Paneles de la pantalla de recursos del evento
+    private void mostrarPanelRecursos(String panel) {
+        if (recursosEvento != null) {
+            recursosEvento.navegarA(panel);
+        }
     }
-
-    public void CancelarRevisarAnalisisEvaluacion() {
+    public void iniciarAnalisisEvaluacion() {
         JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion(this, cliente, evento);
         analisisEvaluacion.setVisible(true);
     }
 
-    public void iniciarRecursosEvento() {
-        recursosEvento = new JFrameRecursosEvento(this);
-        recursosEvento.setVisible(true);
+    
+    //METODOS DE ANALISIS EVALUACION AQUI INICIA F2
+    
+    public void cancelarAnalisisEvaluacion() {
+        JFrameRecursosEvento recursoEvento = new JFrameRecursosEvento(this);
+        recursoEvento.setVisible(true);
+    }
+    
+    public void iniciarRevisarAnalisisEvaluacion() {
+        JFrameRevisarAnalisisEvaluacion revisarAnalisisEvaluacion = new JFrameRevisarAnalisisEvaluacion(this, evento);
+        revisarAnalisisEvaluacion.setVisible(true);
+    }
+    
+    public void cancelarRevisarAnalisisEvaluacion() {
+        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion( this, cliente, evento);
+        analisisEvaluacion.setVisible(true);
     }
 
     //actualizar cuando haya logica de reservas 
@@ -291,13 +333,8 @@ public class controlPresentacion {
         return recomendados;
     }
 
-    //Paneles de la pantalla de recursos del evento
-    private void mostrarPanelRecursos(String panel) {
-        if (recursosEvento != null) {
-            recursosEvento.navegarA(panel);
-        }
-    }
-
+    //METODOS F3 PROPUESTA
+     
     //Aqui va la inicializacion de la pantalla de configuracion de propuesta
     public void iniciarConfigurarPropuesta() {
         if (configurarPropuesta == null) {
@@ -337,7 +374,7 @@ public class controlPresentacion {
         }
     }
 
-    //Cada método carga en su panel la información del almacén y luego lo muestra
+    //Cada metodo carga en su panel la información del almacén y luego lo muestra
     public void solicitarFolio() {
         if (configurarPropuesta != null) {
             configurarPropuesta.solicitarFolio(cliente, evento);
@@ -387,16 +424,6 @@ public class controlPresentacion {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
     }
 
-
-    public void iniciarAnalisisEvaluacion() {
-        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion(this, cliente, evento);
-        analisisEvaluacion.setVisible(true);
-    }
-
-    public void iniciarRevisarAnalisisEvaluacion() {
-        JFrameRevisarAnalisisEvaluacion revisarAnalisisEvaluacion = new JFrameRevisarAnalisisEvaluacion(this, evento);
-        revisarAnalisisEvaluacion.setVisible(true);
-    }
     
     public DTOCotizacion getCotizacion() {
         return cotizacion;
