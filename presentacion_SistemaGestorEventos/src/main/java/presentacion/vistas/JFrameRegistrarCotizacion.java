@@ -6,20 +6,20 @@ package presentacion.vistas;
 
 import dto.DTOCliente;
 import dto.DTOCotizacion;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 
 /**
  *
  * @author armen
  */
 public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
-    private controlPresentacion control;
+    private ControlPresentacion control;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRegistrarCotizacion.class.getName());
 
     /**
      * Creates new form JFrameGenerarOrden
      */
-    public JFrameRegistrarCotizacion(controlPresentacion control) {
+    public JFrameRegistrarCotizacion(ControlPresentacion control) {
         this.control = control;
 
         initComponents();
@@ -72,7 +72,7 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
         listServicios = new javax.swing.JList<>();
         lblTituloGenerarOrden = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         lblCliente.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N

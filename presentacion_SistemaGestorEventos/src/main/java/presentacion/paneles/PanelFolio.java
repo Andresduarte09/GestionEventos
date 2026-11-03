@@ -7,7 +7,7 @@ package presentacion.paneles;
 import dto.DTOCliente;
 import dto.DTODetalleSolicitud;
 import dto.DTOEvento;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -23,12 +23,12 @@ import javax.swing.JTextArea;
  */
 public class PanelFolio extends JPanel {
 
-    private final controlPresentacion control;
+    private final ControlPresentacion control;
     private JLabel lblTitulo;
     private JTextArea txtDetalles;
     private JButton btnContinuar;
 
-    public PanelFolio(controlPresentacion control) {
+    public PanelFolio(ControlPresentacion control) {
         this.control = control;
         setLayout(new BorderLayout(15, 15));
         setBackground(new Color(220, 220, 220));

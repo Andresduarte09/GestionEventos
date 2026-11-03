@@ -17,7 +17,7 @@ import java.util.Map;
  *
  * @author lui
  */
-public class controlPresentacion {
+public class ControlPresentacion {
 
     private JFrameRecursosEvento recursosEvento;
     private Map<String, Integer> seleccionTemporalRecursos = new LinkedHashMap<>();
@@ -124,7 +124,8 @@ public class controlPresentacion {
 
     //muestra el frame para registrar cliente
     private void registrarCliente(DTOCliente cliente) {
-        JFrameFormularioRegistro formulario = new JFrameFormularioRegistro(this, cliente);
+        this.cliente = cliente;
+        JFrameFormularioRegistro formulario = new JFrameFormularioRegistro(this);
         formulario.setVisible(true);
     }
 
@@ -222,14 +223,9 @@ public class controlPresentacion {
     }
 
     public void cancelarRegistrarEvento() {
-        if (this.cliente != null) {
-            almacen.getClientes().remove(this.cliente);
-        }
-
         this.cliente = null;
         this.evento = null;
-        JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
-        inicioSesion.setVisible(true);
+        iniciarSesion();
     }
 
     
@@ -264,25 +260,31 @@ public class controlPresentacion {
         //termina guardando el cliente si es nuevo
         //lo pongo aqui de una vez pero probablemente se deba poner a la hora de crear la orden final
         if (cliente != null && buscarClientePorTelefono(cliente.getTelefono()) == null) {
-            almacen.getClientes().add(cliente);
+             almacen.registrarCliente(cliente);
         }
 
         iniciarAnalisisEvaluacion();
     }
     
     public void iniciarRecursosEvento() {
-        recursosEvento = new JFrameRecursosEvento(this);
-        recursosEvento.setVisible(true);
+        if (recursosEvento != null && recursosEvento.isDisplayable()) {
+            recursosEvento.setVisible(true);
+        } else {
+            recursosEvento = new JFrameRecursosEvento(this);
+            recursosEvento.setVisible(true);
+        }
     }
     
-    //cancelar recursos del evento
     public void cancelarRecursosEvento() {
-        JFrameRegistrarDatosEvento registrarDatos = new JFrameRegistrarDatosEvento(this);
-        registrarDatos.setVisible(true);
-
+        iniciarRegistrarEvento(this.cliente);
     }
-
+    
+    //metodo actualizado para que limpie los recursos de la categoria para evitar seleccionados
     public void actualizarRecursosTemporales(String categoria, Map<String, Integer> cantidades) {
+        //borra registros
+        seleccionTemporalRecursos.entrySet().removeIf(entry -> entry.getKey().startsWith(categoria + "|"));
+
+        //agrega nuevos
         for (java.util.Map.Entry<String, Integer> entry : cantidades.entrySet()) {
             seleccionTemporalRecursos.put(categoria + "|" + entry.getKey(), entry.getValue());
         }
@@ -294,8 +296,9 @@ public class controlPresentacion {
             recursosEvento.navegarA(panel);
         }
     }
+    
     public void iniciarAnalisisEvaluacion() {
-        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion(this, cliente, evento);
+        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion(this);
         analisisEvaluacion.setVisible(true);
     }
 
@@ -303,18 +306,16 @@ public class controlPresentacion {
     //METODOS DE ANALISIS EVALUACION AQUI INICIA F2
     
     public void cancelarAnalisisEvaluacion() {
-        JFrameRecursosEvento recursoEvento = new JFrameRecursosEvento(this);
-        recursoEvento.setVisible(true);
+        iniciarRecursosEvento();
     }
     
     public void iniciarRevisarAnalisisEvaluacion() {
-        JFrameRevisarAnalisisEvaluacion revisarAnalisisEvaluacion = new JFrameRevisarAnalisisEvaluacion(this, evento);
-        revisarAnalisisEvaluacion.setVisible(true);
+        JFrameRevisarAnalisisEvaluacion revisar = new JFrameRevisarAnalisisEvaluacion(this);
+        revisar.setVisible(true);
     }
     
     public void cancelarRevisarAnalisisEvaluacion() {
-        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion( this, cliente, evento);
-        analisisEvaluacion.setVisible(true);
+        iniciarAnalisisEvaluacion();
     }
 
     //actualizar cuando haya logica de reservas 
@@ -325,9 +326,10 @@ public class controlPresentacion {
         }
 
         for (DTOLocalEvento local : almacen.getLocalesEvento()) {
-            if (local.getCapacidad() >= evento.getNumAsistentes()) {
+            //mas logica comentareada para su posible uso en negocio, 
+//            if (local.getCapacidad() >= evento.getNumAsistentes()) {
                 recomendados.add(local);
-            }
+//            }
         }
         recomendados.sort((a, b) -> Integer.compare(a.getCapacidad(), b.getCapacidad()));
         return recomendados;
@@ -336,10 +338,16 @@ public class controlPresentacion {
     //METODOS F3 PROPUESTA
      
     //Aqui va la inicializacion de la pantalla de configuracion de propuesta
+    //metodo modificado para agregar la validacion isDisplayable para evitar ventanas duplicadas
     public void iniciarConfigurarPropuesta() {
-        if (configurarPropuesta == null) {
-            configurarPropuesta = new JFrameConfigurarPropuesta(this);
+        
+        if (configurarPropuesta != null && configurarPropuesta.isDisplayable()) {
+            configurarPropuesta.setVisible(true);
+            solicitarFolio(); 
+            return;
         }
+        
+        configurarPropuesta = new JFrameConfigurarPropuesta(this);
         solicitarFolio();
         configurarPropuesta.setVisible(true);
     }
@@ -395,7 +403,22 @@ public class controlPresentacion {
         }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_EQUIPO);
     }
-
+    
+    public boolean procesarSeleccionCantidadEquipo(int idEquipo, String texto) {
+        if (!Validaciones.esEnteroPositivo(texto)) return false;
+        int cantidad = Integer.parseInt(texto.trim());
+        for (DTOEquipo e : consultarTodosLosEquipos()) {
+            if (e.getIdEquipo() == idEquipo) {
+                if (cantidad <= e.getDisponibilidad()) {
+                    e.setCantidadSeleccionada(cantidad);
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+    
     public void solicitarInventario() {
         if (configurarPropuesta != null) {
             configurarPropuesta.solicitarInventario(obtenerInventarioDisponible());
@@ -416,7 +439,23 @@ public class controlPresentacion {
         }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_PERSONAL);
     }
+    
+    public boolean actualizarCantidadPersonal(int idEspecialidad, String texto) {
+        if (!Validaciones.noEsNegativo(texto)) {
+            return false; 
+        }
+        
+        int cantidad = Integer.parseInt(texto.trim());
 
+        for (DTOPersonal p : almacen.getPersonal()) {
+            if (p.getIdEspecialidad() == idEspecialidad) {
+                p.setCantidad(cantidad);
+                return true; 
+            }
+        }
+        return false;
+    }
+    
     public void obtenerResumen() {
         if (configurarPropuesta != null) {
             configurarPropuesta.solicitarResumen(cliente, evento, consultarServiciosDisponibles(), consultarTodosLosEquipos(), obtenerPersonalDisponible());
@@ -441,8 +480,7 @@ public class controlPresentacion {
         return levantamiento;
     }
     
-    public void iniciarRegistrarCotizacion() {
-        
+    public void iniciarRegistrarCotizacion() {       
         if (cotizacion == null || versionCotizacion == null) {
             generarCotizacion();
         }
@@ -452,8 +490,14 @@ public class controlPresentacion {
 
         registrarCotizacion.setVisible(true);
     }
-
+    
+    //metodo modificado para agregar la validacion isDisplayable para evitar ventanas duplicadas
     public void iniciarResumenCotizacion() {
+        if (resumenCotizacion != null && resumenCotizacion.isDisplayable()) {
+            mostrarResumenCotizacion();
+            resumenCotizacion.setVisible(true);
+            return;
+        }
         configurarPropuesta.dispose();
         generarCotizacion();
         resumenCotizacion = new JFrameResumenCotizacion(this);
@@ -503,7 +547,7 @@ public class controlPresentacion {
 
         cotizacion = new DTOCotizacion(folio, LocalDate.now(), "Pendiente");
         versionCotizacion = new DTOVersionCotizacion(idVersion, 1, LocalDate.now(),
-                "Pendiente", "Versión inicial", 0f, 0f, 0f);
+                "Pendiente", "Versión inicial", 0f, 20000f, 0f);
     }
 
     private List<String> serviciosSeleccionados() {
@@ -554,32 +598,33 @@ public class controlPresentacion {
         return resultado;
     }
     
-    private String obtenerCategoriaServicio(String nombreServicio) {
-
-        switch (nombreServicio) {
-
-            case "Audio":
-                return "Audio";
-
-            case "Alimentos y bebidas":
-                return "Comida";
-
-            case "Entretenimiento":
-                return "Entretenimiento";
-
-            case "Iluminación":
-                return "Iluminación";
-
-            case "Decoración":
-                return "Decoración";
-
-            case "Pantallas":
-                return "Pantallas";
-
-            default:
-                return null;
-        }
-    }
+        //nunca se uso este metodo, lo comentareo por si acaso alguien tiene vista alguna funcionalidad despues?
+//    private String obtenerCategoriaServicio(String nombreServicio) {
+//
+//        switch (nombreServicio) {
+//
+//            case "Audio":
+//                return "Audio";
+//
+//            case "Alimentos y bebidas":
+//                return "Comida";
+//
+//            case "Entretenimiento":
+//                return "Entretenimiento";
+//
+//            case "Iluminación":
+//                return "Iluminación";
+//
+//            case "Decoración":
+//                return "Decoración";
+//
+//            case "Pantallas":
+//                return "Pantallas";
+//
+//            default:
+//                return null;
+//        }
+//    }
     
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
 
@@ -692,19 +737,19 @@ public class controlPresentacion {
 
         DTODecisionCliente nuevaDecision = new DTODecisionCliente(nuevoID, LocalDate.now(), decision, observaciones);
 
-        almacen.getDecisionesCliente().add(nuevaDecision);
+        almacen.registrarDecisionCliente(nuevaDecision);
     }
     
     private void registrarCotizacionEnAlmacen() {
 
         if (cotizacion != null && !almacen.getCotizaciones().contains(cotizacion)) {
 
-            almacen.getCotizaciones().add(cotizacion);
+            almacen.registrarCotizacion(cotizacion);
         }
 
         if (versionCotizacion != null && !almacen.getVersionesCotizacion().contains(versionCotizacion)) {
 
-            almacen.getVersionesCotizacion().add(versionCotizacion);
+            almacen.registrarVersionCotizacion(versionCotizacion);
         }
     }
     
@@ -831,5 +876,15 @@ public class controlPresentacion {
             }
         }
     }
-
+    public void generarOrdenServicio() {
+        int nuevoId = almacen.getOrdenes().size() + 1;
+        DTOOrdenServicio orden = new DTOOrdenServicio(
+            nuevoId,
+            evento.getIdEvento(), // Si no tienes ID asignado, usa 1 provisional
+            cotizacion.getID(),
+            LocalDate.now(),
+            serviciosAceptados
+        );
+        almacen.registrarOrden(orden);
+    }
 }

@@ -13,7 +13,7 @@ public class SistemaGestorEventos {
 
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(()-> {
-            controlPresentacion control = new controlPresentacion();
+            ControlPresentacion control = new ControlPresentacion();
             control.iniciarSesion();
         });
     }

@@ -7,7 +7,7 @@ package presentacion.vistas;
 import dto.DTOCliente;
 import dto.DTOEvento;
 import dto.DTODetalleSolicitud;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 
 /**
  *
@@ -16,22 +16,24 @@ import presentacion.control.controlPresentacion;
 public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameAnalisisEvaluacion.class.getName());
-    private controlPresentacion control;
+    private ControlPresentacion control;
     private DTOEvento evento;
     /**
      * Creates new form JFrameAnalisisEvalucacion
      */
-    public JFrameAnalisisEvaluacion(controlPresentacion control,  DTOCliente cliente, DTOEvento evento) {
+    public JFrameAnalisisEvaluacion(ControlPresentacion control) {
         this.control = control;
-        this.evento = evento;
+        this.evento = control.getEvento();
         initComponents();
         this.setLocationRelativeTo(null);
-        mostrarDatos(cliente, evento);
+        mostrarDatos();
         
         lblNecesidadesExtraInfo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
     }
     
-    private void mostrarDatos(DTOCliente cliente, DTOEvento evento) {
+    private void mostrarDatos() {  
+        DTOCliente cliente = control.getCliente();
+        DTOEvento evento = control.getEvento();
         if (cliente != null) {
             String nombre = cliente.getNombre();
             lblNombreClienteInfo.setText(nombre != null && !nombre.isBlank() ? nombre : cliente.getTelefono());
@@ -73,7 +75,7 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
         btnAtras = new javax.swing.JButton();
         btnVerRecursos = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Análisis y Evaluación del espacio");
         setMaximumSize(new java.awt.Dimension(700, 600));
         setPreferredSize(new java.awt.Dimension(700, 600));

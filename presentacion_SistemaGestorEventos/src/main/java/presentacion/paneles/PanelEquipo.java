@@ -5,7 +5,7 @@
 package presentacion.paneles;
 
 import dto.DTOEquipo;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -31,7 +31,7 @@ public class PanelEquipo extends JPanel {
     private static final int COL_BORRAR = 2;
     private static final Color GRIS = new Color(220, 220, 220);
 
-    private final controlPresentacion control;
+    private final ControlPresentacion control;
     private JLabel lblEncabezado, lblLista;
     private JTable tblEquipos;
     private final JButton btnBasura = new JButton("🗑️");
@@ -39,7 +39,7 @@ public class PanelEquipo extends JPanel {
 
     private final List<DTOEquipo> seleccionados = new ArrayList<>();
 
-    public PanelEquipo(controlPresentacion control) {
+    public PanelEquipo(ControlPresentacion control) {
         this.control = control;
         setLayout(new BorderLayout(15, 15));
         setBackground(GRIS);

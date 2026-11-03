@@ -6,7 +6,7 @@ package presentacion.vistas;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 
 /**
  *
@@ -18,9 +18,9 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
     /**
      * Creates new form JFrameRegistrarDatosEvento
      */
-    private controlPresentacion control;
+    private ControlPresentacion control;
 
-    public JFrameRegistrarDatosEvento(controlPresentacion control) {
+    public JFrameRegistrarDatosEvento(ControlPresentacion control) {
         this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
@@ -74,7 +74,7 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
         jComboBoxTipoEvento = new javax.swing.JComboBox<>();
         jComboBoxUbicacion = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         lblTituloRegistrarDatosEvento.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
@@ -89,6 +89,13 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
         lblHora.setText("Horario");
 
         lblNumeroAsistentes.setText("Número de asistentes:");
+
+        txtFecha.setText("dd/mm/aaaa");
+        txtFecha.addActionListener(this::txtFechaActionPerformed);
+
+        txtHorario.setText("HH:mm");
+
+        txtNumeroAsistentes.addActionListener(this::txtNumeroAsistentesActionPerformed);
 
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(this::btnRegistrarActionPerformed);

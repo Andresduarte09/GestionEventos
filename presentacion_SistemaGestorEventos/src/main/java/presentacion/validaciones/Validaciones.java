@@ -17,25 +17,28 @@ public class Validaciones {
     }
     
     public static boolean soloNumeros(JTextField txt) {
-        String texto = txt.getText();
+        String texto = txt.getText().trim();
+        
+        if (texto.isEmpty())            
+            return false;  
+        
         for (int i = 0; i < texto.length(); i++){
-            if(!Character.isDigit(texto.charAt(i))){
-                return false;
-            }  
+            if(!Character.isDigit(texto.charAt(i))) return false;  
         }
+        
         return true;  
     }
-    
+
     public static boolean soloLetras(JTextField txt) {
-
-        String texto = txt.getText();
-
+        String texto = txt.getText().trim();
+        
+        if (texto.isEmpty()) 
+            return false; 
+        
         for (int i = 0; i < texto.length(); i++) {
-            if (!Character.isLetter(texto.charAt(i)) && texto.charAt(i) != ' ') { // texto.charAt(i) != ' ' permite espacios entre palabras
-                return false;
-            }
+            if (!Character.isLetter(texto.charAt(i)) && texto.charAt(i) != ' ') return false;
         }
-
+        
         return true;
     }
     

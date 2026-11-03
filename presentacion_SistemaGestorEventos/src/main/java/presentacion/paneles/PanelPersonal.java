@@ -4,7 +4,7 @@
  */
 package presentacion.paneles;
 
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -23,7 +23,7 @@ public class PanelPersonal extends JPanel {
 
     private static final int COL_CANTIDAD = 1;
 
-    private final controlPresentacion control;
+    private final ControlPresentacion control;
     private JLabel lblEncabezado;
     private JTable tblPersonal;
     private JButton btnVolver, btnContinuar;
@@ -31,7 +31,7 @@ public class PanelPersonal extends JPanel {
     // Personal que se muestra en la tabla (misma posición que cada fila)
     private final List<DTOPersonal> listaPersonal = new ArrayList<>();
 
-    public PanelPersonal(controlPresentacion control) {
+    public PanelPersonal(ControlPresentacion control) {
         this.control = control;
         setLayout(new BorderLayout(15, 15));
         setBackground(new Color(220, 220, 220));
@@ -93,11 +93,10 @@ public class PanelPersonal extends JPanel {
         DTOPersonal personal = listaPersonal.get(fila);
         String texto = modelo.getValueAt(fila, columna).toString();
 
-        if (control.esCantidadPersonalValida(texto)) {
-            control.seleccionarPersonal(personal.getIdEspecialidad(), Integer.parseInt(texto.trim()));
+        if (control.actualizarCantidadPersonal(personal.getIdEspecialidad(), texto)) {
         } else {
             JOptionPane.showMessageDialog(this, "La cantidad no debe ser un número negativo");
-            modelo.setValueAt(personal.getCantidad(), fila, columna); // regresa el valor anterior
+            modelo.setValueAt(personal.getCantidad(), fila, columna); //aqui regresa el valor anterior
         }
     }
 

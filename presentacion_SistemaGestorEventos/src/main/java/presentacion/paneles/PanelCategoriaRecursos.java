@@ -30,7 +30,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 
 /**
  * Panel general padre que da la estructura general de los paneles de los demas recursos
@@ -44,7 +44,7 @@ public abstract class PanelCategoriaRecursos extends JPanel {
     private static final int ANCHO_IMAGEN = 160;
     private static final int ALTO_IMAGEN = 120;
 
-    private final controlPresentacion control;
+    private final ControlPresentacion control;
     private final String carpetaImagenes;
     private final JComboBox<String> cmbTipo = new JComboBox<>();
     private final JPanel pnlElementos = new JPanel(new GridLayout(0, 2, 16, 14));
@@ -52,7 +52,7 @@ public abstract class PanelCategoriaRecursos extends JPanel {
     private final String tituloCategoria;
 
     //constructor que arma la UI base de todas las categorias, en el cual las subclases aportan los datos
-    protected PanelCategoriaRecursos(controlPresentacion control, String titulo, String carpetaImagenes, String[][] elementos){
+    protected PanelCategoriaRecursos(ControlPresentacion control, String titulo, String carpetaImagenes, String[][] elementos){
         this.control = control;
         this.carpetaImagenes = carpetaImagenes;
         this.tituloCategoria = titulo;

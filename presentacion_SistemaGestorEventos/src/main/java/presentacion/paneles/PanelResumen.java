@@ -10,7 +10,7 @@ import dto.DTOEquipo;
 import dto.DTOEvento;
 import dto.DTOPersonal;
 import dto.DTOServicio;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -31,14 +31,14 @@ import presentacion.vistas.JFrameConfigurarPropuesta;
  */
 public class PanelResumen extends JPanel {
 
-    private final controlPresentacion control;
+    private final ControlPresentacion control;
     private JLabel lblEncabezado;
     private JTextArea txtResumenPropuesta, txtComentarios;
     private JTextField txtHorarioMontaje, txtHorarioDesmontaje;
     private JButton btnVolver, btnEnviarCotizacion;
     private JFrameConfigurarPropuesta configurarPropuesta;
 
-    public PanelResumen(controlPresentacion control) {
+    public PanelResumen(ControlPresentacion control) {
         this.control = control;
         setLayout(new BorderLayout(15, 15));
         setBackground(new Color(220, 220, 220));

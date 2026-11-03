@@ -36,6 +36,7 @@ public class AlmacenDatos {
     private final List<DTOPersonal> personal = new ArrayList<>();
     private final List<DTOServicio> servicios = new ArrayList<>();
     private final List<DTOVersionCotizacion> versionesCotizacion = new ArrayList<>();
+    private final List<DTOOrdenServicio> ordenes = new ArrayList<>();
 
     public AlmacenDatos() {
         cargarDatos();
@@ -43,8 +44,7 @@ public class AlmacenDatos {
 
     private void cargarDatos() {
         cargarClientes();
-        cargarLocalesEvento();
-                
+        cargarLocalesEvento();              
         cargarEventos();
         cargarDetallesSolicitud();
         cargarRecursos();
@@ -367,8 +367,10 @@ String unidadCapacidad, String tipoRecurso, String unidadMedida, String estadoEn
     /** total = (subtotal - descuento%) + IVA, redondeado a centavos. */
     private DTOVersionCotizacion crearVersion(int id, int numero, LocalDate fecha, String estado,
             String observaciones, float descuento, float subtotal) {
-        float total = Math.round(subtotal * (1 - descuento / 100f) * (1 + IVA) * 100f) / 100f;
-        return new DTOVersionCotizacion(id, numero, fecha, estado, observaciones, descuento, subtotal, total);
+        //esta linea va cuando se calcule la logica, comentareada para solo moverla a negocio cuando sea necesario
+        //retorna 0 en total por el momento
+//        float total = Math.round(subtotal * (1 - descuento / 100f) * (1 + IVA) * 100f) / 100f;
+        return new DTOVersionCotizacion(id, numero, fecha, estado, observaciones, descuento, subtotal, 0f);
     }
 
     private DTODetalleCotizacion crearDetalleCotizacion(int id, LocalTime horarioFases, float importe, DTOInventario inv) {
@@ -439,5 +441,30 @@ String unidadCapacidad, String tipoRecurso, String unidadMedida, String estadoEn
 
     public List<DTOVersionCotizacion> getVersionesCotizacion() {
         return versionesCotizacion;
+    }
+    public void registrarOrden(DTOOrdenServicio orden) {
+        this.ordenes.add(orden);
+    }
+    public List<DTOOrdenServicio> getOrdenes() {
+        return ordenes;
+    }
+    
+    public void registrarCliente(DTOCliente c) {
+        this.clientes.add(c);
+    }
+
+    public void registrarEvento(DTOEvento e) {
+        this.eventos.add(e);
+    }
+
+    public void registrarCotizacion(DTOCotizacion c) {
+        this.cotizaciones.add(c);
+    }
+
+    public void registrarVersionCotizacion(DTOVersionCotizacion v) {
+        this.versionesCotizacion.add(v);
+    }
+    public void registrarDecisionCliente(DTODecisionCliente d) { 
+        this.decisionesCliente.add(d); 
     }
 }

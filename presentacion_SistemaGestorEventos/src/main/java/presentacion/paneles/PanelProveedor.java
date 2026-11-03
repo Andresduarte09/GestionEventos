@@ -5,7 +5,7 @@
 package presentacion.paneles;
 
 import dto.DTOEquipo;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -25,12 +25,12 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PanelProveedor extends JPanel {
 
-    private final controlPresentacion control;
+    private final ControlPresentacion control;
     private JTextField txtBuscar;
     private JButton btnBuscar, btnCerrar, btnUsarCantidad;
     private JTable tblConsulta;
 
-    public PanelProveedor(controlPresentacion control) {
+    public PanelProveedor(ControlPresentacion control) {
         this.control = control;
         setLayout(new BorderLayout(15, 15));
         setBackground(new Color(220, 220, 220));

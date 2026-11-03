@@ -4,7 +4,7 @@
  */
 package presentacion.vistas;
 
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 import java.util.List;
 
 /**
@@ -15,12 +15,12 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameResumenCotizacion.class.getName());
 
-    private controlPresentacion control;
+    private ControlPresentacion control;
 
     /**
      * Creates new form JFrameResumenCotizacion
      */
-    public JFrameResumenCotizacion(controlPresentacion control) {
+    public JFrameResumenCotizacion(ControlPresentacion control) {
         this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
@@ -78,7 +78,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         btnAtras = new javax.swing.JButton();
         btnAprobar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         pnelCentral.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));

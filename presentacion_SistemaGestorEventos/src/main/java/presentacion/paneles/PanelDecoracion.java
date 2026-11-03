@@ -4,7 +4,7 @@
  */
 package presentacion.paneles;
 
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 
 /**
  *
@@ -12,7 +12,7 @@ import presentacion.control.controlPresentacion;
  */
 public class PanelDecoracion extends PanelCategoriaRecursos {
 
-    public PanelDecoracion(controlPresentacion control) {
+    public PanelDecoracion(ControlPresentacion control) {
         super(control, "Decoración", "decoracion", new String[][]{
             {"Mesas redondas", "Mobiliario"},
             {"Sillas Tiffany", "Mobiliario"},

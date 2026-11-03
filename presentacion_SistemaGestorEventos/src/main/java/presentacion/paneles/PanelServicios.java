@@ -6,7 +6,7 @@
 package presentacion.paneles;
 
 import dto.DTOServicio;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -22,7 +22,7 @@ import javax.swing.JTextField;
 
 public class PanelServicios extends JPanel {
 
-    private final controlPresentacion control;
+    private final ControlPresentacion control;
     private JLabel lblEncabezado;
     private JPanel pnlOpcionesServicios;
     private JPanel pnlBusqueda;
@@ -30,7 +30,7 @@ public class PanelServicios extends JPanel {
     private JButton btnBuscar;
     private JButton btnVolver, btnContinuar;
 
-    public PanelServicios(controlPresentacion control) {
+    public PanelServicios(ControlPresentacion control) {
         this.control = control;
 
         setLayout(new BorderLayout(15, 15));

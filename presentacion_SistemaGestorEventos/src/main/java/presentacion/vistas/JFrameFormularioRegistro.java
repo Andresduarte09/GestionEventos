@@ -5,7 +5,7 @@
 package presentacion.vistas;
 
 import dto.DTOCliente;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 
 /**
  *
@@ -14,14 +14,14 @@ import presentacion.control.controlPresentacion;
 public class JFrameFormularioRegistro extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameFormularioRegistro.class.getName());
-    private final controlPresentacion control;
+    private final ControlPresentacion control;
     private final DTOCliente cliente;
     /**
      * Creates new form JFrameFormularioRegistro
      */
-    public JFrameFormularioRegistro(controlPresentacion control, DTOCliente cliente) {
+    public JFrameFormularioRegistro(ControlPresentacion control) {
         this.control = control;
-        this.cliente = cliente;
+        this.cliente = control.getCliente();
         initComponents();
         this.setLocationRelativeTo(null);
         if (cliente.getTelefono() != null) {
@@ -48,7 +48,7 @@ public class JFrameFormularioRegistro extends javax.swing.JFrame {
         txtRelefonoRespaldo = new javax.swing.JTextField();
         btnFinalizarRegistro = new javax.swing.JToggleButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         lblTituloRegistroClienteNuevo.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N

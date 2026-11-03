@@ -5,7 +5,7 @@
 package presentacion.vistas;
 
 import dto.DTOCliente;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 
 /**
  *
@@ -20,8 +20,8 @@ public class JFrameInicioSesion extends javax.swing.JFrame {
      */
     
     //comentariado por el momento el renglon de abajo
-    private controlPresentacion control;
-    public JFrameInicioSesion(controlPresentacion control) {
+    private ControlPresentacion control;
+    public JFrameInicioSesion(ControlPresentacion control) {
         this.control = control;
         initComponents();
         this.setLocationRelativeTo(null);
@@ -41,7 +41,7 @@ public class JFrameInicioSesion extends javax.swing.JFrame {
         txtTelefono = new javax.swing.JTextField();
         btnRegistrarEvento = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 255));
         setResizable(false);
 

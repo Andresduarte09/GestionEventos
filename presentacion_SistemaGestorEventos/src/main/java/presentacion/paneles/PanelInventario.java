@@ -18,7 +18,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 
 /**
  *
@@ -26,12 +26,12 @@ import presentacion.control.controlPresentacion;
  */
 public class PanelInventario extends JPanel{
     
-    private final controlPresentacion control;
+    private final ControlPresentacion control;
     private JTextField txtBuscar;
     private JButton btnBuscar, btnCerrar, btnUsarCantidad;
     private JTable tblConsulta;
 
-    public PanelInventario(controlPresentacion control) {
+    public PanelInventario(ControlPresentacion control) {
         this.control = control;
         setLayout(new BorderLayout(15, 15));
         setBackground(new Color(220, 220, 220));
@@ -130,15 +130,12 @@ public class PanelInventario extends JPanel{
             return; // el usuario canceló
         }
 
-        // 4. Validar: entero mayor a 0 y que no pase de la disponibilidad
-        if (!control.esCantidadEquipoValida(idEquipo, texto)) {
-            JOptionPane.showMessageDialog(this,
-                    "La cantidad debe ser un entero entre 1 y " + equipo.getDisponibilidad() + ".");
-            return;
+        boolean exito = control.procesarSeleccionCantidadEquipo(idEquipo, texto);
+        if (exito) {
+            control.solicitarEquipos(); // Recarga la tabla
+        } else {
+            JOptionPane.showMessageDialog(this, "Cantidad inválida o excede la disponibilidad.");
         }
-
-        // 5. Guardar y volver a la pantalla de equipo
-        control.seleccionarEquipos(idEquipo, Integer.parseInt(texto.trim()));
         control.solicitarEquipos();
     }
     

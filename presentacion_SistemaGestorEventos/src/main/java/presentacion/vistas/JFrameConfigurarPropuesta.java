@@ -6,7 +6,7 @@ import presentacion.paneles.PanelProveedor;
 import presentacion.paneles.PanelPersonal;
 import presentacion.paneles.PanelFolio;
 import presentacion.paneles.PanelEquipo;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -49,7 +49,7 @@ public class JFrameConfigurarPropuesta extends JFrame {
     private JButton btnResumen;
 
     // Controlador de presentación y subpaneles (cada uno en su propia clase)
-    private final controlPresentacion control;
+    private final ControlPresentacion control;
     private PanelFolio pnlFolio;
     private PanelServicios pnlServicios;
     private PanelEquipo pnlEquipo;
@@ -58,7 +58,7 @@ public class JFrameConfigurarPropuesta extends JFrame {
     private PanelPersonal pnlPersonal;
     private PanelResumen pnlResumen;
 
-    public JFrameConfigurarPropuesta(controlPresentacion control) {
+    public JFrameConfigurarPropuesta(ControlPresentacion control) {
         this.control = control;
         iniciarComponentes();
     }

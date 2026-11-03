@@ -6,7 +6,7 @@ package presentacion.vistas;
 
 import dto.DTOServicio;
 import javax.swing.JOptionPane;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 
 /**
  *
@@ -15,9 +15,9 @@ import presentacion.control.controlPresentacion;
 public class JFrameGenerarOrden extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameGenerarOrden.class.getName());
-    private controlPresentacion control;
+    private ControlPresentacion control;
     
-    public JFrameGenerarOrden(controlPresentacion control) {
+    public JFrameGenerarOrden(ControlPresentacion control) {
         
         this.control = control;
 
@@ -49,10 +49,11 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
         lblClienteInfo = new javax.swing.JLabel();
         lblCotizacionAutorizadaInfo = new javax.swing.JLabel();
         lblFechaEventoInfo = new javax.swing.JLabel();
+        btnCancelarOrden = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lblCliente.setText("Cliente:");
 
@@ -83,6 +84,9 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
 
         lblFechaEventoInfo.setText("Fecha del evento");
 
+        btnCancelarOrden.setText("Cancelar Orden");
+        btnCancelarOrden.addActionListener(this::btnCancelarOrdenActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,9 +112,11 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
                         .addContainerGap(155, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnGenerarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(69, 69, 69))))
+                        .addGap(39, 39, 39)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnGenerarOrden, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)
+                            .addComponent(btnCancelarOrden, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(48, 48, 48))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblTituloGenerarOrden)
@@ -136,18 +142,40 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(lblConceptosAutorizados)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGenerarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnGenerarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancelarOrden, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    //boton funcional que genera orden ahora si 
     private void btnGenerarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarOrdenActionPerformed
-        JOptionPane.showMessageDialog(this, "¡La orden fue generada con éxito!", "Orden generada", JOptionPane.INFORMATION_MESSAGE);
+
+        control.generarOrdenServicio();
+
+        
+        JOptionPane.showMessageDialog(this, 
+            "¡La orden fue generada y guardada con éxito!", 
+            "Orden generada", 
+            JOptionPane.INFORMATION_MESSAGE);
+
+        
+        this.dispose();
     }//GEN-LAST:event_btnGenerarOrdenActionPerformed
+
+    private void btnCancelarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarOrdenActionPerformed
+        int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que deseas salir sin generar la orden?", "Cancelar", JOptionPane.YES_NO_OPTION);
+            if (opcion == JOptionPane.YES_OPTION) {
+                control.cancelarRegistrarEvento(); // O un método que regrese al inicio
+                this.dispose();
+            }
+    }//GEN-LAST:event_btnCancelarOrdenActionPerformed
 
     private void mostrarDatos() {
 
@@ -180,6 +208,7 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelarOrden;
     private javax.swing.JButton btnGenerarOrden;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;

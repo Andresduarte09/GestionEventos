@@ -5,7 +5,7 @@
 package presentacion.vistas;
 
 import dto.DTOEvento;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 
 /**
  * SE MODIFICO ESTA CLASE, SI HAY ALGUN ERROR CHECAR LOGICA DE AQUI
@@ -15,16 +15,16 @@ import presentacion.control.controlPresentacion;
 public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameRevisarAnalisisEvaluacion.class.getName());
-    private controlPresentacion control;
+    private ControlPresentacion control;
 
     private DTOEvento evento;
 
     /**
      * Creates new form JFrameRevisarAnalisisEvaluacion
      */
-    public JFrameRevisarAnalisisEvaluacion(controlPresentacion control, DTOEvento evento) {
+    public JFrameRevisarAnalisisEvaluacion(ControlPresentacion control) {
         this.control = control;
-        this.evento = evento;
+        this.evento = control.getEvento();
         initComponents();
         this.setLocationRelativeTo(null);
 
@@ -126,7 +126,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
 
         jMenuItem1.setText("jMenuItem1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 204));
         setPreferredSize(new java.awt.Dimension(680, 620));
         setResizable(false);

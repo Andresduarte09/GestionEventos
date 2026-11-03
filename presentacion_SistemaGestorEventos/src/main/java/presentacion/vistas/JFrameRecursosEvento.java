@@ -7,7 +7,7 @@ package presentacion.vistas;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import javax.swing.JPanel;
-import presentacion.control.controlPresentacion;
+import presentacion.control.ControlPresentacion;
 import presentacion.paneles.PanelComida;
 import presentacion.paneles.PanelDecoracion;
 import presentacion.paneles.PanelEntretenimiento;
@@ -29,11 +29,11 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
     public static final String PANEL_DECORACION = "PanelDecoracion";
     public static final String PANEL_PANTALLAS = "PanelPantallas";
 
-    private final controlPresentacion control;
+    private final ControlPresentacion control;
     private JPanel pnlContenido;
     private CardLayout layoutPaneles;
 
-    public JFrameRecursosEvento(controlPresentacion control) {
+    public JFrameRecursosEvento(ControlPresentacion control) {
         this.control = control;
         initComponents();
         iniciarPaneles();
@@ -95,7 +95,7 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
 
         btnNecesidadesExtra.setText("Necesidades extra");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(2147, 2147));
         setResizable(false);
 
