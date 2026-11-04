@@ -170,11 +170,14 @@ public class JFrameGenerarOrden extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGenerarOrdenActionPerformed
 
     private void btnCancelarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarOrdenActionPerformed
-        int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que deseas salir sin generar la orden?", "Cancelar", JOptionPane.YES_NO_OPTION);
-            if (opcion == JOptionPane.YES_OPTION) {
-                control.cancelarRegistrarEvento(); // O un método que regrese al inicio
-                this.dispose();
-            }
+        int opcion = JOptionPane.showConfirmDialog(this, "¿Seguro que deseas cancelar el evento? Se guardará un registro con los datos actuales.", "Cancelar Evento", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.WARNING_MESSAGE);
+        
+        if (opcion == JOptionPane.YES_OPTION) {
+            control.cancelarEventoGuardandoRegistro(); 
+            this.dispose();
+        }
     }//GEN-LAST:event_btnCancelarOrdenActionPerformed
 
     private void mostrarDatos() {

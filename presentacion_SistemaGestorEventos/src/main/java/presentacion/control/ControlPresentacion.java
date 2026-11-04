@@ -35,7 +35,8 @@ public class ControlPresentacion {
     private LocalTime horarioMontajePropuesta;
     private LocalTime horarioDesmontajePropuesta;
     private String comentariosPropuesta = "";
-    
+    private JFrameRegistrarDatosEvento registrarEvento;
+    private JFrameAnalisisEvaluacion analisisEvaluacion;
 
     //DTO´s que se mueven entre las pantallas y solo el control las conserva
     private DTOCliente cliente;
@@ -107,7 +108,7 @@ public class ControlPresentacion {
         } else {
             DTOCliente nuevo = new DTOCliente();
             nuevo.setTelefono(telefono);
-            registrarCliente(nuevo);
+            mostrarFormularioCliente(nuevo);
         }
         return true;
     }
@@ -123,24 +124,23 @@ public class ControlPresentacion {
     }
 
     //muestra el frame para registrar cliente
-    private void registrarCliente(DTOCliente cliente) {
+    private void mostrarFormularioCliente(DTOCliente cliente) {
         this.cliente = cliente;
         JFrameFormularioRegistro formulario = new JFrameFormularioRegistro(this);
         formulario.setVisible(true);
     }
 
     //el metodo se encarga de validar, persistir los datos del cliente para el metodo del registro de formulario
-    //me estoy basando en la arquitectura por capas para su creacion, ya que se dividen las responsabilidades
-    public boolean procesarRegistroCliente(DTOCliente cliente) {
+    public boolean procesarRegistroCliente(String nombre, String correo, String telefono, String telefonoAlt) {
         StringBuilder errores = new StringBuilder();
 
-        if (!Validaciones.textoValido(cliente.getNombre())) {
+        if (!Validaciones.textoValido(nombre)) {
             errores.append("El nombre no puede estar vacío.\n");
         }
-        if (!Validaciones.telefonoValido(cliente.getTelefono())) {
+        if (!Validaciones.telefonoValido(telefono)) {
             errores.append("El teléfono debe tener 10 dígitos numéricos.\n");
         }
-        if (!Validaciones.correoValido(cliente.getCorreo())) {
+        if (!Validaciones.correoValido(correo)) {
             errores.append("El correo electrónico no tiene un formato válido.\n");
         }
 
@@ -149,9 +149,19 @@ public class ControlPresentacion {
                     "Datos invalidos", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        ;
-        //Continuar flujo
-        iniciarRegistrarEvento(cliente);
+        
+        if (telefonoAlt != null && !telefonoAlt.trim().isEmpty()) {
+            if (!Validaciones.telefonoValido(telefonoAlt)) {
+                errores.append("El teléfono alterno debe tener 10 dígitos numéricos.\n");
+            }
+        }
+        
+        this.cliente.setNombre(nombre);
+        this.cliente.setCorreo(correo);
+        this.cliente.setTelefono(telefono);
+        this.cliente.setTelefonoAlt(telefonoAlt);
+
+        iniciarRegistrarEvento(this.cliente);
         return true;
     }
 
@@ -169,8 +179,13 @@ public class ControlPresentacion {
     //Inicia el registro de datos del evento 
     public void iniciarRegistrarEvento(DTOCliente cliente) {
         this.cliente = cliente;
-        JFrameRegistrarDatosEvento registrarEvento = new JFrameRegistrarDatosEvento(this);
-        registrarEvento.setVisible(true);
+        if (registrarEvento != null && registrarEvento.isDisplayable()) {
+            registrarEvento.cargarDatosEvento(this.evento);
+            registrarEvento.setVisible(true);
+        } else {
+            registrarEvento = new JFrameRegistrarDatosEvento(this);
+            registrarEvento.setVisible(true);
+        }
     }
 
     //guarda el evento y mueve a la siguiente pantalla
@@ -256,7 +271,7 @@ public class ControlPresentacion {
 
         //asigna los detalles de la solicitud al evento
         evento.setDetallesSolicitud(detalles);
-
+        almacen.registrarEvento(evento);
         //termina guardando el cliente si es nuevo
         //lo pongo aqui de una vez pero probablemente se deba poner a la hora de crear la orden final
         if (cliente != null && buscarClientePorTelefono(cliente.getTelefono()) == null) {
@@ -298,8 +313,12 @@ public class ControlPresentacion {
     }
     
     public void iniciarAnalisisEvaluacion() {
-        JFrameAnalisisEvaluacion analisisEvaluacion = new JFrameAnalisisEvaluacion(this);
-        analisisEvaluacion.setVisible(true);
+        if (analisisEvaluacion != null && analisisEvaluacion.isDisplayable()) {
+            analisisEvaluacion.setVisible(true);
+        } else {
+            analisisEvaluacion = new JFrameAnalisisEvaluacion(this);
+            analisisEvaluacion.setVisible(true);
+        }
     }
 
     
@@ -876,6 +895,22 @@ public class ControlPresentacion {
             }
         }
     }
+    
+    //para cuando se presione el boton cancelar evento
+    public void cancelarEventoGuardandoRegistro() {       
+        if (evento != null) {
+            evento.setEstadoAtencion("Cancelado");
+            almacen.registrarEvento(evento); 
+        }
+
+        if (cliente != null && buscarClientePorTelefono(cliente.getTelefono()) == null) {
+            almacen.registrarCliente(cliente);
+        }
+        this.cliente = null;
+        this.evento = null;
+        iniciarSesion();
+    }
+    
     public void generarOrdenServicio() {
         int nuevoId = almacen.getOrdenes().size() + 1;
         DTOOrdenServicio orden = new DTOOrdenServicio(

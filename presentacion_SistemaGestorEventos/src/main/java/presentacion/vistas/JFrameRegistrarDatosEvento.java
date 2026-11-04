@@ -6,6 +6,7 @@ package presentacion.vistas;
 
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
+import dto.DTOEvento;
 import presentacion.control.ControlPresentacion;
 
 /**
@@ -50,7 +51,28 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
         datePickerFecha.setBounds(txtFecha.getX(), txtFecha.getY(), txtFecha.getWidth(), 28);
         timePickerHorario.setBounds(txtHorario.getX(), txtHorario.getY(), txtHorario.getWidth(), 28);
     }
-
+    
+    //recibe los DTOs de control y los pinta 
+    public void cargarDatosEvento(DTOEvento evento) {
+        if (evento != null) {
+            if (evento.getTipoEvento() != null) {
+                jComboBoxTipoEvento.setSelectedItem(evento.getTipoEvento());
+            }
+            if (evento.getUbicacion() != null) {
+                jComboBoxUbicacion.setSelectedItem(evento.getUbicacion());
+            }
+            if (evento.getNumAsistentes() > 0) {
+                txtNumeroAsistentes.setText(String.valueOf(evento.getNumAsistentes()));
+            }
+            if (evento.getFechaEvento() != null) {
+                datePickerFecha.setDate(evento.getFechaEvento());
+            }
+            if (evento.getHoraInicio() != null) {
+                timePickerHorario.setTime(evento.getHoraInicio());
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -121,12 +121,13 @@ public class JFrameFormularioRegistro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnFinalizarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarRegistroActionPerformed
-        cliente.setNombre(txtNombreCompleto.getText().trim());
-        cliente.setCorreo(txtCorreoElectronico.getText().trim());
-        cliente.setTelefono(txtTelefonoContacto.getText().trim());
-        cliente.setTelefonoAlt(txtRelefonoRespaldo.getText().trim());
-
-        if (control.procesarRegistroCliente(cliente)) {
+        boolean exito = control.procesarRegistroCliente(
+            txtNombreCompleto.getText().trim(),
+            txtCorreoElectronico.getText().trim(),
+            txtTelefonoContacto.getText().trim(),
+            txtRelefonoRespaldo.getText().trim()
+        );
+        if (exito) {
             this.dispose();
         }
     }//GEN-LAST:event_btnFinalizarRegistroActionPerformed
