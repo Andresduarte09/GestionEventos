@@ -41,14 +41,14 @@ public class JFrameInicioSesion extends javax.swing.JFrame {
         btnRegistrarEvento = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(204, 204, 255));
+        setBackground(new java.awt.Color(153, 153, 153));
         setResizable(false);
 
         lblTelefono.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
         lblTelefono.setText("Teléfono del cliente: ");
         lblTelefono.setName(""); // NOI18N
 
-        lblTitulo.setFont(new java.awt.Font("Verdana", 2, 30)); // NOI18N
+        lblTitulo.setFont(new java.awt.Font("MS Reference Sans Serif", 2, 30)); // NOI18N
         lblTitulo.setText("Sistema Gestor de Eventos");
 
         txtTelefono.addActionListener(this::txtTelefonoActionPerformed);
