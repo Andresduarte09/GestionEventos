@@ -27,7 +27,6 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         this.evento = control.getEvento();
         initComponents();
         this.setLocationRelativeTo(null);
-
         //para hacer que los campos de txt no se puedan modificar
         txtTipoEvento.setEditable(false);
         txtNumAsistentes.setEditable(false);
