@@ -28,6 +28,11 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
 
+        //para hacer que los campos de txt no se puedan modificar
+        txtTipoEvento.setEditable(false);
+        txtNumAsistentes.setEditable(false);
+        txtFecha.setEditable(false);
+
         lblImagenUbicacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblEjemploInfo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
@@ -249,7 +254,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
-        
+
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaActionPerformed
 
