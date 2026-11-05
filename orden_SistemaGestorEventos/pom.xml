@@ -10,4 +10,5 @@
         <maven.compiler.release>26</maven.compiler.release>
         <exec.mainClass>com.mycompany.orden_sistemagestoreventos.Orden_SistemaGestorEventos</exec.mainClass>
     </properties>
+    <name>negocioOrden_SistemaGestorEventos</name>
 </project>
