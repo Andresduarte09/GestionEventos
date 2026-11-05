@@ -249,6 +249,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
+        
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaActionPerformed
 

@@ -6,11 +6,11 @@ package com.mycompany.evento_sistemagestorevento;
 
 /**
  *
- * @author luise
+ * @author Ale
  */
 public class Evento_SistemaGestorEvento {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        //System.out.println("Hello World!");
     }
 }
