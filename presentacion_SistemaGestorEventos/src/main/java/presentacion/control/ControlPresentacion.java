@@ -248,8 +248,8 @@ public class ControlPresentacion {
     
     //RECURSOS EVENTO
     
-    
-    public void registrarRecursosEvento(String necesidadesExtra) {
+    //se vuelve crear la logica de dentro cuando lo cambie de subsistema
+    public void ingresarRecurso(String necesidadesExtra) {
         evento.setNecesidadesIniciales(necesidadesExtra);
 
         List<DTODetalleSolicitud> detalles = new java.util.ArrayList<>();
@@ -277,7 +277,6 @@ public class ControlPresentacion {
         if (cliente != null && buscarClientePorTelefono(cliente.getTelefono()) == null) {
              almacen.registrarCliente(cliente);
         }
-
         iniciarAnalisisEvaluacion();
     }
     
@@ -295,7 +294,7 @@ public class ControlPresentacion {
     }
     
     //metodo actualizado para que limpie los recursos de la categoria para evitar seleccionados
-    public void actualizarRecursosTemporales(String categoria, Map<String, Integer> cantidades) {
+    public void actualizarRecurso(String categoria, Map<String, Integer> cantidades) {
         //borra registros
         seleccionTemporalRecursos.entrySet().removeIf(entry -> entry.getKey().startsWith(categoria + "|"));
 

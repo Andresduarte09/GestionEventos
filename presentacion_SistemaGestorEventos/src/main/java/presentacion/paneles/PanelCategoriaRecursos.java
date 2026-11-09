@@ -153,7 +153,7 @@ public abstract class PanelCategoriaRecursos extends JPanel {
     }
     
    public void notificarCambios() {
-        this.control.actualizarRecursosTemporales(this.tituloCategoria, getCantidades());
+        this.control.actualizarRecurso(this.tituloCategoria, getCantidades());
    }
     
     //busca la imagen para luego cargarla, de no encontrar solo da un lugar vacio con Sin imagen (luego se añadiran)

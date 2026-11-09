@@ -204,7 +204,7 @@ public class JFrameRecursosEvento extends javax.swing.JFrame {
     }//GEN-LAST:event_btnComidaActionPerformed
 
     private void btnContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnContinuarActionPerformed
-        control.registrarRecursosEvento(txtNecesidadesExtra.getText().trim());
+        control.ingresarRecurso(txtNecesidadesExtra.getText().trim());
         this.dispose();
     }//GEN-LAST:event_btnContinuarActionPerformed
 
