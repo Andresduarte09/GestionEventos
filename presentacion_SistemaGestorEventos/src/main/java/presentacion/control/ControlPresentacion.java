@@ -522,7 +522,6 @@ public class ControlPresentacion {
         resumenCotizacion = new JFrameResumenCotizacion(this);
         mostrarResumenCotizacion();
         resumenCotizacion.setVisible(true);
-
     }
 
     public void mostrarResumenCotizacion() {

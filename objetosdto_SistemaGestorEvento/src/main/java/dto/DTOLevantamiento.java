@@ -18,11 +18,11 @@ public class DTOLevantamiento {
 
     public DTOLevantamiento(){}
 
-    public int getIdLevatamiento() {
+    public int getIdLevantamiento() {
         return idLevantamiento;
     }
 
-    public void setIdLevatamiento(int idLevatamiento) {
+    public void setIdLevantamiento(int idLevatamiento) {
         this.idLevantamiento = idLevatamiento;
     }
 
