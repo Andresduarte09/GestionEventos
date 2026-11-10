@@ -11,24 +11,6 @@ import dto.DTOPropuesta;
  *
  * @author Andres
  */
-public class PropuestaBO implements IPropuestaBO{
-    @Override
-    public DTOPropuesta guardar(DTOPropuesta propuesta) {
-        return null; 
-    }
-
-    @Override
-    public DTOPropuesta consultar(int idPropuesta) {
-        return null; 
-    }
-
-    @Override
-    public DTOInventario consultarSeleccion(int idEvento) {
-        return null; 
-    }
-
-    @Override
-    public void actualizarSeleccion(DTOInventario cambios) {
-        
-    }
+public class PropuestaBO{
+   
 }

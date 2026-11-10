@@ -2,22 +2,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package negocioEvento.control;
+package negocioEvento.BO;
 
-import dto.DTOCliente;
+import dto.DTOEvento;
 
 /**
  *
  * @author Ale
  */
-public class GestorClientes {
+public class EventoBO {
+    public DTOEvento guardar (DTOEvento evento){
     
-    public DTOCliente buscarClientes(String telefono){
         return null;
     }
     
-    public DTOCliente registrarCliente(DTOCliente datos){
+    public DTOEvento consultar (int idevento){
+    
         return null;
+    }
+    
+    public void actualizar (DTOEvento evento){
     }
     
 }

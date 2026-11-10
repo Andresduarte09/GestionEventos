@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package negocioCotizacion.control;
+package negocioCotizacion.gestor;
 
 import dto.DTOCotizacion;
 import dto.DTODetalleCotizacion;
@@ -12,7 +12,7 @@ import dto.DTOVersionCotizacion;
  *
  * @author Andres
  */
-public class ControlCotizacion {
+public class GestorCotizacion {
     private DTOVersionCotizacion versionActual;
 
     public DTOCotizacion calcularCotizacion(int idPropuesta) {

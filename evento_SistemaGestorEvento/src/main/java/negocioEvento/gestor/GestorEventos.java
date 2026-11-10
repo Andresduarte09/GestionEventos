@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package negocioEvento.control;
+package negocioEvento.gestor;
 
 import dto.*;
 
@@ -12,6 +12,13 @@ import dto.*;
  */
 public class GestorEventos {
     
+    public DTOCliente buscarClientes(String telefono){
+        return null;
+    }
+    
+    public DTOCliente registrarCliente(DTOCliente datos){
+        return null;
+    }
     public DTOEvento crearEvento(DTOEvento datos){
         return null;
     }
@@ -32,5 +39,8 @@ public class GestorEventos {
         return null;
     }
     
+    public DTOLevantamiento registrarLevantamiento(DTOLevantamiento datos){
+        return null;
+    }
     
 }

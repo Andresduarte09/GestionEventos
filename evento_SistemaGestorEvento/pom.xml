@@ -17,4 +17,5 @@
         <maven.compiler.release>25</maven.compiler.release>
         <exec.mainClass>com.mycompany.evento_sistemagestorevento.Evento_SistemaGestorEvento</exec.mainClass>
     </properties>
+    <name>negocioEvento_SistemaGestorEvento</name>
 </project>

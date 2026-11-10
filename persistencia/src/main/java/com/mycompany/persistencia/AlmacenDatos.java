@@ -308,7 +308,7 @@ String unidadCapacidad, String tipoRecurso, String unidadMedida, String estadoEn
     private DTOLevantamiento crearLevantamiento(int id, LocalDate fecha, LocalTime montaje,
             LocalTime desmontaje, String estado, String observaciones) {
         DTOLevantamiento l = new DTOLevantamiento();
-        l.setIdLevatamiento(id);
+        l.setIdLevantamiento(id);
         l.setFechaLevantamiento(fecha);
         l.setHorarioMontaje(montaje);
         l.setHorarioDesmontaje(desmontaje);
