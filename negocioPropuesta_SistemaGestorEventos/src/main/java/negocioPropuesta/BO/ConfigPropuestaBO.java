@@ -4,17 +4,20 @@
  */
 package negocioPropuesta.BO;
 
+import com.mycompany.persistencia.AlmacenDatos;
+import dto.DTODetalleSolicitud;
 import dto.DTOEquipo;
+import dto.DTOEvento;
+import dto.DTOInventario;
 import dto.DTOPersonal;
 import dto.DTOServicio;
+import infraestructura.ProveedorExterno;
 import java.util.ArrayList;
 import java.util.List;
 import negocioPropuesta.interfaces.IConfigPropuestaBO;
-import com.mycompany.persistencia.AlmacenDatos;
-import infraestructura.ProveedorExterno;
 
 /**
- * Consulta de recursos y manejo de la selección para configurar la propuesta.
+ * Consulta de recursos y detalles de solicitud para configurar la propuesta.
  */
 public class ConfigPropuestaBO implements IConfigPropuestaBO {
 
@@ -38,13 +41,37 @@ public class ConfigPropuestaBO implements IConfigPropuestaBO {
     }
 
     @Override
+    public DTODetalleSolicitud guardarDetalleSolicitud(DTODetalleSolicitud detalle) {
+        if (detalle == null) {
+            return null;
+        }
+        almacen.getDetallesSolicitud().add(detalle);
+        return detalle;
+    }
+
+    //los detalles de solicitud viven dentro del evento
+    @Override
+    public List<DTODetalleSolicitud> consultarDetallesPorEvento(int idEvento) {
+        for (DTOEvento e : almacen.getEventos()) {
+            if (e.getIdEvento() == idEvento) {
+                List<DTODetalleSolicitud> detalles = e.getDetallesSolicitud();
+                return detalles == null ? new ArrayList<>() : new ArrayList<>(detalles);
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
     public List<DTOServicio> consultarServicios() {
         return new ArrayList<>(almacen.getServicios());
     }
 
+    //equipos propios + equipos del proveedor externo
     @Override
     public List<DTOEquipo> consultarEquipos() {
-        return new ArrayList<>(almacen.getEquipos());
+        List<DTOEquipo> todos = new ArrayList<>(almacen.getEquipos());
+        todos.addAll(proveedorExterno.getEquipos());
+        return todos;
     }
 
     @Override
@@ -52,60 +79,28 @@ public class ConfigPropuestaBO implements IConfigPropuestaBO {
         return new ArrayList<>(almacen.getPersonal());
     }
 
-    //equipos propios + equipos del proveedor externo
-    private List<DTOEquipo> todosLosEquipos() {
-        List<DTOEquipo> todos = consultarEquipos();
-        todos.addAll(proveedorExterno.getEquipos());
-        return todos;
-    }
-
+    //verifica que la cantidad seleccionada de cada equipo no rebase su disponibilidad
     @Override
-    public void seleccionarServicio(int idServicio, boolean seleccionado) {
-        for (DTOServicio s : almacen.getServicios()) {
-            if (s.getIdServicio() == idServicio) {
-                s.setSeleccionado(seleccionado);
-                return;
+    public boolean verificarDisponibilidad(DTOInventario seleccion) {
+        if (seleccion == null) {
+            return false;
+        }
+        List<DTOEquipo> existentes = consultarEquipos();
+        for (DTOEquipo pedido : seleccion.getEquipos()) {
+            boolean encontrado = false;
+            for (DTOEquipo e : existentes) {
+                if (e.getIdEquipo() == pedido.getIdEquipo()) {
+                    encontrado = true;
+                    if (pedido.getCantidadSeleccionada() > e.getDisponibilidad()) {
+                        return false;
+                    }
+                    break;
+                }
+            }
+            if (!encontrado) {
+                return false;
             }
         }
-    }
-
-    @Override
-    public void seleccionarEquipo(int idEquipo, int cantidad) {
-        for (DTOEquipo e : todosLosEquipos()) {
-            if (e.getIdEquipo() == idEquipo) {
-                e.setCantidadSeleccionada(cantidad);
-                return;
-            }
-        }
-    }
-
-    @Override
-    public void seleccionarPersonal(int idEspecialidad, int cantidad) {
-        for (DTOPersonal p : almacen.getPersonal()) {
-            if (p.getIdEspecialidad() == idEspecialidad) {
-                p.setCantidad(cantidad);
-                return;
-            }
-        }
-    }
-
-    @Override
-    public boolean haySeleccionEquipos() {
-        for (DTOEquipo e : todosLosEquipos()) {
-            if (e.getCantidadSeleccionada() > 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean haySeleccionPersonal() {
-        for (DTOPersonal p : consultarPersonal()) {
-            if (p.getCantidad() > 0) {
-                return true;
-            }
-        }
-        return false;
+        return true;
     }
 }

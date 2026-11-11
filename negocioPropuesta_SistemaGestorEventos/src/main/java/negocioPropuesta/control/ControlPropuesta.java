@@ -39,24 +39,50 @@ public class ControlPropuesta {
         return configBO.consultarPersonal();
     }
 
+    //la seleccion se maneja aqui sobre los DTOs que entrega el BO
     public void seleccionarServicios(int idServicio, boolean seleccionado) {
-        configBO.seleccionarServicio(idServicio, seleccionado);
+        for (DTOServicio s : configBO.consultarServicios()) {
+            if (s.getIdServicio() == idServicio) {
+                s.setSeleccionado(seleccionado);
+                return;
+            }
+        }
     }
 
     public void seleccionarEquipos(int idEquipo, int cantidad) {
-        configBO.seleccionarEquipo(idEquipo, cantidad);
+        for (DTOEquipo e : configBO.consultarEquipos()) {
+            if (e.getIdEquipo() == idEquipo) {
+                e.setCantidadSeleccionada(cantidad);
+                return;
+            }
+        }
     }
 
     public void seleccionarPersonal(int idPersonal, int cantidad) {
-        configBO.seleccionarPersonal(idPersonal, cantidad);
+        for (DTOPersonal p : configBO.consultarPersonal()) {
+            if (p.getIdEspecialidad() == idPersonal) {
+                p.setCantidad(cantidad);
+                return;
+            }
+        }
     }
 
     public boolean verificarSeleccionEquipo() {
-        return configBO.haySeleccionEquipos();
+        for (DTOEquipo e : configBO.consultarEquipos()) {
+            if (e.getCantidadSeleccionada() > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean verificarSeleccionPersonal() {
-        return configBO.haySeleccionPersonal();
+        for (DTOPersonal p : configBO.consultarPersonal()) {
+            if (p.getCantidad() > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void enviarPropuestaHaciaCotizacion(String horarioMontaje, String horarioDesmontaje, String comentarios) {
