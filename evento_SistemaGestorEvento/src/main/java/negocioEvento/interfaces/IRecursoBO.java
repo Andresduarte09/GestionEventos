@@ -11,7 +11,6 @@ import dto.DTORecurso;
  * @author Andres   
  */
 public interface IRecursoBO {
-    public DTORecurso crearRecurso(DTORecurso recurso);
-    public DTORecurso actualizarRecurso(int idRecurso); 
+    public DTORecurso crearRecurso(DTORecurso recurso); 
     public DTORecurso consultarRecurso(int idRecurso);  
 }

@@ -23,6 +23,7 @@ public interface ISubsistemaEvento {
     public DTOEvento consultarInformacionEvento(int idEvento);
     public DTOLevantamiento registrarLevantamiento(DTOLevantamiento datos);
     public DTODetalleSolicitud registrarRecurso(DTODetalleSolicitud datos);
+    public void guardarRecursos(List<DTODetalleSolicitud> detalles);
     public DTORecurso consultarRecurso(int idRecurso);
     public DTOLocalEvento consultarLocal(int idLocalEvento);
     public List<DTOLocalEvento> obtenerLocalesDisponibles(DTOEvento evento, String tipoLocal);

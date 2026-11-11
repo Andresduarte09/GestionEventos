@@ -26,10 +26,6 @@ public class RecursoBO implements IRecursoBO {
         almacen.getRecursos().add(recurso);
         return recurso;
     }
-    @Override
-    public DTORecurso actualizarRecurso(int idRecurso) {
-        return null;
-    }
 
     @Override
     public DTORecurso consultarRecurso(int idRecurso) {

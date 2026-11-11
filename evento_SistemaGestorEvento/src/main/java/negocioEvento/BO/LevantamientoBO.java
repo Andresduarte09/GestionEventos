@@ -30,7 +30,9 @@ public class LevantamientoBO implements ILevantamientoBO {
     @Override
     public DTOLevantamiento consultarPorEvento(int idEvento) {
         for (DTOLevantamiento l : almacen.getLevantamientos()) {
-            return l; 
+            if (l.getIdEvento() == idEvento) { 
+                return l;
+            }
         }
         return null;
     }

@@ -10,6 +10,7 @@ import java.time.LocalTime;
 
 public class DTOLevantamiento {
     int idLevantamiento;
+    int idEvento;
     LocalDate fechaLevantamiento;
     LocalTime horarioMontaje;
     LocalTime horarioDesmontaje;
@@ -26,6 +27,14 @@ public class DTOLevantamiento {
         this.idLevantamiento = idLevatamiento;
     }
 
+    public int getIdEvento() {
+        return idEvento;
+    }
+
+    public void setIdEvento(int idEvento) {
+        this.idEvento = idEvento;
+    }
+    
     public LocalDate getFechaLevantamiento() {
         return fechaLevantamiento;
     }

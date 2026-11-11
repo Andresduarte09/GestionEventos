@@ -46,7 +46,12 @@ public class FachadaEvento implements ISubsistemaEvento {
     public DTOLevantamiento registrarLevantamiento(DTOLevantamiento datos) {
         return gestor.registrarLevantamiento(datos);
     }
-
+    
+    @Override
+    public void guardarRecursos(List<DTODetalleSolicitud> detalles) {
+        gestor.guardarRecursos(detalles);
+    }
+    
     @Override
     public DTODetalleSolicitud registrarRecurso(DTODetalleSolicitud datos) {
         return gestor.crearRecurso(datos);

@@ -100,6 +100,30 @@ public class GestorEventos {
         return datos != null && datos.getCapacidad() > 0;
     }
     
+   
+    public void guardarRecursos(List<DTODetalleSolicitud> detalles) {
+        if (detalles == null || detalles.isEmpty()) {
+            return;
+        }
+
+        for (DTODetalleSolicitud detalle : detalles) {
+            if (validarRecursos(detalle)) {
+                iDetalleSolicitudBO.crearDetalleSolicitud(detalle);
+            }
+        }
+    }
+
+    //por el momento solo valida que exista
+    private boolean validarRecursos(DTODetalleSolicitud detalle) {
+        if (detalle == null) {
+            return false;
+        }
+
+        DTORecurso recursoValidado = iRecursoBO.consultarRecurso(detalle.getIdRecurso());
+        
+        return recursoValidado != null;
+    }
+    
     public List<DTOLocalEvento> obtenerLocalesDisponibles(DTOEvento evento, String tipoLocal) {
         if (evento == null || tipoLocal == null) return new ArrayList<>();
         

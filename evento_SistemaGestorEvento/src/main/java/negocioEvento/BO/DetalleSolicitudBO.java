@@ -23,7 +23,7 @@ public class DetalleSolicitudBO implements IDetalleSolicitudBO {
     @Override
     public DTODetalleSolicitud crearDetalleSolicitud(DTODetalleSolicitud detalle) {
         int nuevoId = almacen.getDetallesSolicitud().size() + 1;
-        detalle.setDetalleSolicitud(nuevoId);
+        detalle.setIdDetalleSolicitud(nuevoId);
         almacen.getDetallesSolicitud().add(detalle);
         return detalle;
     }

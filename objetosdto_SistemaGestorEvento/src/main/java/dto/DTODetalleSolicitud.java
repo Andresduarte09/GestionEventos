@@ -7,7 +7,8 @@ package dto;
 import java.util.Objects;
 
 public class DTODetalleSolicitud {
-    int detalleSolicitud;
+    int idDetalleSolicitud;
+    int idRecurso;
     String CategoriaSolicitada;
     String descripcionSolicitud;
     String preferencias;
@@ -16,14 +17,22 @@ public class DTODetalleSolicitud {
 
     public DTODetalleSolicitud() {}
 
-    public int getDetalleSolicitud() {
-        return detalleSolicitud;
+    public int getIdDetalleSolicitud() {
+        return idDetalleSolicitud;
     }
 
-    public void setDetalleSolicitud(int detalleSolicitud) {
-        this.detalleSolicitud = detalleSolicitud;
+    public void setIdDetalleSolicitud(int detalleSolicitud) {
+        this.idDetalleSolicitud = detalleSolicitud;
     }
 
+    public int getIdRecurso() {
+        return idRecurso;
+    }
+
+    public void setIdRecurso(int idRecurso) {
+        this.idRecurso = idRecurso;
+    }
+    
     public String getCategoriaSolicitada() {
         return CategoriaSolicitada;
     }
@@ -82,12 +91,12 @@ public class DTODetalleSolicitud {
             return false;
         }
         final DTODetalleSolicitud other = (DTODetalleSolicitud) obj;
-        return this.detalleSolicitud == other.detalleSolicitud;
+        return this.idDetalleSolicitud == other.idDetalleSolicitud;
     }
 
     @Override
     public String toString() {
-        return "DTODetalleSolicitud{" + "detalleSolicitud=" + detalleSolicitud + ", CategoriaSolicitada=" + CategoriaSolicitada + ", descripcionSolicitud=" + descripcionSolicitud + ", preferencias=" + preferencias + ", cantidadEstimada=" + cantidadEstimada + ", observaciones=" + observaciones + '}';
+        return "DTODetalleSolicitud{" + "detalleSolicitud=" + idDetalleSolicitud + ", CategoriaSolicitada=" + CategoriaSolicitada + ", descripcionSolicitud=" + descripcionSolicitud + ", preferencias=" + preferencias + ", cantidadEstimada=" + cantidadEstimada + ", observaciones=" + observaciones + '}';
     }
 
     
