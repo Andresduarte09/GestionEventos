@@ -4,8 +4,10 @@
  */
 package negocioEvento.BO;
 
+import com.mycompany.persistencia.AlmacenDatos;
 import dto.DTOLevantamiento;
 import negocioEvento.interfaces.ILevantamientoBO;
+
 
 /**
  *
@@ -13,13 +15,23 @@ import negocioEvento.interfaces.ILevantamientoBO;
  */
 public class LevantamientoBO implements ILevantamientoBO {
 
+    private final AlmacenDatos almacen;
+
+    public LevantamientoBO(AlmacenDatos almacen) {
+        this.almacen = almacen;
+    }
+
     @Override
     public DTOLevantamiento guardar(DTOLevantamiento levantamiento) {
-        return null;
+        almacen.getLevantamientos().add(levantamiento);
+        return levantamiento;
     }
 
     @Override
     public DTOLevantamiento consultarPorEvento(int idEvento) {
+        for (DTOLevantamiento l : almacen.getLevantamientos()) {
+            return l; 
+        }
         return null;
     }
 }

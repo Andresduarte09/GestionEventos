@@ -3,18 +3,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package negocioEvento.BO;
+import com.mycompany.persistencia.AlmacenDatos;
+import dto.DTODetalleSolicitud;
+import negocioEvento.interfaces.IDetalleSolicitudBO;
+
 
 /**
  *
  * @author Andres
  */
-import dto.DTODetalleSolicitud;
-import negocioEvento.interfaces.IDetalleSolicitudBO;
-
 public class DetalleSolicitudBO implements IDetalleSolicitudBO {
+
+    private final AlmacenDatos almacen;
+
+    public DetalleSolicitudBO(AlmacenDatos almacen) {
+        this.almacen = almacen;
+    }
 
     @Override
     public DTODetalleSolicitud crearDetalleSolicitud(DTODetalleSolicitud detalle) {
-        return null; // Aquí irá la lógica para guardarlo en la BD y devolverlo con ID
+        int nuevoId = almacen.getDetallesSolicitud().size() + 1;
+        detalle.setDetalleSolicitud(nuevoId);
+        almacen.getDetallesSolicitud().add(detalle);
+        return detalle;
     }
 }

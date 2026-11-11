@@ -4,8 +4,10 @@
  */
 package negocioEvento.BO;
 
+import com.mycompany.persistencia.AlmacenDatos;
 import dto.DTORecurso;
 import negocioEvento.interfaces.IRecursoBO;
+
 
 /**
  *
@@ -13,11 +15,17 @@ import negocioEvento.interfaces.IRecursoBO;
  */
 public class RecursoBO implements IRecursoBO {
 
-    @Override
-    public DTORecurso crearRecurso(DTORecurso recurso) {
-        return null;
+    private final AlmacenDatos almacen;
+
+    public RecursoBO(AlmacenDatos almacen) {
+        this.almacen = almacen;
     }
 
+    @Override
+    public DTORecurso crearRecurso(DTORecurso recurso) {
+        almacen.getRecursos().add(recurso);
+        return recurso;
+    }
     @Override
     public DTORecurso actualizarRecurso(int idRecurso) {
         return null;
@@ -25,6 +33,11 @@ public class RecursoBO implements IRecursoBO {
 
     @Override
     public DTORecurso consultarRecurso(int idRecurso) {
+        for (DTORecurso r : almacen.getRecursos()) {
+            if (r.getIdRecurso() == idRecurso) {
+                return r;
+            }
+        }
         return null;
     }
 }

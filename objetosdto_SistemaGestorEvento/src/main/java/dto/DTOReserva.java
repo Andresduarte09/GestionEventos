@@ -13,6 +13,7 @@ public class DTOReserva {
     LocalTime horaInicio;
     LocalTime horaFin;
     String estado;
+    int idLocalEvento;
 
     public DTOReserva(){}
 
@@ -56,6 +57,16 @@ public class DTOReserva {
         this.estado = estado;
     }
 
+    public int getIdLocalEvento() {
+        return idLocalEvento;
+    }
+
+    public void setIdLocalEvento(int idLocalEvento) {
+        this.idLocalEvento = idLocalEvento;
+    }
+
+    
+    
     @Override
     public String toString() {
         return "DTOReserva{" + "idReserva=" + idReserva + ", fecha=" + fecha + ", horaInicio=" + horaInicio + ", horaFin=" + horaFin + ", estado=" + estado + '}';

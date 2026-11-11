@@ -6,7 +6,6 @@ package presentacion.vistas;
 
 import dto.DTOCliente;
 import dto.DTOEvento;
-import dto.DTODetalleSolicitud;
 import presentacion.control.ControlPresentacion;
 
 /**

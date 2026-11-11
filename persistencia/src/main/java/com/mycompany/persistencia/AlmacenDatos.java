@@ -19,6 +19,10 @@ import java.util.Arrays;
  */
 public class AlmacenDatos {
 
+    //AHORA SE ESTA USANDO SINGLETON
+    
+    private static AlmacenDatos instancia = null;
+
     private static final float IVA = 0.16f;
 
     private final List<DTOCliente> clientes = new ArrayList<>();
@@ -38,8 +42,17 @@ public class AlmacenDatos {
     private final List<DTOVersionCotizacion> versionesCotizacion = new ArrayList<>();
     private final List<DTOOrdenServicio> ordenes = new ArrayList<>();
 
-    public AlmacenDatos() {
+    //singleton
+    private AlmacenDatos() {
         cargarDatos();
+    }
+
+    //acceso global
+    public static AlmacenDatos getInstance() {
+        if (instancia == null) {
+            instancia = new AlmacenDatos();
+        }
+        return instancia;
     }
 
     private void cargarDatos() {
