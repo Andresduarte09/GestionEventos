@@ -4,10 +4,14 @@
  */
 package negocioOrden.interfaces;
 
+import negocioOrden.BO.OrdenServicioBO;
+
 /**
  *
  * @author Andres
  */
+import java.util.List;
+
 public interface ISubsistemaOrden {
-    
+    boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados);
 }

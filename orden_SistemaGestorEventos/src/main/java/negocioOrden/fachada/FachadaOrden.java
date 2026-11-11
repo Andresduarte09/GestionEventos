@@ -8,6 +8,26 @@ package negocioOrden.fachada;
  *
  * @author Chomp
  */
-public class FachadaOrden {
-    
+import com.mycompany.persistencia.AlmacenDatos;
+import java.util.List;
+import negocioOrden.BO.DecisionClienteBO;
+import negocioOrden.BO.OrdenServicioBO;
+import negocioOrden.gestor.GestorOrden;
+import negocioOrden.interfaces.ISubsistemaOrden;
+
+public class FachadaOrden implements ISubsistemaOrden {
+
+    private final GestorOrden gestor;
+
+    public FachadaOrden(AlmacenDatos almacen) {
+        this.gestor = new GestorOrden(
+                new OrdenServicioBO(almacen),
+                new DecisionClienteBO(almacen)
+        );
+    }
+
+    @Override
+    public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
+        return gestor.registrarDecisionCotizacion(decision, serviciosSeleccionados);
+    }
 }

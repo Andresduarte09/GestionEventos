@@ -4,10 +4,20 @@
  */
 package negocioOrden.interfaces;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author Andres
  */
+import dto.DTOOrdenServicio;
+import dto.DTOServicio;
+import java.util.List;
+
 public interface IOrdenServicioBO {
-    
+    void generarOrdenServicio();
+    void registrarCotizacionEnAlmacen();
+    DTOOrdenServicio consultarOrdenPorId(int idOrden);
+    List<DTOOrdenServicio> consultarTodasOrdenes();
 }
+
