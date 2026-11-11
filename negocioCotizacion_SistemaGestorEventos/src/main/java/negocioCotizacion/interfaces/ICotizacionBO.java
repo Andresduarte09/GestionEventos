@@ -3,11 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package negocioCotizacion.interfaces;
+import dto.DTOCotizacion;
 
 /**
  *
- * @author Andres
+ * @author lui
  */
 public interface ICotizacionBO {
     
+    DTOCotizacion calcularCotizacion(int idPropuesta);
 }

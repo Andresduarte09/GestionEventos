@@ -7,16 +7,28 @@ package negocioCotizacion.gestor;
 import dto.DTOCotizacion;
 import dto.DTODetalleCotizacion;
 import dto.DTOVersionCotizacion;
+import com.mycompany.persistencia.AlmacenDatos;
+import negocioCotizacion.BO.CotizacionBO;
+
 
 /**
  *
- * @author Andres
+ * @author lui
  */
 public class GestorCotizacion {
+    private final AlmacenDatos almacen;
+    private final CotizacionBO cotizacionBO;
+    
+    public GestorCotizacion(){
+        this.almacen = AlmacenDatos.getInstance();
+        this.cotizacionBO = new CotizacionBO(this.almacen);
+        
+    }
+    
     private DTOVersionCotizacion versionActual;
 
     public DTOCotizacion calcularCotizacion(int idPropuesta) {
-        return null;
+        return cotizacionBO.calcularCotizacion(idPropuesta);
     }
 
     public DTOVersionCotizacion crearNuevaVersion(int idCotizacion) {
