@@ -5,19 +5,21 @@
 package negocioEvento.BO;
 
 import dto.DTOLevantamiento;
+import negocioEvento.interfaces.ILevantamientoBO;
 
 /**
  *
  * @author Ale
  */
-public class LevantamientoBO {
-    
-   public DTOLevantamiento guardar(DTOLevantamiento levantamiento){
+public class LevantamientoBO implements ILevantamientoBO {
+
+    @Override
+    public DTOLevantamiento guardar(DTOLevantamiento levantamiento) {
         return null;
     }
-    
-    public DTOLevantamiento consultarPorEvento(int idEvento){
+
+    @Override
+    public DTOLevantamiento consultarPorEvento(int idEvento) {
         return null;
     }
-    
 }

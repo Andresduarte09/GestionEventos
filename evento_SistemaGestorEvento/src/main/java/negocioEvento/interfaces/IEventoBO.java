@@ -4,10 +4,14 @@
  */
 package negocioEvento.interfaces;
 
+import dto.DTOEvento;
+
 /**
  *
- * @author Chomp
+ * @author Andres
  */
 public interface IEventoBO {
-    
+    public DTOEvento guardar(DTOEvento evento);
+    public DTOEvento consultar(int idEvento);
+    public void actualizar(DTOEvento evento);
 }

@@ -4,10 +4,13 @@
  */
 package negocioEvento.interfaces;
 
+import dto.DTOLocalEvento;
+
 /**
  *
- * @author Chomp
+ * @author Andres
  */
 public interface ILocalEventoBO {
-    
+    public DTOLocalEvento guardar(DTOLocalEvento local);
+    public DTOLocalEvento consultar(int idLocalEvento);
 }

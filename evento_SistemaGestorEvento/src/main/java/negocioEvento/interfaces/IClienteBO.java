@@ -4,10 +4,13 @@
  */
 package negocioEvento.interfaces;
 
+import dto.DTOCliente;
+
 /**
  *
- * @author Chomp
+ * @author Andres
  */
 public interface IClienteBO {
-    
+    public DTOCliente guardar(DTOCliente cliente);
+    public DTOCliente consultarPorTelefono(String telefono);
 }

@@ -5,23 +5,26 @@
 package negocioEvento.BO;
 
 import dto.DTOEvento;
+import negocioEvento.interfaces.IEventoBO;
 
 /**
  *
  * @author Ale
  */
-public class EventoBO {
-    public DTOEvento guardar (DTOEvento evento){
-    
+public class EventoBO implements IEventoBO {
+
+    @Override
+    public DTOEvento guardar(DTOEvento evento) {
         return null;
     }
-    
-    public DTOEvento consultar (int idevento){
-    
+
+    @Override
+    public DTOEvento consultar(int idEvento) {
         return null;
     }
-    
-    public void actualizar (DTOEvento evento){
+
+    @Override
+    public void actualizar(DTOEvento evento) {
+        
     }
-    
 }

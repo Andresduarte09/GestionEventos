@@ -4,10 +4,13 @@
  */
 package negocioEvento.interfaces;
 
+import dto.DTOLevantamiento;
+
 /**
  *
- * @author Chomp
+ * @author Andres
  */
 public interface ILevantamientoBO {
-    
+    public DTOLevantamiento guardar(DTOLevantamiento levantamiento);
+    public DTOLevantamiento consultarPorEvento(int idEvento);
 }

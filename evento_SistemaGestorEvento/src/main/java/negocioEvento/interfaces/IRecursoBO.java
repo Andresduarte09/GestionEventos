@@ -4,10 +4,14 @@
  */
 package negocioEvento.interfaces;
 
+import dto.DTORecurso;
+
 /**
  *
- * @author Chomp
+ * @author Andres   
  */
 public interface IRecursoBO {
-    
+    public DTORecurso crearRecurso(DTORecurso recurso);
+    public DTORecurso actualizarRecurso(int idRecurso); 
+    public DTORecurso consultarRecurso(int idRecurso);  
 }

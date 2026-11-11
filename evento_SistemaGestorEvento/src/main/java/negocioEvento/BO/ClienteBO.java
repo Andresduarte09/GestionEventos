@@ -3,19 +3,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package negocioEvento.BO;
-import dto.DTOCliente;
 /**
  *
  * @author Ale
  */
-public class ClienteBO {
-    
-    public DTOCliente guardar(DTOCliente cliente){
+import dto.DTOCliente;
+import negocioEvento.interfaces.IClienteBO;
+
+public class ClienteBO implements IClienteBO {
+
+    @Override
+    public DTOCliente guardar(DTOCliente cliente) {
         return null;
     }
-    
-    public DTOCliente consultarPorTelefono(String telefono){
+
+    @Override
+    public DTOCliente consultarPorTelefono(String telefono) {
         return null;
     }
-    
 }
+

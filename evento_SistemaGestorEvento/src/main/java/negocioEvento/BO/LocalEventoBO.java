@@ -5,19 +5,21 @@
 package negocioEvento.BO;
 
 import dto.DTOLocalEvento;
+import negocioEvento.interfaces.ILocalEventoBO;
 
 /**
  *
  * @author Ale
  */
-public class LocalEventoBO {
-    
-    public DTOLocalEvento guardar(DTOLocalEvento local){
+public class LocalEventoBO implements ILocalEventoBO {
+
+    @Override
+    public DTOLocalEvento guardar(DTOLocalEvento local) {
         return null;
     }
-    
-    public DTOLocalEvento consultar(int idLocalEvento){
+
+    @Override
+    public DTOLocalEvento consultar(int idLocalEvento) {
         return null;
     }
-    
 }

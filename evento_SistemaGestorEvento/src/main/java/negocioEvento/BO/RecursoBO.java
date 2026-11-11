@@ -4,10 +4,27 @@
  */
 package negocioEvento.BO;
 
+import dto.DTORecurso;
+import negocioEvento.interfaces.IRecursoBO;
+
 /**
  *
  * @author Andres
  */
-public class RecursoBO {
-    
+public class RecursoBO implements IRecursoBO {
+
+    @Override
+    public DTORecurso crearRecurso(DTORecurso recurso) {
+        return null;
+    }
+
+    @Override
+    public DTORecurso actualizarRecurso(int idRecurso) {
+        return null;
+    }
+
+    @Override
+    public DTORecurso consultarRecurso(int idRecurso) {
+        return null;
+    }
 }
