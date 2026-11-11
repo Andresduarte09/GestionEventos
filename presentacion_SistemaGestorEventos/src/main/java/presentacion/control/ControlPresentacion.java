@@ -28,7 +28,7 @@ public class ControlPresentacion {
     private DTODetalleCotizacion detalleCotizacion;
     private DTOLevantamiento levantamiento;
     private List<DTOPersonal> personalSeleccionado = new ArrayList<>();
-    private final AlmacenDatos almacen = new AlmacenDatos();
+    private final AlmacenDatos almacen = AlmacenDatos.getInstance();
     private final ProveedorExterno proveedorExterno = new ProveedorExterno();
     private DTODecisionCliente decisionCliente;
     private List<DTOServicio> serviciosAceptados = new ArrayList<>();

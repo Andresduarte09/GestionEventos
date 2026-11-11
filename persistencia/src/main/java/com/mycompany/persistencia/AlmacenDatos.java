@@ -18,13 +18,10 @@ import java.util.Arrays;
  * Base de datos provisional en memoria, cuando se cierra la ejecucion no se guarda
  */
 public class AlmacenDatos {
-
     //AHORA SE ESTA USANDO SINGLETON
     
     private static AlmacenDatos instancia = null;
-
     private static final float IVA = 0.16f;
-
     private final List<DTOCliente> clientes = new ArrayList<>();
     private final List<DTODetalleSolicitud> detallesSolicitud = new ArrayList<>();
     private final List<DTOEvento> eventos = new ArrayList<>();
@@ -78,28 +75,23 @@ public class AlmacenDatos {
         clientes.add(new DTOCliente(6, "Daniela Montserrat Ibarra Félix", "dani.ibarra@hotmail.com", "6442266880", "6443390012"));
     }
 
-    //Locales de evento (id, tipoLocal, dimensionesLugar,
-    //dimensionesEspacios, condicionesAcceso, restricciones, necesidades y duracionHoras
+    //Locales de evento
     private void cargarLocalesEvento() {
         localesEvento.add(new DTOLocalEvento(1, "Salón", "30 x 20 m", "Escenario y pista",
                 "Acceso por entrada principal", "No fumar",
                 "Se necesita conexión eléctrica", 200, 8));
-
         localesEvento.add(new DTOLocalEvento(2, "Jardín", "40 x 25 m", "Área de mesas y pista al aire libre",
                 "Acceso por portón lateral; piso de pasto", "Música permitida hasta las 23:00",
-                "Se requieren extensiones de 50 m o planta eléctrica", 350,6));
-
+                "Se requieren extensiones de 50 m o planta eléctrica", 350, 6));
         localesEvento.add(new DTOLocalEvento(3, "Auditorio", "35 x 22 m", "Escenario fijo y butacas",
                 "Rampa de carga y elevador de equipo", "No pegar elementos en las paredes",
-                "Tomas trifásicas disponibles en el escenario", 400,7));
-
+                "Tomas trifásicas disponibles en el escenario", 400, 7));
         localesEvento.add(new DTOLocalEvento(4, "Terraza", "25 x 15 m", "Zona de mesas y barra",
                 "Acceso por escalera, sin elevador", "Máximo 220 personas",
-                "Cubrir las instalaciones por posible lluvia", 220,8));
-
+                "Cubrir las instalaciones por posible lluvia", 220, 8));
         localesEvento.add(new DTOLocalEvento(5, "Salón de hotel", "28 x 18 m", "Salón con pista y mesa principal",
                 "Acceso de carga por la parte trasera", "Montaje solo a partir de las 8:00",
-                "El aire acondicionado limita el uso de humo", 180,6));
+                "El aire acondicionado limita el uso de humo", 180, 6));
     }
 
     //Eventos
@@ -176,13 +168,14 @@ public class AlmacenDatos {
         return d;
     }
 
-    //Recursos
+    //Recursos (solo Audio y Comida)
     private void cargarRecursos() {
         // Audio
         recursos.add(new DTORecurso(1, "Bocina", "Bocina amplificada", 100, 1500.0f, "personas", "Audio", "pieza", "Activo"));
         agregarRecurso(2, "Consola de audio", "Consola digital de 16 canales", 200, 2500f, "personas", "Audio", "pieza", "Activo");
         agregarRecurso(3, "Micrófono inalámbrico", "Micrófono de mano con receptor", 1, 350f, "personas", "Audio", "pieza", "Activo");
         agregarRecurso(4, "Sistema de audio completo", "Bocinas, consola y micrófonos para eventos medianos", 200, 6500f, "personas", "Audio", "servicio", "Activo");
+
         // Comida
         agregarRecurso(5, "Sopa fría", "Entrada: sopa fría de temporada", 1, 85f, "porción", "Comida", "porción", "Activo");
         agregarRecurso(6, "Ensalada", "Entrada: ensalada de la casa", 1, 70f, "porción", "Comida", "porción", "Activo");
@@ -192,33 +185,10 @@ public class AlmacenDatos {
         agregarRecurso(10, "Gelatina", "Postre: gelatina individual", 1, 25f, "porción", "Comida", "porción", "Inactivo");
         agregarRecurso(11, "Agua de jamaica", "Bebida: agua fresca", 1, 20f, "porción", "Comida", "vaso", "Activo");
         agregarRecurso(12, "Refresco", "Bebida: refresco embotellado", 1, 25f, "porción", "Comida", "pieza", "Activo");
-        // Entretenimiento
-        agregarRecurso(13, "DJ", "Música: DJ con equipo básico por 5 horas", 300, 4500f, "personas", "Entretenimiento", "servicio", "Activo");
-        agregarRecurso(14, "Banda en vivo", "Música: banda musical en vivo", 300, 6000f, "personas", "Entretenimiento", "servicio", "Activo");
-        agregarRecurso(15, "Payaso", "Infantil: show con payaso de 2 horas", 40, 1800f, "niños", "Entretenimiento", "servicio", "Activo");
-        agregarRecurso(16, "Brincolín", "Infantil: brincolín inflable", 20, 1200f, "niños", "Entretenimiento", "pieza", "Activo");
-        agregarRecurso(17, "Mago", "Show: espectáculo de magia", 100, 2500f, "personas", "Entretenimiento", "servicio", "Activo");
-        // Iluminación
-        agregarRecurso(18, "Lámparas colgantes", "Interior: lámparas decorativas", 10, 300f, "m²", "Iluminación", "pieza", "Activo");
-        agregarRecurso(19, "Luces LED", "Interior: tiras y focos LED", 20, 450f, "m²", "Iluminación", "pieza", "Activo");
-        agregarRecurso(20, "Reflectores", "Escenario: reflectores de escenario", 40, 600f, "m²", "Iluminación", "pieza", "Activo");
-        agregarRecurso(21, "Luces robóticas", "Escenario: cabezas móviles", 60, 900f, "m²", "Iluminación", "pieza", "Activo");
-        agregarRecurso(22, "Máquina de humo", "Efectos: humo para efectos", 100, 700f, "m²", "Iluminación", "pieza", "Activo");
-        // Decoración
-        agregarRecurso(23, "Mesas redondas", "Mobiliario: mesa para 10 personas", 10, 120f, "personas", "Decoración", "pieza", "Activo");
-        agregarRecurso(24, "Sillas Tiffany", "Mobiliario: silla decorativa", 1, 25f, "personas", "Decoración", "pieza", "Activo");
-        agregarRecurso(25, "Centros de mesa", "Ambientación: arreglo floral", 1, 180f, "mesa", "Decoración", "pieza", "Activo");
-        agregarRecurso(26, "Globos", "Ambientación: arco o racimos de globos", 1, 900f, "arco", "Decoración", "pieza", "Activo");
-        agregarRecurso(27, "Mantelería", "Textiles: mantel y camino de mesa", 1, 60f, "mesa", "Decoración", "juego", "Activo");
-        // Pantallas
-        agregarRecurso(28, "Pantalla LED", "LED: pantalla modular de 3 x 2 m", 150, 5500f, "personas", "Pantallas", "pieza", "Activo");
-        agregarRecurso(29, "Proyector", "Proyección: proyector de alta luminosidad", 100, 1200f, "personas", "Pantallas", "pieza", "Activo");
-        agregarRecurso(30, "Pantalla de proyección", "Proyección: pantalla con tripié", 100, 500f, "personas", "Pantallas", "pieza", "Activo");
-        agregarRecurso(31, "Televisión", "Televisión: pantalla de 55 pulgadas", 30, 800f, "personas", "Pantallas", "pieza", "Activo");
     }
 
     private void agregarRecurso(int id, String nombre, String descripcion, int capacidad, float precioReferencia,
-String unidadCapacidad, String tipoRecurso, String unidadMedida, String estadoEnCatalogo) {
+            String unidadCapacidad, String tipoRecurso, String unidadMedida, String estadoEnCatalogo) {
         recursos.add(new DTORecurso(id, nombre, descripcion, capacidad, precioReferencia,
                 unidadCapacidad, tipoRecurso, unidadMedida, estadoEnCatalogo));
     }
@@ -230,52 +200,44 @@ String unidadCapacidad, String tipoRecurso, String unidadMedida, String estadoEn
         equipos.add(new DTOEquipo(3, "Bocina amplificada", 12, 0));
         equipos.add(new DTOEquipo(4, "Consola de audio", 3, 0));
         equipos.add(new DTOEquipo(5, "Micrófono inalámbrico", 10, 0));
-        equipos.add(new DTOEquipo(6, "Reflector LED", 24, 0));
-        equipos.add(new DTOEquipo(7, "Luz robótica", 8, 0));
-        equipos.add(new DTOEquipo(8, "Pantalla LED modular", 6, 0));
-        equipos.add(new DTOEquipo(9, "Proyector", 4, 0));
         equipos.add(new DTOEquipo(10, "Chafing dish", 20, 0));
         equipos.add(new DTOEquipo(11, "Cableado y soportes", 15, 0));
 
         // id, especialidad, cantidad, horas de montaje, horas de operación, horas de desmontaje
         personal.add(new DTOPersonal(1, "Técnico de audio", 3, 2, 5, 1));
-        personal.add(new DTOPersonal(2, "Técnico de iluminación", 2, 2, 5, 1));
-        personal.add(new DTOPersonal(3, "Operador de pantallas", 2, 1, 5, 1));
         personal.add(new DTOPersonal(4, "Montador", 6, 3, 0, 2));
         personal.add(new DTOPersonal(5, "Cocinero", 3, 0, 6, 0));
         personal.add(new DTOPersonal(6, "Mesero", 10, 0, 6, 0));
         personal.add(new DTOPersonal(7, "Coordinador de evento", 2, 1, 6, 1));
 
-        // id, nombre, descripción, seleccionado, esAdicional, observaciones
-        servicios.add(new DTOServicio(1, "Audio", "Servicio de audio para evento", true, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(2, "Iluminación", "Iluminación de pista, escenario y ambiente", true, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(3, "Pantallas", "Pantallas y proyección de contenido", true, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(4, "Decoración", "Ambientación y centros de mesa", true, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(5, "Mobiliario", "Mesas, sillas y mantelería", true, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(6, "Alimentos y bebidas", "Menú, servicio de meseros y cocina", true, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(7, "Entretenimiento", "Música y espectáculos", false, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(8, "Transporte y logística", "Traslado de equipo al lugar del evento", false, true, "Se cobra según la distancia"));
-        servicios.add(new DTOServicio(9, "Personal de apoyo", "Personal adicional de montaje y operación", false, true, "Se cobra por hora"));
-        servicios.add(new DTOServicio(10, "Fotografía y video", "Cobertura completa del evento en foto y video", true, false, "Sin observaciones"));
+        // Solo se mantienen servicios que no son de las categorías eliminadas
+        servicios.add(new DTOServicio(1, "Audio", "Servicio de audio para evento", false, false, "Sin observaciones"));
+        servicios.add(new DTOServicio(5, "Mobiliario", "Mesas, sillas y mantelería", false, false, "Sin observaciones"));
+        servicios.add(new DTOServicio(6, "Alimentos y bebidas", "Menú, servicio de meseros y cocina", false, false, "Sin observaciones"));
+        servicios.add(new DTOServicio(8, "Transporte y logística", "Traslado de equipo al lugar del evento", false, false, "Se cobra según la distancia"));
+        servicios.add(new DTOServicio(9, "Personal de apoyo", "Personal adicional de montaje y operación", false, false, "Se cobra por hora"));
+        servicios.add(new DTOServicio(10, "Fotografía y video", "Cobertura completa del evento en foto y video", false, false, "Sin observaciones"));
         servicios.add(new DTOServicio(11, "Seguridad", "Personal de control de acceso y vigilancia", false, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(12, "Coordinación", "Planeación y logística general durante el evento", true, false, "Incluye un coordinador principal"));
-        servicios.add(new DTOServicio(13, "Pirotecnia", "Efectos especiales y fuegos artificiales seguros", false, true, "Requiere permisos especiales del lugar"));
+        servicios.add(new DTOServicio(12, "Coordinación", "Planeación y logística general durante el evento", false, false, "Incluye un coordinador principal"));
+        servicios.add(new DTOServicio(13, "Pirotecnia", "Efectos especiales y fuegos artificiales seguros", false, false, "Requiere permisos especiales del lugar"));
         servicios.add(new DTOServicio(14, "Souvenirs y recuerdos", "Artículos personalizados para los invitados", false, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(15, "Valet parking", "Servicio de estacionamiento para los asistentes", false, true, "Sujeto a la capacidad del recinto"));
+        servicios.add(new DTOServicio(15, "Valet parking", "Servicio de estacionamiento para los asistentes", false, false, "Sujeto a la capacidad del recinto"));
     }
 
-    //Inventarios
+    //Inventarios (solo los que quedan válidos)
     private void cargarInventarios() {
         // 0: Audio
-        inventario.add(new DTOInventario(listaDe(equipo(3), equipo(4), equipo(5), equipo(11)), listaDe(especialista(1)), listaDe(servicio(1)), 1));
-        // 1: Iluminación
-        inventario.add(new DTOInventario(listaDe(equipo(6), equipo(7), equipo(11)), listaDe(especialista(2)), listaDe(servicio(2)), 1));
-        // 2: Pantallas
-        inventario.add(new DTOInventario(listaDe(equipo(8), equipo(9)), listaDe(especialista(3)), listaDe(servicio(3)), 1));
-        // 3: Decoración y mobiliario
-        inventario.add(new DTOInventario(listaDe(equipo(1), equipo(2)), listaDe(especialista(4)), listaDe(servicio(4), servicio(5)), 1));
-        // 4: Alimentos y bebidas
-        inventario.add(new DTOInventario(listaDe(equipo(10)), listaDe(especialista(5), especialista(6)), listaDe(servicio(6)), 1));
+        inventario.add(new DTOInventario(listaDe(equipo(3), equipo(4), equipo(5), equipo(11)), 
+                                         listaDe(especialista(1)), 
+                                         listaDe(servicio(1)), 1));
+        // 1: Alimentos y bebidas
+        inventario.add(new DTOInventario(listaDe(equipo(10)), 
+                                         listaDe(especialista(5), especialista(6)), 
+                                         listaDe(servicio(6)), 1));
+        // 2: Mobiliario
+        inventario.add(new DTOInventario(listaDe(equipo(1), equipo(2)), 
+                                         listaDe(especialista(4)), 
+                                         listaDe(servicio(5)), 1));
     }
 
     private DTOEquipo equipo(int id) {
@@ -332,10 +294,10 @@ String unidadCapacidad, String tipoRecurso, String unidadMedida, String estadoEn
 
     //Reservas
     private void cargarReservas() {
-        reservas.add(crearReserva(1, LocalDate.of(2026, 12, 12), LocalTime.of(14, 0), LocalTime.of(1, 0), "Tentativa"));      // Evento 1
-        reservas.add(crearReserva(2, LocalDate.of(2026, 12, 18), LocalTime.of(8, 0), LocalTime.of(15, 0), "Confirmada"));    // Evento 2
-        reservas.add(crearReserva(3, LocalDate.of(2026, 11, 28), LocalTime.of(12, 0), LocalTime.of(19, 30), "Tentativa"));   // Evento 3
-        reservas.add(crearReserva(4, LocalDate.of(2027, 2, 6), LocalTime.of(15, 0), LocalTime.of(2, 0), "Tentativa"));       // Evento 5
+        reservas.add(crearReserva(1, LocalDate.of(2026, 12, 12), LocalTime.of(14, 0), LocalTime.of(1, 0), "Tentativa"));
+        reservas.add(crearReserva(2, LocalDate.of(2026, 12, 18), LocalTime.of(8, 0), LocalTime.of(15, 0), "Confirmada"));
+        reservas.add(crearReserva(3, LocalDate.of(2026, 11, 28), LocalTime.of(12, 0), LocalTime.of(19, 30), "Tentativa"));
+        reservas.add(crearReserva(4, LocalDate.of(2027, 2, 6), LocalTime.of(15, 0), LocalTime.of(2, 0), "Tentativa"));
     }
 
     private DTOReserva crearReserva(int id, LocalDate fecha, LocalTime inicio, LocalTime fin, String estado) {
@@ -350,39 +312,29 @@ String unidadCapacidad, String tipoRecurso, String unidadMedida, String estadoEn
 
     //Cotizaciones 
     private void cargarCotizaciones() {
-        // Cotización 1 (Evento 1, Boda): la primera versión no convenció y se emitió una segunda con descuento
+        // Cotización 1 (Evento 1, Boda)
         cotizaciones.add(new DTOCotizacion(1, LocalDate.of(2026, 10, 18), "Pendiente"));
         versionesCotizacion.add(crearVersion(1, 1, LocalDate.of(2026, 10, 18), "Reemplazada", "Versión inicial", 0f, 10000f));
         versionesCotizacion.add(crearVersion(2, 2, LocalDate.of(2026, 10, 23), "Vigente", "Se aplicó descuento del 5%", 5f, 10000f));
         decisionesCliente.add(new DTODecisionCliente(3, LocalDate.of(2026, 10, 21), "Modificaciones solicitadas", "Solicita aplicar un descuento"));
         detallesCotizacion.add(crearDetalleCotizacion(1, LocalTime.of(10, 0), 4500f, inventario.get(0)));   // Audio
-        detallesCotizacion.add(crearDetalleCotizacion(2, LocalTime.of(11, 0), 3500f, inventario.get(1)));   // Iluminación
-        detallesCotizacion.add(crearDetalleCotizacion(3, LocalTime.of(12, 0), 2000f, inventario.get(2)));   // Pantallas
 
-        // Cotización 2 (Evento 2, Graduación): aceptada
+        // Cotización 2 (Evento 2, Graduación)
         cotizaciones.add(new DTOCotizacion(2, LocalDate.of(2026, 10, 8), "Aceptada"));
         versionesCotizacion.add(crearVersion(3, 1, LocalDate.of(2026, 10, 8), "Aceptada", "Versión inicial", 0f, 25000f));
         decisionesCliente.add(new DTODecisionCliente(1, LocalDate.of(2026, 10, 14), "Aceptada", "Cotización aprobada"));
         detallesCotizacion.add(crearDetalleCotizacion(4, LocalTime.of(7, 0), 7000f, inventario.get(0)));    // Audio
-        detallesCotizacion.add(crearDetalleCotizacion(5, LocalTime.of(8, 0), 6000f, inventario.get(1)));    // Iluminación
-        detallesCotizacion.add(crearDetalleCotizacion(6, LocalTime.of(8, 30), 5000f, inventario.get(2)));   // Pantallas
-        detallesCotizacion.add(crearDetalleCotizacion(7, LocalTime.of(7, 30), 7000f, inventario.get(3)));   // Decoración
 
-        // Cotización 3 (Evento 4, Posada empresarial): rechazada
+        // Cotización 3 (Evento 4, Posada empresarial)
         cotizaciones.add(new DTOCotizacion(3, LocalDate.of(2026, 10, 12), "Rechazada"));
         versionesCotizacion.add(crearVersion(4, 1, LocalDate.of(2026, 10, 12), "Rechazada", "Versión inicial", 10f, 18000f));
         decisionesCliente.add(new DTODecisionCliente(2, LocalDate.of(2026, 10, 22), "Rechazada", "El presupuesto excede el límite de la empresa"));
-        detallesCotizacion.add(crearDetalleCotizacion(8, LocalTime.of(16, 0), 12000f, inventario.get(4)));  // Alimentos
+        detallesCotizacion.add(crearDetalleCotizacion(8, LocalTime.of(16, 0), 12000f, inventario.get(1)));  // Alimentos
         detallesCotizacion.add(crearDetalleCotizacion(9, LocalTime.of(16, 30), 4000f, inventario.get(0)));  // Audio
-        detallesCotizacion.add(crearDetalleCotizacion(10, LocalTime.of(17, 0), 2000f, inventario.get(3))); // Decoración
     }
 
-    /** total = (subtotal - descuento%) + IVA, redondeado a centavos. */
     private DTOVersionCotizacion crearVersion(int id, int numero, LocalDate fecha, String estado,
             String observaciones, float descuento, float subtotal) {
-        //esta linea va cuando se calcule la logica, comentareada para solo moverla a negocio cuando sea necesario
-        //retorna 0 en total por el momento
-//        float total = Math.round(subtotal * (1 - descuento / 100f) * (1 + IVA) * 100f) / 100f;
         return new DTOVersionCotizacion(id, numero, fecha, estado, observaciones, descuento, subtotal, 0f);
     }
 
@@ -455,9 +407,11 @@ String unidadCapacidad, String tipoRecurso, String unidadMedida, String estadoEn
     public List<DTOVersionCotizacion> getVersionesCotizacion() {
         return versionesCotizacion;
     }
+
     public void registrarOrden(DTOOrdenServicio orden) {
         this.ordenes.add(orden);
     }
+
     public List<DTOOrdenServicio> getOrdenes() {
         return ordenes;
     }
@@ -477,6 +431,7 @@ String unidadCapacidad, String tipoRecurso, String unidadMedida, String estadoEn
     public void registrarVersionCotizacion(DTOVersionCotizacion v) {
         this.versionesCotizacion.add(v);
     }
+
     public void registrarDecisionCliente(DTODecisionCliente d) { 
         this.decisionesCliente.add(d); 
     }

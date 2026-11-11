@@ -38,9 +38,10 @@ public class PanelFolio extends JPanel {
 
         txtDetalles = new JTextArea();
         txtDetalles.setEditable(false);
-
+        txtDetalles.setFont(new Font("Arial", Font.PLAIN, 20));
+        
         btnContinuar = new JButton("Continuar");
-        btnContinuar.setFont(new Font("Arial", Font.BOLD, 14));
+        btnContinuar.setFont(new Font("Arial", Font.BOLD, 20));
         btnContinuar.setBackground(new Color(30, 30, 30));
         btnContinuar.setForeground(Color.WHITE);
         btnContinuar.addActionListener(e -> this.control.solicitarServicios());

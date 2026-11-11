@@ -9,8 +9,8 @@
         <module>../objetosdto_SistemaGestorEvento</module>
         <module>../presentacion_SistemaGestorEventos</module>
         <module>../persistencia</module>
-        <module>../negocioPropuesta_SistemaGestorEventos</module>
         <module>../negocioCotizacion_SistemaGestorEventos</module>
+        <module>../negocioPropuesta_SistemaGestorEventos</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
