@@ -3,11 +3,14 @@ package negocioPropuesta.fachada;
 import com.mycompany.persistencia.AlmacenDatos;
 import dto.DTOEquipo;
 import dto.DTOPersonal;
+import dto.DTOPropuesta;
 import dto.DTOServicio;
 import infraestructura.ProveedorExterno;
-import java.util.List;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import negocioPropuesta.BO.ConfigPropuestaBO;
-import negocioPropuesta.control.ControlPropuesta;
+import negocioPropuesta.BO.PropuestaBO;
+import negocioPropuesta.control.GestorPropuesta;
 import negocioPropuesta.interfaces.ISubsistemaPropuesta;
 
 /**
@@ -15,54 +18,80 @@ import negocioPropuesta.interfaces.ISubsistemaPropuesta;
  */
 public class FachadaPropuesta implements ISubsistemaPropuesta {
 
-    private final ControlPropuesta control;
+    private final GestorPropuesta gestor;
 
     public FachadaPropuesta(AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
-        this.control = new ControlPropuesta(ConfigPropuestaBO.getInstance(almacen, proveedorExterno));
-    }
-
-    @Override
-    public List<DTOServicio> consultarServiciosDisponibles() {
-        return control.consultarServiciosDisponibles();
-    }
-
-    @Override
-    public List<DTOEquipo> obtenerEquiposDisponibles() {
-        return control.obtenerEquiposDisponibles();
-    }
-
-    @Override
-    public List<DTOPersonal> obtenerPersonalDisponible() {
-        return control.obtenerPersonalDisponible();
+        this.gestor = new GestorPropuesta(
+                ConfigPropuestaBO.getInstance(almacen, proveedorExterno),
+                PropuestaBO.getInstance(almacen, proveedorExterno));
     }
 
     @Override
     public void seleccionarServicios(int idServicio, boolean seleccionado) {
-        control.seleccionarServicios(idServicio, seleccionado);
+        for (DTOServicio s : gestor.solicitarServicios()) {
+            if (s.getIdServicio() == idServicio) {
+                s.setSeleccionado(seleccionado);
+                return;
+            }
+        }
     }
 
     @Override
     public void seleccionarEquipos(int idEquipo, int cantidad) {
-        control.seleccionarEquipos(idEquipo, cantidad);
+        for (DTOEquipo e : gestor.solicitarEquipos()) {
+            if (e.getIdEquipo() == idEquipo) {
+                e.setCantidadSeleccionada(cantidad);
+                return;
+            }
+        }
     }
 
     @Override
     public void seleccionarPersonal(int idPersonal, int cantidad) {
-        control.seleccionarPersonal(idPersonal, cantidad);
+        for (DTOPersonal p : gestor.solicitarPersonal()) {
+            if (p.getIdEspecialidad() == idPersonal) {
+                p.setCantidad(cantidad);
+                return;
+            }
+        }
     }
 
     @Override
     public boolean verificarSeleccionEquipo() {
-        return control.verificarSeleccionEquipo();
+        for (DTOEquipo e : gestor.solicitarEquipos()) {
+            if (e.getCantidadSeleccionada() > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public boolean verificarSeleccionPersonal() {
-        return control.verificarSeleccionPersonal();
+        for (DTOPersonal p : gestor.solicitarPersonal()) {
+            if (p.getCantidad() > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    public void enviarPropuestaHaciaCotizacion(String horarioMontaje, String horarioDesmontaje, String comentarios) {
-        control.enviarPropuestaHaciaCotizacion(horarioMontaje, horarioDesmontaje, comentarios);
+    public DTOPropuesta enviarPropuestaHaciaCotizacion(String horarioMontaje, String horarioDesmontaje, String comentarios) {
+        validarHorario(horarioMontaje);
+        validarHorario(horarioDesmontaje);
+        return gestor.solicitarPropuesta(null, horarioMontaje, horarioDesmontaje, comentarios);
+    }
+
+    //los horarios son opcionales pero si vienen deben ser HH:mm
+    private void validarHorario(String texto) {
+        if (texto == null || texto.trim().isEmpty()) {
+            return;
+        }
+        try {
+            LocalTime.parse(texto.trim());
+        } catch (DateTimeParseException ex) {
+            throw new IllegalArgumentException("Los horarios deben tener el formato HH:mm, por ejemplo 08:30.", ex);
+        }
     }
 }
