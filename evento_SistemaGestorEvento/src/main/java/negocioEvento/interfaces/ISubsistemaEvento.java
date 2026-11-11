@@ -9,6 +9,7 @@ import dto.DTOEvento;
 import dto.DTOLevantamiento;
 import dto.DTOLocalEvento;
 import dto.DTORecurso;
+import java.util.List;
 
 
 /**
@@ -24,4 +25,5 @@ public interface ISubsistemaEvento {
     public DTODetalleSolicitud registrarRecurso(DTODetalleSolicitud datos);
     public DTORecurso consultarRecurso(int idRecurso);
     public DTOLocalEvento consultarLocal(int idLocalEvento);
+    public List<DTOLocalEvento> obtenerLocalesDisponibles(DTOEvento evento, String tipoLocal);
 }
