@@ -28,6 +28,9 @@ public class ControlPresentacion {
     private DTODetalleCotizacion detalleCotizacion;
     private DTOLevantamiento levantamiento;
     private List<DTOPersonal> personalSeleccionado = new ArrayList<>();
+
+    
+    //nomas por el momento, controlPresentacion no debe conocer el almacen
     private final AlmacenDatos almacen = AlmacenDatos.getInstance();
     private final ProveedorExterno proveedorExterno = new ProveedorExterno();
     private DTODecisionCliente decisionCliente;

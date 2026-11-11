@@ -61,4 +61,9 @@ public class FachadaEvento implements ISubsistemaEvento {
     public DTOLocalEvento consultarLocal(int idLocalEvento) {
         return gestor.consultarLocal(idLocalEvento);
     }
+    
+    @Override
+    public List<DTOLocalEvento> obtenerLocalesDisponibles(DTOEvento evento, String tipoLocal) {
+        return gestor.obtenerLocalesDisponibles(evento, tipoLocal);
+    }
 }

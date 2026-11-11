@@ -49,83 +49,80 @@ public class GestorEventos {
             this.iReservaBO = new ReservaBO(this.almacen);
         }
 
-        public DTOCliente obtenerCliente(String telefono) {
-            return iClienteBO.consultarPorTelefono(telefono);
-        }
+    public DTOCliente obtenerCliente(String telefono) {
+        return iClienteBO.consultarPorTelefono(telefono);
+    }
 
-        public DTOCliente crearCliente(DTOCliente datos) {
-            return iClienteBO.guardar(datos);
-        }
+    public DTOCliente crearCliente(DTOCliente datos) {
+        return iClienteBO.guardar(datos);
+    }
 
-        public DTOEvento crearEvento(DTOEvento datos) {
-            if (validarDatosEvento(datos)) {
-                return iEventoBO.guardar(datos);
-            }
-            return null;
+    public DTOEvento crearEvento(DTOEvento datos) {
+        if (validarDatosEvento(datos)) {
+            return iEventoBO.guardar(datos);
         }
+        return null;
+    }
 
-        public boolean validarDatosEvento(DTOEvento datos) {
-            return datos != null && datos.getNumAsistentes() > 0;
-        }
+    public boolean validarDatosEvento(DTOEvento datos) {
+        return datos != null && datos.getNumAsistentes() > 0;
+    }
 
-        public DTOEvento consultarEvento(int idEvento) {
-            return iEventoBO.consultar(idEvento);
-        }
+    public DTOEvento consultarEvento(int idEvento) {
+        return iEventoBO.consultar(idEvento);
+    }
 
-        public DTOEvento solicitarInformacionEvento(int idEvento) {
-            return iEventoBO.consultar(idEvento);
-        }
+    public DTOEvento solicitarInformacionEvento(int idEvento) {
+        return iEventoBO.consultar(idEvento);
+    }
 
-        public DTORecurso obtenerRecurso(int idRecurso) {
-            return iRecursoBO.consultarRecurso(idRecurso);
-        }
+    public DTORecurso obtenerRecurso(int idRecurso) {
+        return iRecursoBO.consultarRecurso(idRecurso);
+    }
 
-        public DTODetalleSolicitud crearRecurso(DTODetalleSolicitud datos) {
-            return iDetalleSolicitudBO.crearDetalleSolicitud(datos);
-        }
+    public DTODetalleSolicitud crearRecurso(DTODetalleSolicitud datos) {
+        return iDetalleSolicitudBO.crearDetalleSolicitud(datos);
+    }
 
-        public void creaDetalleSolicitud(DTODetalleSolicitud datos) {
-            iDetalleSolicitudBO.crearDetalleSolicitud(datos);
-        }
+    public void creaDetalleSolicitud(DTODetalleSolicitud datos) {
+        iDetalleSolicitudBO.crearDetalleSolicitud(datos);
+    }
 
-        public DTOLevantamiento registrarLevantamiento(DTOLevantamiento datos) {
-            return iLevantamientoBO.guardar(datos);
-        }
+    public DTOLevantamiento registrarLevantamiento(DTOLevantamiento datos) {
+        return iLevantamientoBO.guardar(datos);
+    }
 
-        public DTOLocalEvento consultarLocal(int idLocalEvento) {
-            return iLocalEventoBO.consultar(idLocalEvento);
-        }
+    public DTOLocalEvento consultarLocal(int idLocalEvento) {
+        return iLocalEventoBO.consultar(idLocalEvento);
+    }
 
-        public boolean validarDatosLocal(DTOLocalEvento datos) {
-            return datos != null && datos.getCapacidad() > 0;
-        }
+    public boolean validarDatosLocal(DTOLocalEvento datos) {
+        return datos != null && datos.getCapacidad() > 0;
+    }
+    
+    public List<DTOLocalEvento> obtenerLocalesDisponibles(DTOEvento evento, String tipoLocal) {
+        if (evento == null || tipoLocal == null) return new ArrayList<>();
         
-        //estos 2 metodos de recomendacion se ven mas extensos porque son CU, los metodos anteriores son de CRUD donde
-        //la logica se hizo en los BOs, en el caso de realizar la lista de recomendaciones se necesita acceder a los BOs
-        //de las reservas y los locales
-        public List<DTOLocalEvento> obtenerLocalesDisponibles(DTOEvento evento, String tipoLocal) {
-            if (evento == null || tipoLocal == null) return new ArrayList<>();
-                List<DTOLocalEvento> localesCandidatos = iLocalEventoBO.obtenerLocalFiltrado(
-                        tipoLocal, evento.getNumAsistentes());
-                List<DTOReserva> reservasDelDia = iReservaBO.consultar(evento.getFechaEvento());
+        List<DTOLocalEvento> localesCandidatos = iLocalEventoBO.obtenerLocalFiltrado(tipoLocal, evento.getNumAsistentes());
+        List<DTOReserva> reservasDelDia = iReservaBO.consultar(evento.getFechaEvento());
 
-            return crearListaLocalEventos(localesCandidatos, reservasDelDia);
-        }
+        return crearListaLocalEventos(localesCandidatos, reservasDelDia);
+    }
 
-        private List<DTOLocalEvento> crearListaLocalEventos(List<DTOLocalEvento> localesCandidatos, List<DTOReserva> reservasDelDia) {
-            List<DTOLocalEvento> listaFinal = new ArrayList<>();
-                for (DTOLocalEvento local : localesCandidatos) {
-                    boolean estaOcupado = false;
-                    for (DTOReserva reserva : reservasDelDia) {
-                        if (reserva.getIdLocalEvento() == local.getIdLocalEvento()) {
-                            estaOcupado = true;
-                            break;
-                        }
-                    }
-                    if (!estaOcupado) {
-                        listaFinal.add(local);
-                    }
+    private List<DTOLocalEvento> crearListaLocalEventos(List<DTOLocalEvento> localesCandidatos, List<DTOReserva> reservasDelDia) {
+        List<DTOLocalEvento> listaFinal = new ArrayList<>();
+        for (DTOLocalEvento local : localesCandidatos) {
+            boolean estaOcupado = false;
+            for (DTOReserva reserva : reservasDelDia) {
+                if (reserva.getIdLocalEvento() == local.getIdLocalEvento()) {
+                    estaOcupado = true;
+                    break;
                 }
-            return listaFinal;
+            }
+            if (!estaOcupado) {
+                listaFinal.add(local);
+            }
         }
+        return listaFinal;
+    }
 }
