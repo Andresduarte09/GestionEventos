@@ -5,43 +5,76 @@
 package negocioPropuesta.control;
 
 import dto.DTOEquipo;
-import dto.DTOInventario;
 import dto.DTOPersonal;
 import dto.DTOServicio;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import negocioPropuesta.interfaces.IConfigPropuestaBO;
 
 /**
- *
- * @author Andres
+ * Gestor del subsistema de propuesta.
  */
 public class ControlPropuesta {
-     private DTOInventario seleccionActual; 
 
-    public List<DTOServicio> solicitarServicios() {
-        return null;
+    private final IConfigPropuestaBO configBO;
+
+    private LocalTime horarioMontaje;
+    private LocalTime horarioDesmontaje;
+    private String comentarios = "";
+
+    public ControlPropuesta(IConfigPropuestaBO configBO) {
+        this.configBO = configBO;
     }
 
-    public List<DTOEquipo> solicitarEquipos() {
-        return null;
+    public List<DTOServicio> consultarServiciosDisponibles() {
+        return configBO.consultarServicios();
     }
 
-    public List<DTOPersonal> solicitarPersonal() {
-        return null;
+    public List<DTOEquipo> obtenerEquiposDisponibles() {
+        return configBO.consultarEquipos();
     }
 
-    public boolean verificarSeleccion(DTOInventario seleccion) {
-        return false;
+    public List<DTOPersonal> obtenerPersonalDisponible() {
+        return configBO.consultarPersonal();
     }
 
-    public DTOInventario obtenerResumen(int idEvento) {
-        return null;
+    public void seleccionarServicios(int idServicio, boolean seleccionado) {
+        configBO.seleccionarServicio(idServicio, seleccionado);
     }
 
-    public void solicitarPropuesta(String folio, String horarioMontaje, String horarioDesmontaje, String comentarios) {
-        // Vacío
+    public void seleccionarEquipos(int idEquipo, int cantidad) {
+        configBO.seleccionarEquipo(idEquipo, cantidad);
     }
 
-    public void actualizarPropuesta(DTOInventario cambios) {
-        // Vacío
+    public void seleccionarPersonal(int idPersonal, int cantidad) {
+        configBO.seleccionarPersonal(idPersonal, cantidad);
+    }
+
+    public boolean verificarSeleccionEquipo() {
+        return configBO.haySeleccionEquipos();
+    }
+
+    public boolean verificarSeleccionPersonal() {
+        return configBO.haySeleccionPersonal();
+    }
+
+    public void enviarPropuestaHaciaCotizacion(String horarioMontaje, String horarioDesmontaje, String comentarios) {
+        LocalTime montaje = parsearHorario(horarioMontaje);
+        LocalTime desmontaje = parsearHorario(horarioDesmontaje);
+        this.horarioMontaje = montaje;
+        this.horarioDesmontaje = desmontaje;
+        this.comentarios = comentarios == null ? "" : comentarios.trim();
+    }
+
+    private LocalTime parsearHorario(String texto) {
+        if (texto == null || texto.trim().isEmpty()) {
+            return null;
+        }
+        try {
+            return LocalTime.parse(texto.trim());
+        } catch (DateTimeParseException ex) {
+            throw new IllegalArgumentException("Los horarios deben tener el formato HH:mm, por ejemplo 08:30.", ex);
+        }
     }
 }

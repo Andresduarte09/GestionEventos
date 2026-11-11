@@ -1,51 +1,68 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package negocioPropuesta.fachada;
 
+import com.mycompany.persistencia.AlmacenDatos;
 import dto.DTOEquipo;
 import dto.DTOPersonal;
-import dto.DTOPropuesta;
 import dto.DTOServicio;
-import java.util.ArrayList;
+import infraestructura.ProveedorExterno;
 import java.util.List;
+import negocioPropuesta.BO.ConfigPropuestaBO;
+import negocioPropuesta.control.ControlPropuesta;
+import negocioPropuesta.interfaces.ISubsistemaPropuesta;
 
 /**
- *
- * @author Andres
+ * Punto de entrada al subsistema de propuesta.
  */
-public class FachadaPropuesta {
-    
-    public List<DTOServicio> solicitarServicios() {
-        return null;
-    }
-    
-    public List<DTOEquipo> solicitarEquipos() {
-        return null;
+public class FachadaPropuesta implements ISubsistemaPropuesta {
+
+    private final ControlPropuesta control;
+
+    public FachadaPropuesta(AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
+        this.control = new ControlPropuesta(ConfigPropuestaBO.getInstance(almacen, proveedorExterno));
     }
 
-    public List<DTOPersonal> solicitarPersonal() {
-        return null;
+    @Override
+    public List<DTOServicio> consultarServiciosDisponibles() {
+        return control.consultarServiciosDisponibles();
     }
 
-    public void actualizarSeleccion(String categoria, String cantidades, int valor) {
-        
+    @Override
+    public List<DTOEquipo> obtenerEquiposDisponibles() {
+        return control.obtenerEquiposDisponibles();
     }
 
-    public boolean verificarSeleccion() {
-        return false;
-    }
-//no tenemos dto resumen aun lmao no lo ocupamos para presentacion pero ahora si
-//    public DTOResumen obtenerResumen() {
-//        return null;
-//    }
-
-    public void solicitarPropuesta(DTOPropuesta datos) {
-        
+    @Override
+    public List<DTOPersonal> obtenerPersonalDisponible() {
+        return control.obtenerPersonalDisponible();
     }
 
-    public void actualizarPropuesta(DTOPropuesta cambios) {
-        
+    @Override
+    public void seleccionarServicios(int idServicio, boolean seleccionado) {
+        control.seleccionarServicios(idServicio, seleccionado);
+    }
+
+    @Override
+    public void seleccionarEquipos(int idEquipo, int cantidad) {
+        control.seleccionarEquipos(idEquipo, cantidad);
+    }
+
+    @Override
+    public void seleccionarPersonal(int idPersonal, int cantidad) {
+        control.seleccionarPersonal(idPersonal, cantidad);
+    }
+
+    @Override
+    public boolean verificarSeleccionEquipo() {
+        return control.verificarSeleccionEquipo();
+    }
+
+    @Override
+    public boolean verificarSeleccionPersonal() {
+        return control.verificarSeleccionPersonal();
+    }
+
+    @Override
+    public void enviarPropuestaHaciaCotizacion(String horarioMontaje, String horarioDesmontaje, String comentarios) {
+        control.enviarPropuestaHaciaCotizacion(horarioMontaje, horarioDesmontaje, comentarios);
     }
 }
