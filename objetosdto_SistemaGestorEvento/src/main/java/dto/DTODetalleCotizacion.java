@@ -4,16 +4,12 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 /**
  *
  * @author lui
  */
 public class DTODetalleCotizacion {
+
     private int ID;
     private LocalTime horarioFases;
     List<DTOInventario> inventario = new ArrayList<>();
@@ -50,6 +46,16 @@ public class DTODetalleCotizacion {
     public void setImporte(float importe) {
         this.importe = importe;
     }
-    
-    
+
+    private int idVersion;
+
+    public int getIdVersion() {
+        return idVersion;
+    }
+
+    public void setIdVersion(int idVersion) {
+        this.idVersion = idVersion;
+        
+    }
+
 }

@@ -15,11 +15,12 @@ import java.util.Arrays;
  * @Author andres y marcelo
  */
 /**
- * Base de datos provisional en memoria, cuando se cierra la ejecucion no se guarda
+ * Base de datos provisional en memoria, cuando se cierra la ejecucion no se
+ * guarda
  */
 public class AlmacenDatos {
     //AHORA SE ESTA USANDO SINGLETON
-    
+
     private static AlmacenDatos instancia = null;
     private static final float IVA = 0.16f;
     private final List<DTOCliente> clientes = new ArrayList<>();
@@ -54,7 +55,7 @@ public class AlmacenDatos {
 
     private void cargarDatos() {
         cargarClientes();
-        cargarLocalesEvento();              
+        cargarLocalesEvento();
         cargarEventos();
         cargarDetallesSolicitud();
         cargarRecursos();
@@ -159,7 +160,7 @@ public class AlmacenDatos {
     private DTODetalleSolicitud crearDetalleSolicitud(int id, String categoria, String descripcion,
             String preferencias, int cantidad, String observaciones) {
         DTODetalleSolicitud d = new DTODetalleSolicitud();
-        d.setDetalleSolicitud(id);
+//        d.setDetalleSolicitud(id);
         d.setCategoriaSolicitada(categoria);
         d.setDescripcionSolicitud(descripcion);
         d.setPreferencias(preferencias);
@@ -227,17 +228,17 @@ public class AlmacenDatos {
     //Inventarios (solo los que quedan válidos)
     private void cargarInventarios() {
         // 0: Audio
-        inventario.add(new DTOInventario(listaDe(equipo(3), equipo(4), equipo(5), equipo(11)), 
-                                         listaDe(especialista(1)), 
-                                         listaDe(servicio(1)), 1));
+        inventario.add(new DTOInventario(listaDe(equipo(3), equipo(4), equipo(5), equipo(11)),
+                listaDe(especialista(1)),
+                listaDe(servicio(1)), 1));
         // 1: Alimentos y bebidas
-        inventario.add(new DTOInventario(listaDe(equipo(10)), 
-                                         listaDe(especialista(5), especialista(6)), 
-                                         listaDe(servicio(6)), 1));
+        inventario.add(new DTOInventario(listaDe(equipo(10)),
+                listaDe(especialista(5), especialista(6)),
+                listaDe(servicio(6)), 1));
         // 2: Mobiliario
-        inventario.add(new DTOInventario(listaDe(equipo(1), equipo(2)), 
-                                         listaDe(especialista(4)), 
-                                         listaDe(servicio(5)), 1));
+        inventario.add(new DTOInventario(listaDe(equipo(1), equipo(2)),
+                listaDe(especialista(4)),
+                listaDe(servicio(5)), 1));
     }
 
     private DTOEquipo equipo(int id) {
@@ -314,37 +315,59 @@ public class AlmacenDatos {
     private void cargarCotizaciones() {
         // Cotización 1 (Evento 1, Boda)
         cotizaciones.add(new DTOCotizacion(1, LocalDate.of(2026, 10, 18), "Pendiente"));
-        versionesCotizacion.add(crearVersion(1, 1, LocalDate.of(2026, 10, 18), "Reemplazada", "Versión inicial", 0f, 10000f));
-        versionesCotizacion.add(crearVersion(2, 2, LocalDate.of(2026, 10, 23), "Vigente", "Se aplicó descuento del 5%", 5f, 10000f));
+        versionesCotizacion.add(crearVersion(1, 1, LocalDate.of(2026, 10, 18), "Reemplazada", "Versión inicial", 0f, 10000f, 1));
+        versionesCotizacion.add(crearVersion(2, 2, LocalDate.of(2026, 10, 23), "Vigente", "Se aplicó descuento del 5%", 5f, 10000f, 1));
+
         decisionesCliente.add(new DTODecisionCliente(3, LocalDate.of(2026, 10, 21), "Modificaciones solicitadas", "Solicita aplicar un descuento"));
-        detallesCotizacion.add(crearDetalleCotizacion(1, LocalTime.of(10, 0), 4500f, inventario.get(0)));   // Audio
+        detallesCotizacion.add(crearDetalleCotizacion(1, LocalTime.of(10, 0), 4500f, inventario.get(0), 2));   // Audio
 
         // Cotización 2 (Evento 2, Graduación)
         cotizaciones.add(new DTOCotizacion(2, LocalDate.of(2026, 10, 8), "Aceptada"));
-        versionesCotizacion.add(crearVersion(3, 1, LocalDate.of(2026, 10, 8), "Aceptada", "Versión inicial", 0f, 25000f));
+
+        versionesCotizacion.add(crearVersion(3, 1, LocalDate.of(2026, 10, 8), "Aceptada", "Versión inicial", 0f, 25000f, 2));
         decisionesCliente.add(new DTODecisionCliente(1, LocalDate.of(2026, 10, 14), "Aceptada", "Cotización aprobada"));
-        detallesCotizacion.add(crearDetalleCotizacion(4, LocalTime.of(7, 0), 7000f, inventario.get(0)));    // Audio
+        detallesCotizacion.add(crearDetalleCotizacion(4, LocalTime.of(7, 0), 7000f, inventario.get(0), 3));    // Audio
 
         // Cotización 3 (Evento 4, Posada empresarial)
         cotizaciones.add(new DTOCotizacion(3, LocalDate.of(2026, 10, 12), "Rechazada"));
-        versionesCotizacion.add(crearVersion(4, 1, LocalDate.of(2026, 10, 12), "Rechazada", "Versión inicial", 10f, 18000f));
+        versionesCotizacion.add(crearVersion(4, 1, LocalDate.of(2026, 10, 12), "Rechazada", "Versión inicial", 10f, 18000f, 3));
         decisionesCliente.add(new DTODecisionCliente(2, LocalDate.of(2026, 10, 22), "Rechazada", "El presupuesto excede el límite de la empresa"));
-        detallesCotizacion.add(crearDetalleCotizacion(8, LocalTime.of(16, 0), 12000f, inventario.get(1)));  // Alimentos
-        detallesCotizacion.add(crearDetalleCotizacion(9, LocalTime.of(16, 30), 4000f, inventario.get(0)));  // Audio
+        detallesCotizacion.add(crearDetalleCotizacion(8, LocalTime.of(16, 0), 12000f, inventario.get(1), 4));  // Alimentos
+        detallesCotizacion.add(crearDetalleCotizacion(9, LocalTime.of(16, 30), 4000f, inventario.get(0), 4));  // Audio
     }
 
-    private DTOVersionCotizacion crearVersion(int id, int numero, LocalDate fecha, String estado,
-            String observaciones, float descuento, float subtotal) {
-        return new DTOVersionCotizacion(id, numero, fecha, estado, observaciones, descuento, subtotal, 0f);
+    private DTOVersionCotizacion crearVersion(
+            int id,
+            int numero,
+            LocalDate fecha,
+            String estado,
+            String observaciones,
+            float descuento,
+            float subtotal,
+            int idCotizacion) {
+
+        DTOVersionCotizacion version
+                = new DTOVersionCotizacion(
+                        id, numero, fecha, estado,
+                        observaciones, descuento, subtotal, 0f
+                );
+
+        version.setIdCotizacion(idCotizacion);
+
+        return version;
     }
 
-    private DTODetalleCotizacion crearDetalleCotizacion(int id, LocalTime horarioFases, float importe, DTOInventario inv) {
-        DTODetalleCotizacion d = new DTODetalleCotizacion();
-        d.setID(id);
-        d.setHorarioFases(horarioFases);
-        d.setImporte(importe);
-        d.setInventario(listaDe(inv));
-        return d;
+    private DTODetalleCotizacion crearDetalleCotizacion(int id, LocalTime horarioFases, float importe,
+            DTOInventario inv, int idVersion) {
+
+        DTODetalleCotizacion detalle = new DTODetalleCotizacion();
+        detalle.setID(id);
+        detalle.setHorarioFases(horarioFases);
+        detalle.setImporte(importe);
+        detalle.setInventario(listaDe(inv));
+        detalle.setIdVersion(idVersion);
+
+        return detalle;
     }
 
     //Getters
@@ -415,7 +438,7 @@ public class AlmacenDatos {
     public List<DTOOrdenServicio> getOrdenes() {
         return ordenes;
     }
-    
+
     public void registrarCliente(DTOCliente c) {
         this.clientes.add(c);
     }
@@ -432,7 +455,7 @@ public class AlmacenDatos {
         this.versionesCotizacion.add(v);
     }
 
-    public void registrarDecisionCliente(DTODecisionCliente d) { 
-        this.decisionesCliente.add(d); 
+    public void registrarDecisionCliente(DTODecisionCliente d) {
+        this.decisionesCliente.add(d);
     }
 }

@@ -7,6 +7,8 @@ package dto;
 import java.util.Objects;
 
 public class DTODetalleSolicitud {
+
+    private int idVersion;
     int idDetalleSolicitud;
     int idRecurso;
     String CategoriaSolicitada;
@@ -14,8 +16,10 @@ public class DTODetalleSolicitud {
     String preferencias;
     int cantidadEstimada;
     String observaciones;
+    private int idCotizacion;
 
-    public DTODetalleSolicitud() {}
+    public DTODetalleSolicitud() {
+    }
 
     public int getIdDetalleSolicitud() {
         return idDetalleSolicitud;
@@ -32,7 +36,7 @@ public class DTODetalleSolicitud {
     public void setIdRecurso(int idRecurso) {
         this.idRecurso = idRecurso;
     }
-    
+
     public String getCategoriaSolicitada() {
         return CategoriaSolicitada;
     }
@@ -73,6 +77,7 @@ public class DTODetalleSolicitud {
         this.observaciones = observaciones;
     }
 
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -96,8 +101,12 @@ public class DTODetalleSolicitud {
 
     @Override
     public String toString() {
-        return "DTODetalleSolicitud{" + "detalleSolicitud=" + idDetalleSolicitud + ", CategoriaSolicitada=" + CategoriaSolicitada + ", descripcionSolicitud=" + descripcionSolicitud + ", preferencias=" + preferencias + ", cantidadEstimada=" + cantidadEstimada + ", observaciones=" + observaciones + '}';
+        return "DTODetalleSolicitud{" + "detalleSolicitud=" + idDetalleSolicitud + ", "
+                + "CategoriaSolicitada=" + CategoriaSolicitada + ", descripcionSolicitud="
+                + descripcionSolicitud + ", preferencias=" + preferencias + ", cantidadEstimada="
+                + cantidadEstimada + ", observaciones=" + observaciones + '}';
     }
 
     
+
 }
