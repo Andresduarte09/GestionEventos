@@ -40,7 +40,7 @@ public class FachadaEvento implements ISubsistemaEvento {
 
     @Override
     public DTOEvento consultarInformacionEvento(int idEvento) {
-        return gestor.solicitarInformacionEvento(idEvento);
+        return gestor.consultarEvento(idEvento);
     }
 
     @Override
@@ -53,10 +53,9 @@ public class FachadaEvento implements ISubsistemaEvento {
     }
 
     @Override
-public void guardarRecursos(int idEvento) {
-    System.out.println("DEBUG: Llegué a la Fachada. Mandando al Gestor...");
-    gestor.guardarRecursos(idEvento);
-}
+    public void guardarRecursos(int idEvento) {
+        gestor.guardarRecursos(idEvento);
+    }
     
     @Override
     public DTODetalleSolicitud registrarRecurso(DTODetalleSolicitud datos) {

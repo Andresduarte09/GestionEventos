@@ -78,10 +78,6 @@ public class GestorEventos {
         return iEventoBO.consultar(idEvento);
     }
 
-    public DTOEvento solicitarInformacionEvento(int idEvento) {
-        return iEventoBO.consultar(idEvento);
-    }
-
     //expone el recurso a la ui
     public DTORecurso obtenerRecurso(int idRecurso) {
         return iRecursoBO.consultarRecurso(idRecurso);
@@ -109,7 +105,6 @@ public class GestorEventos {
     //falta que valide por cantidades del recurso en el almacen/bd, que no deje agregar mas recursos
     //de los que hay
     public void actualizarRecursosTemporal(String categoria, Map<Integer, Integer> cantidades) {
-        System.out.println("DEBUG: Actualizando Map desde la UI. Categoría: " + categoria + ". Cantidades: " + cantidades.size());
         seleccionRecursos.entrySet().removeIf(entry -> {
             DTORecurso r = iRecursoBO.consultarRecurso(entry.getKey());
             return r != null && r.getTipoRecurso().equalsIgnoreCase(categoria);
@@ -125,14 +120,6 @@ public class GestorEventos {
     }
     
     public void guardarRecursos(int idEvento) {
-        System.out.println("DEBUG: Entré al Gestor. ID Evento: " + idEvento); // <-- AGREGA ESTO
-    System.out.println("DEBUG: Tamaño del Map de selección: " + seleccionRecursos.size()); // <-- AGREGA ESTO
-    
-    if (seleccionRecursos.isEmpty()) {
-        System.out.println("DEBUG: El Map está vacío. No se guardará nada."); // <-- AGREGA ESTO
-        return;
-    }
-
         for (Map.Entry<Integer, Integer> entry : seleccionRecursos.entrySet()) {
             DTODetalleSolicitud detalle = new DTODetalleSolicitud();
             detalle.setIdEvento(idEvento);
@@ -143,7 +130,8 @@ public class GestorEventos {
         }
         seleccionRecursos.clear();
     }
-    public void creaDetalleSolicitud(DTODetalleSolicitud datos) {
+    
+    private void creaDetalleSolicitud(DTODetalleSolicitud datos) {
         iDetalleSolicitudBO.crearDetalleSolicitud(datos);
     }
 
