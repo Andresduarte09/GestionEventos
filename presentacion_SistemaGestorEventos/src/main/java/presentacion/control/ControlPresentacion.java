@@ -26,16 +26,16 @@ import negocioOrden.interfaces.ISubsistemaOrden;
  * @author lui
  */
 public class ControlPresentacion {
-    private ISubsistemaEvento fachadaEvento;
-    private ISubsistemaPropuesta fachadaPropuesta;
-    private ISubsistemaCotizacion fachadaCotizacion;
-    private ISubsistemaOrden fachadaOrden;
+    private ISubsistemaEvento subsistemaEvento;
+    private ISubsistemaPropuesta subsistemaPropuesta;
+    private ISubsistemaCotizacion subsistemaCotizacion;
+    private ISubsistemaOrden subsistemaOrden;
     
     private AlmacenDatos almacen;
     private ProveedorExterno proveedorExterno;
     
     
-    private JFrameRecursosEvento recursosEvento;
+    private JFrameRecursosEvento recursosFrmEvento;
     private Map<Integer, Integer> seleccionTemporalRecursos = new LinkedHashMap<>();
     private JFrameConfigurarPropuesta configurarPropuesta;
     private JFrameResumenCotizacion resumenCotizacion;
@@ -51,10 +51,10 @@ public class ControlPresentacion {
         this.proveedorExterno = new ProveedorExterno();
         
         //puede que en el futuro las fachadas ocupen mas peticiones conforme vayamos implementando
-        this.fachadaEvento = new FachadaEvento();
-        this.fachadaPropuesta = new FachadaPropuesta(this.almacen, this.proveedorExterno);       
-        this.fachadaCotizacion = new FachadaCotizacion();
-        this.fachadaOrden = new FachadaOrden(this.almacen);
+        this.subsistemaEvento = new FachadaEvento();
+        this.subsistemaPropuesta = new FachadaPropuesta(this.almacen, this.proveedorExterno);       
+        this.subsistemaCotizacion = new FachadaCotizacion();
+        this.subsistemaOrden = new FachadaOrden(this.almacen);
     }
     
  
@@ -125,7 +125,7 @@ public class ControlPresentacion {
             return false;
         }
         //crea el cliente a buscar si existe o no
-        DTOCliente existente = fachadaEvento.ingresarTelefono(telefono);
+        DTOCliente existente = subsistemaEvento.ingresarTelefono(telefono);
     
         if (existente != null) {
             iniciarRegistrarEvento(existente);
@@ -174,7 +174,7 @@ public class ControlPresentacion {
         this.cliente.setTelefono(telefono);
         this.cliente.setTelefonoAlt(telefonoAlt);
         
-        this.cliente = fachadaEvento.registrarCliente(this.cliente);
+        this.cliente = subsistemaEvento.registrarCliente(this.cliente);
 
         iniciarRegistrarEvento(this.cliente);
         return true;
@@ -238,7 +238,7 @@ public class ControlPresentacion {
         evento.setHoraInicio(hora);
         evento.setNumAsistentes(Integer.parseInt(asistentesTexto.trim()));
         
-        evento = fachadaEvento.registrarDatosEvento(evento);
+        evento = subsistemaEvento.registrarDatosEvento(evento);
 
         //llama al metodo que guarda y mueve pantalla
         registrarDatosEvento(evento);
@@ -253,17 +253,17 @@ public class ControlPresentacion {
 
     //RECURSOS EVENTO
     public void iniciarRecursosEvento() {
-        if (recursosEvento != null && recursosEvento.isDisplayable()) {
-            recursosEvento.setVisible(true);
+        if (recursosFrmEvento != null && recursosFrmEvento.isDisplayable()) {
+            recursosFrmEvento.setVisible(true);
         } else {
-            recursosEvento = new JFrameRecursosEvento(this);
-            recursosEvento.setVisible(true);
+            recursosFrmEvento = new JFrameRecursosEvento(this);
+            recursosFrmEvento.setVisible(true);
         }
     }
     
     //metodo para el panelCategoriaRecursos, va delegando
     public List<DTORecurso> obtenerCatalogoRecursos() {
-        return fachadaEvento.obtenerCatalogoRecursos();
+        return subsistemaEvento.obtenerCatalogoRecursos();
     }
     
     public void cancelarRecursosEvento() {
@@ -272,23 +272,23 @@ public class ControlPresentacion {
     
     //metodo actualizado para que limpie los recursos de la categoria para evitar seleccionados
     public void actualizarRecurso(String categoria, Map<Integer, Integer> cantidades) {
-       fachadaEvento.actualizarRecursosTemporal(categoria,cantidades);
+       subsistemaEvento.actualizarRecursosTemporal(categoria,cantidades);
     }
 
     //Paneles de la pantalla de recursos del evento
     private void mostrarPanelRecursos(String panel) {
-        if (recursosEvento != null) {
-            recursosEvento.navegarA(panel);
+        if (recursosFrmEvento != null) {
+            recursosFrmEvento.navegarA(panel);
         }
     }
     
     public void finalizarRegistroRecursos(String necesidadesExtra) {
         evento.setNecesidadesIniciales(necesidadesExtra);
         
-        fachadaEvento.guardarRecursos(evento.getIdEvento());
+        subsistemaEvento.guardarRecursos(evento.getIdEvento());
 
         //actualiza para traer la lista de detalleSolicitud
-        this.evento = fachadaEvento.consultarInformacionEvento(evento.getIdEvento());
+        this.evento = subsistemaEvento.consultarInformacionEvento(evento.getIdEvento());
 
         iniciarAnalisisEvaluacion();
     }
@@ -882,11 +882,11 @@ public class ControlPresentacion {
     public void cancelarEventoGuardandoRegistro() {       
         if (evento != null) {
             evento.setEstadoAtencion("Cancelado");
-            fachadaEvento.registrarDatosEvento(evento); 
+            subsistemaEvento.registrarDatosEvento(evento); 
         }
 
-        if (cliente != null && fachadaEvento.ingresarTelefono(cliente.getTelefono()) == null) {
-            fachadaEvento.registrarCliente(cliente); 
+        if (cliente != null && subsistemaEvento.ingresarTelefono(cliente.getTelefono()) == null) {
+            subsistemaEvento.registrarCliente(cliente); 
         }
 
         this.cliente = null;
