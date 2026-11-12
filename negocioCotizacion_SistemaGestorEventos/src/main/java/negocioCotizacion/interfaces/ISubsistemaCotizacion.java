@@ -8,7 +8,6 @@ import dto.DTOCotizacion;
  *
  * @author lui
  */
-public interface ISubsistemaCotizacion {
-    
+public interface ISubsistemaCotizacion {   
     DTOCotizacion calcularCotizacion(int idPropuesta);
 }

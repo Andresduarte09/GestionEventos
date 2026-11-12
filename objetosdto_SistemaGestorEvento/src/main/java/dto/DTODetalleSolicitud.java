@@ -9,8 +9,9 @@ import java.util.Objects;
 public class DTODetalleSolicitud {
 
     private int idVersion;
-    int idDetalleSolicitud;
-    int idRecurso;
+    private int idDetalleSolicitud;
+    private int idRecurso;
+    private int idEvento;
     String CategoriaSolicitada;
     String descripcionSolicitud;
     String preferencias;
@@ -37,6 +38,14 @@ public class DTODetalleSolicitud {
         this.idRecurso = idRecurso;
     }
 
+    public int getIdEvento() {
+        return idEvento;
+    }
+
+    public void setIdEvento(int idEvento) {
+        this.idEvento = idEvento;
+    }
+    
     public String getCategoriaSolicitada() {
         return CategoriaSolicitada;
     }

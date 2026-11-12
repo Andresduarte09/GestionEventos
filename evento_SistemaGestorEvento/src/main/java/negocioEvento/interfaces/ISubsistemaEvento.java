@@ -10,6 +10,7 @@ import dto.DTOLevantamiento;
 import dto.DTOLocalEvento;
 import dto.DTORecurso;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -22,9 +23,12 @@ public interface ISubsistemaEvento {
     public DTOEvento registrarDatosEvento(DTOEvento datos);
     public DTOEvento consultarInformacionEvento(int idEvento);
     public DTOLevantamiento registrarLevantamiento(DTOLevantamiento datos);
+    public List<DTORecurso> obtenerCatalogoRecursos();
     public DTODetalleSolicitud registrarRecurso(DTODetalleSolicitud datos);
-    public void guardarRecursos(List<DTODetalleSolicitud> detalles);
+    public void guardarRecursos(int idEvento);
     public DTORecurso consultarRecurso(int idRecurso);
     public DTOLocalEvento consultarLocal(int idLocalEvento);
     public List<DTOLocalEvento> obtenerLocalesDisponibles(DTOEvento evento, String tipoLocal);
+    public void actualizarRecursosTemporal(String categoria, Map<Integer, Integer> cantidades);
+    public Map<Integer, Integer> obtenerRecursosSeleccionados();
 }

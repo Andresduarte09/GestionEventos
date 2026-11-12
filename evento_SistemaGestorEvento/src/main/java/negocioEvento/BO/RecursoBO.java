@@ -6,6 +6,8 @@ package negocioEvento.BO;
 
 import com.mycompany.persistencia.AlmacenDatos;
 import dto.DTORecurso;
+import java.util.ArrayList;
+import java.util.List;
 import negocioEvento.interfaces.IRecursoBO;
 
 
@@ -35,5 +37,9 @@ public class RecursoBO implements IRecursoBO {
             }
         }
         return null;
+    }
+    @Override
+    public List<DTORecurso> obtenerTodosLosRecursos() {
+        return new ArrayList<>(almacen.getRecursos());
     }
 }

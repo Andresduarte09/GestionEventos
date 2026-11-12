@@ -8,8 +8,6 @@ package negocioOrden.gestor;
  *
  * @author Andres
  */
-import dto.DTOServicio;
-import java.util.ArrayList;
 import java.util.List;
 import negocioOrden.interfaces.IDecisionClienteBO;
 import negocioOrden.interfaces.IOrdenServicioBO;

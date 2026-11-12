@@ -4,6 +4,7 @@
  */
 package negocioEvento.interfaces;
 import dto.DTORecurso;
+import java.util.List;
 
 
 /**
@@ -12,5 +13,6 @@ import dto.DTORecurso;
  */
 public interface IRecursoBO {
     public DTORecurso crearRecurso(DTORecurso recurso); 
-    public DTORecurso consultarRecurso(int idRecurso);  
+    public DTORecurso consultarRecurso(int idRecurso); 
+    public List<DTORecurso> obtenerTodosLosRecursos(); 
 }

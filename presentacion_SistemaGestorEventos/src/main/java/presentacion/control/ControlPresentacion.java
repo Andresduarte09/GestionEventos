@@ -12,27 +12,52 @@ import java.time.LocalTime;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import negocioEvento.fachada.FachadaEvento;
+import negocioEvento.interfaces.ISubsistemaEvento;
+import negocioPropuesta.fachada.FachadaPropuesta;
+import negocioPropuesta.interfaces.ISubsistemaPropuesta;
+import negocioCotizacion.fachada.FachadaCotizacion;
+import negocioCotizacion.interfaces.ISubsistemaCotizacion;
+import negocioOrden.fachada.FachadaOrden;
+import negocioOrden.interfaces.ISubsistemaOrden;
 
 /**
  *
  * @author lui
  */
 public class ControlPresentacion {
-
+    private ISubsistemaEvento fachadaEvento;
+    private ISubsistemaPropuesta fachadaPropuesta;
+    private ISubsistemaCotizacion fachadaCotizacion;
+    private ISubsistemaOrden fachadaOrden;
+    
+    private AlmacenDatos almacen;
+    private ProveedorExterno proveedorExterno;
+    
+    
     private JFrameRecursosEvento recursosEvento;
-    private Map<String, Integer> seleccionTemporalRecursos = new LinkedHashMap<>();
+    private Map<Integer, Integer> seleccionTemporalRecursos = new LinkedHashMap<>();
     private JFrameConfigurarPropuesta configurarPropuesta;
     private JFrameResumenCotizacion resumenCotizacion;
     private DTOCotizacion cotizacion;
     private DTOVersionCotizacion versionCotizacion;
     private DTODetalleCotizacion detalleCotizacion;
-    private DTOLevantamiento levantamiento;
+    private DTOLevantamiento levantamiento; 
     private List<DTOPersonal> personalSeleccionado = new ArrayList<>();
 
+    public ControlPresentacion() {
+        //nomas por el momento, controlPresentacion no debe conocer el almacen
+        this.almacen = AlmacenDatos.getInstance();
+        this.proveedorExterno = new ProveedorExterno();
+        
+        //puede que en el futuro las fachadas ocupen mas peticiones conforme vayamos implementando
+        this.fachadaEvento = new FachadaEvento();
+        this.fachadaPropuesta = new FachadaPropuesta(this.almacen, this.proveedorExterno);       
+        this.fachadaCotizacion = new FachadaCotizacion();
+        this.fachadaOrden = new FachadaOrden(this.almacen);
+    }
     
-    //nomas por el momento, controlPresentacion no debe conocer el almacen
-    private final AlmacenDatos almacen = AlmacenDatos.getInstance();
-    private final ProveedorExterno proveedorExterno = new ProveedorExterno();
+ 
     private DTODecisionCliente decisionCliente;
     private List<DTOServicio> serviciosAceptados = new ArrayList<>();
     private LocalTime horarioMontajePropuesta;
@@ -49,7 +74,7 @@ public class ControlPresentacion {
         JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
         inicioSesion.setVisible(true);
     }
-
+    
     /*
     Consulta lo del almacen para mostrarlo unicamente
      */
@@ -91,9 +116,6 @@ public class ControlPresentacion {
     
     
     //METODOS DE INICIO DE SESION/REGISTRO DE CLIENTE
-    
-    
-    
     public boolean procesarTelefonoIngresado(String telefono) {
         if (!Validaciones.telefonoValido(telefono)) {
             JOptionPane.showMessageDialog(null,
@@ -103,9 +125,8 @@ public class ControlPresentacion {
             return false;
         }
         //crea el cliente a buscar si existe o no
-        DTOCliente existente = buscarClientePorTelefono(telefono);
-
-        //decide el flujo
+        DTOCliente existente = fachadaEvento.ingresarTelefono(telefono);
+    
         if (existente != null) {
             iniciarRegistrarEvento(existente);
         } else {
@@ -114,16 +135,6 @@ public class ControlPresentacion {
             mostrarFormularioCliente(nuevo);
         }
         return true;
-    }
-
-    //busca el cliente en el almacen actualmente para la comunicacion entre patnallas
-    private DTOCliente buscarClientePorTelefono(String telefono) {
-        for (DTOCliente c : almacen.getClientes()) {
-            if (c.getTelefono() != null && c.getTelefono().equals(telefono)) {
-                return c;
-            }
-        }
-        return null;
     }
 
     //muestra el frame para registrar cliente
@@ -157,12 +168,13 @@ public class ControlPresentacion {
             if (!Validaciones.telefonoValido(telefonoAlt)) {
                 errores.append("El teléfono alterno debe tener 10 dígitos numéricos.\n");
             }
-        }
-        
+        }      
         this.cliente.setNombre(nombre);
         this.cliente.setCorreo(correo);
         this.cliente.setTelefono(telefono);
         this.cliente.setTelefonoAlt(telefonoAlt);
+        
+        this.cliente = fachadaEvento.registrarCliente(this.cliente);
 
         iniciarRegistrarEvento(this.cliente);
         return true;
@@ -225,6 +237,8 @@ public class ControlPresentacion {
         evento.setFechaEvento(fecha);
         evento.setHoraInicio(hora);
         evento.setNumAsistentes(Integer.parseInt(asistentesTexto.trim()));
+        
+        evento = fachadaEvento.registrarDatosEvento(evento);
 
         //llama al metodo que guarda y mueve pantalla
         registrarDatosEvento(evento);
@@ -237,43 +251,7 @@ public class ControlPresentacion {
         iniciarSesion();
     }
 
-    
-    
-    
     //RECURSOS EVENTO
-    
-    //se vuelve crear la logica de dentro cuando lo cambie de subsistema
-    public void ingresarRecurso(String necesidadesExtra) {
-        evento.setNecesidadesIniciales(necesidadesExtra);
-
-        List<DTODetalleSolicitud> detalles = new java.util.ArrayList<>();
-
-        for (Map.Entry<String, Integer> entry : seleccionTemporalRecursos.entrySet()) {
-            String[] partes = entry.getKey().split("\\|");
-            //el if es para asegurar formato correcto
-            if (partes.length == 2) {
-                DTODetalleSolicitud detalle = new DTODetalleSolicitud();
-                //inserta en el arreglo la categoria de la comida y la pone en indice 0
-                detalle.setCategoriaSolicitada(partes[0]);
-                //pone en conjunto a la categoria, el recurso que se selecciono de dicha categoria en indice 1
-                detalle.setDescripcionSolicitud(partes[1]);
-                detalle.setCantidadEstimada(entry.getValue());
-                detalles.add(detalle);
-                //termina quedando algo como: Comida|Sopa fría
-            }
-        }
-
-        //asigna los detalles de la solicitud al evento
-        evento.setDetallesSolicitud(detalles);
-        almacen.registrarEvento(evento);
-        //termina guardando el cliente si es nuevo
-        //lo pongo aqui de una vez pero probablemente se deba poner a la hora de crear la orden final
-        if (cliente != null && buscarClientePorTelefono(cliente.getTelefono()) == null) {
-             almacen.registrarCliente(cliente);
-        }
-        iniciarAnalisisEvaluacion();
-    }
-    
     public void iniciarRecursosEvento() {
         if (recursosEvento != null && recursosEvento.isDisplayable()) {
             recursosEvento.setVisible(true);
@@ -283,19 +261,18 @@ public class ControlPresentacion {
         }
     }
     
+    //metodo para el panelCategoriaRecursos, va delegando
+    public List<DTORecurso> obtenerCatalogoRecursos() {
+        return fachadaEvento.obtenerCatalogoRecursos();
+    }
+    
     public void cancelarRecursosEvento() {
         iniciarRegistrarEvento(this.cliente);
     }
     
     //metodo actualizado para que limpie los recursos de la categoria para evitar seleccionados
-    public void actualizarRecurso(String categoria, Map<String, Integer> cantidades) {
-        //borra registros
-        seleccionTemporalRecursos.entrySet().removeIf(entry -> entry.getKey().startsWith(categoria + "|"));
-
-        //agrega nuevos
-        for (java.util.Map.Entry<String, Integer> entry : cantidades.entrySet()) {
-            seleccionTemporalRecursos.put(categoria + "|" + entry.getKey(), entry.getValue());
-        }
+    public void actualizarRecurso(String categoria, Map<Integer, Integer> cantidades) {
+       fachadaEvento.actualizarRecursosTemporal(categoria,cantidades);
     }
 
     //Paneles de la pantalla de recursos del evento
@@ -305,6 +282,20 @@ public class ControlPresentacion {
         }
     }
     
+    public void finalizarRegistroRecursos(String necesidadesExtra) {
+        evento.setNecesidadesIniciales(necesidadesExtra);
+        
+        fachadaEvento.guardarRecursos(evento.getIdEvento());
+
+        //actualiza para traer la lista de detalleSolicitud
+        this.evento = fachadaEvento.consultarInformacionEvento(evento.getIdEvento());
+
+        iniciarAnalisisEvaluacion();
+    }
+    
+
+    
+    //METODOS DE ANALISIS EVALUACION AQUI INICIA F2
     public void iniciarAnalisisEvaluacion() {
         if (analisisEvaluacion != null && analisisEvaluacion.isDisplayable()) {
             analisisEvaluacion.setVisible(true);
@@ -313,9 +304,6 @@ public class ControlPresentacion {
             analisisEvaluacion.setVisible(true);
         }
     }
-
-    
-    //METODOS DE ANALISIS EVALUACION AQUI INICIA F2
     
     public void cancelarAnalisisEvaluacion() {
         iniciarRecursosEvento();
@@ -330,25 +318,8 @@ public class ControlPresentacion {
         iniciarAnalisisEvaluacion();
     }
 
-    //actualizar cuando haya logica de reservas 
-    public List<DTOLocalEvento> recomendarLocales(DTOEvento evento) {
-        List<DTOLocalEvento> recomendados = new ArrayList<>();
-        if (evento == null) {
-            return recomendados;
-        }
-
-        for (DTOLocalEvento local : almacen.getLocalesEvento()) {
-            //mas logica comentareada para su posible uso en negocio, 
-//            if (local.getCapacidad() >= evento.getNumAsistentes()) {
-                recomendados.add(local);
-//            }
-        }
-        recomendados.sort((a, b) -> Integer.compare(a.getCapacidad(), b.getCapacidad()));
-        return recomendados;
-    }
-
-    //METODOS F3 PROPUESTA
-     
+   
+    //METODOS F3 PROPUESTA   
     //Aqui va la inicializacion de la pantalla de configuracion de propuesta
     //metodo modificado para agregar la validacion isDisplayable para evitar ventanas duplicadas
     public void iniciarConfigurarPropuesta() {
@@ -416,6 +387,7 @@ public class ControlPresentacion {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_EQUIPO);
     }
     
+    //MOVER AL SUBSISTEMA Y BORRAR
     public boolean procesarSeleccionCantidadEquipo(int idEquipo, String texto) {
         if (!Validaciones.esEnteroPositivo(texto)) return false;
         int cantidad = Integer.parseInt(texto.trim());
@@ -452,6 +424,7 @@ public class ControlPresentacion {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_PERSONAL);
     }
     
+    //MOVER AL SUBSISTEMA Y BORRAR
     public boolean actualizarCantidadPersonal(int idEspecialidad, String texto) {
         if (!Validaciones.noEsNegativo(texto)) {
             return false; 
@@ -516,7 +489,7 @@ public class ControlPresentacion {
         mostrarResumenCotizacion();
         resumenCotizacion.setVisible(true);
     }
-
+    
     public void mostrarResumenCotizacion() {
         if (resumenCotizacion == null) {
             return;
@@ -552,6 +525,7 @@ public class ControlPresentacion {
         return inicio + " - " + fin;
     }
 
+    //MOVER AL SUBSISTEMA Y BORRAR
     private void generarCotizacion() {
         int folio = almacen.getCotizaciones().size() + 1;
         int idVersion = almacen.getVersionesCotizacion().size() + 1;
@@ -561,6 +535,7 @@ public class ControlPresentacion {
                 "Pendiente", "Versión inicial", 0f, 20000f, 0f);
     }
 
+    //MOVER AL SUBSISTEMA Y BORRAR
     private List<String> serviciosSeleccionados() {
         List<String> nombres = new ArrayList<>();
         for (DTOServicio s : consultarServiciosDisponibles()) {
@@ -570,7 +545,8 @@ public class ControlPresentacion {
         }
         return nombres;
     }
-
+    
+    //MOVER AL SUBSISTEMA Y BORRAR
     private List<String> equiposSeleccionados() {
         List<String> nombres = new ArrayList<>();
         for (DTOEquipo e : consultarTodosLosEquipos()) {
@@ -581,6 +557,7 @@ public class ControlPresentacion {
         return nombres;
     }
 
+    //MOVER AL SUBSISTEMA Y BORRAR
     private List<String> personalSeleccionado() {
         List<String> nombres = new ArrayList<>();
         for (DTOPersonal p : obtenerPersonalDisponible()) {
@@ -596,7 +573,8 @@ public class ControlPresentacion {
         generarOrden.setVisible(true);
     }
 
-        public List<String> obtenerServiciosCotizadosConPrecio() {
+    //MOVER AL SUBSISTEMA Y BORRAR
+    public List<String> obtenerServiciosCotizadosConPrecio() {
              List<String> resultado = new ArrayList<>();
 
         for (DTOServicio servicio : consultarServiciosDisponibles()) {
@@ -637,6 +615,7 @@ public class ControlPresentacion {
 //        }
 //    }
     
+    //MOVER AL SUBSISTEMA Y BORRAR
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
 
         if (decision == null || decision.equals("Selecciona una decisión")) {
@@ -725,6 +704,8 @@ public class ControlPresentacion {
 
         return true;
     }
+    
+    //MOVER AL SUBSISTEMA Y BORRAR
     private String obtenerNombresServiciosAceptados() {
 
         List<String> nombres = new ArrayList<>();
@@ -736,6 +717,7 @@ public class ControlPresentacion {
         return String.join(", ", nombres);
     }
     
+    //MOVER AL SUBSISTEMA Y BORRAR
     private void guardarDecisionCliente(String decision, String observaciones) {
 
         int nuevoID = 1;
@@ -751,6 +733,7 @@ public class ControlPresentacion {
         almacen.registrarDecisionCliente(nuevaDecision);
     }
     
+    //MOVER AL SUBSISTEMA Y BORRAR
     private void registrarCotizacionEnAlmacen() {
 
         if (cotizacion != null && !almacen.getCotizaciones().contains(cotizacion)) {
@@ -768,6 +751,7 @@ public class ControlPresentacion {
         return new ArrayList<>(serviciosAceptados);
     }
 
+    //MOVER AL SUBSISTEMA Y BORRAR
     public boolean verificarSeleccionServicios() {
         for (DTOServicio s : consultarServiciosDisponibles()) {
             if (s.isSeleccionado()) {
@@ -777,6 +761,7 @@ public class ControlPresentacion {
         return false;
     }
 
+    //MOVER AL SUBSISTEMA Y BORRAR
     //Este metodo verifica si se selecciono al menos un equipo
     public boolean verificarSeleccionEquipos() {
         for (DTOEquipo e : consultarTodosLosEquipos()) {
@@ -786,7 +771,8 @@ public class ControlPresentacion {
         }
         return false;
     }
-
+    
+    //MOVER AL SUBSISTEMA Y BORRAR
     public void seleccionarEquipos(int idEquipo, int cantidad) {
         for (DTOEquipo e : consultarTodosLosEquipos()) {
             if (e.getIdEquipo() == idEquipo) {
@@ -796,6 +782,7 @@ public class ControlPresentacion {
         }
     }
 
+    //MOVER AL SUBSISTEMA Y BORRAR
     public boolean verificarSeleccionPersonal() {
         for (DTOPersonal p : obtenerPersonalDisponible()) {
             if (p.getCantidad() > 0) {
@@ -805,6 +792,7 @@ public class ControlPresentacion {
         return false;
     }
 
+    //MOVER AL SUBSISTEMA Y BORRAR
     public boolean enviarPropuestaHaciaCotizacion(String horarioMontaje, String horarioDesmontaje, String comentarios) {
         LocalTime montaje = null;
         LocalTime desmontaje = null;
@@ -850,6 +838,7 @@ public class ControlPresentacion {
         return Validaciones.noEsNegativo(texto);
     }
 
+    //ES VALIDACION
     public boolean esCantidadEquipoValida(int idEquipo, String texto) {
         for (DTOEquipo e : consultarTodosLosEquipos()) {
             if (e.getIdEquipo() == idEquipo) {
@@ -860,6 +849,7 @@ public class ControlPresentacion {
         return false;
     }
 
+    //MOVER AL SUBSISTEMA Y BORRAR
     public List<DTOEquipo> buscarEquiposExternos(String texto) {
         List<DTOEquipo> resultado = new ArrayList<>();
         for (DTOEquipo e : consultarEquiposExternos()) {
@@ -869,7 +859,7 @@ public class ControlPresentacion {
         }
         return resultado;
     }
-
+    //MOVER AL SUBSISTEMA Y BORRAR
     public void seleccionarPersonal(int idPersonal, int cantidad) {
         for (DTOPersonal p : almacen.getPersonal()) {
             if (p.getIdEspecialidad() == idPersonal) {
@@ -878,7 +868,7 @@ public class ControlPresentacion {
             }
         }
     }
-
+    //MOVER AL SUBSISTEMA Y BORRAR
     public void seleccionarServicios(int idServicio, boolean seleccionado) {
         for (DTOServicio s : almacen.getServicios()) {
             if (s.getIdServicio() == idServicio) {
@@ -892,17 +882,19 @@ public class ControlPresentacion {
     public void cancelarEventoGuardandoRegistro() {       
         if (evento != null) {
             evento.setEstadoAtencion("Cancelado");
-            almacen.registrarEvento(evento); 
+            fachadaEvento.registrarDatosEvento(evento); 
         }
 
-        if (cliente != null && buscarClientePorTelefono(cliente.getTelefono()) == null) {
-            almacen.registrarCliente(cliente);
+        if (cliente != null && fachadaEvento.ingresarTelefono(cliente.getTelefono()) == null) {
+            fachadaEvento.registrarCliente(cliente); 
         }
+
         this.cliente = null;
         this.evento = null;
         iniciarSesion();
     }
     
+    //MOVER AL SUBSISTEMA Y BORRAR
     public void generarOrdenServicio() {
         int nuevoId = almacen.getOrdenes().size() + 1;
         DTOOrdenServicio orden = new DTOOrdenServicio(

@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -31,10 +31,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import presentacion.control.ControlPresentacion;
+import dto.DTORecurso; 
 
 /**
- * Panel general padre que da la estructura general de los paneles de los demas recursos
- * @author andres
+ * 
+ * @author Andres
  */
 public abstract class PanelCategoriaRecursos extends JPanel {
 
@@ -51,7 +52,6 @@ public abstract class PanelCategoriaRecursos extends JPanel {
     private final List<TarjetaElemento> tarjetas = new ArrayList<>();
     private final String tituloCategoria;
 
-    //constructor que arma la UI base de todas las categorias, en el cual las subclases aportan los datos
     protected PanelCategoriaRecursos(ControlPresentacion control, String titulo, String carpetaImagenes, String[][] elementos){
         this.control = control;
         this.carpetaImagenes = carpetaImagenes;
@@ -76,9 +76,16 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         pnlNorte.setBorder(BorderFactory.createEmptyBorder(10, 10, 4, 10));
         pnlNorte.add(lblTitulo, BorderLayout.NORTH);
         pnlNorte.add(pnlTipo, BorderLayout.CENTER);
-
+        
+        List<DTORecurso> catalogo = control.obtenerCatalogoRecursos();
+        
         for(String[] elemento : elementos){
-            tarjetas.add(new TarjetaElemento(elemento[0], elemento[1], cargarImagen(elemento[0]), this));
+            String nombre = elemento[0];
+            String tipo = elemento[1];
+            
+            int idRecurso = obtenerIdDeRecurso(catalogo, nombre);
+            
+            tarjetas.add(new TarjetaElemento(idRecurso, nombre, tipo, cargarImagen(nombre), this));
         }
         
         List<String> tipos = new ArrayList<>();
@@ -123,12 +130,20 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         add(scroll, BorderLayout.CENTER);
         add(pnlSur, BorderLayout.SOUTH);
         
-        
         mostrarElementos();
     }
 
-    //muestra los recursos por su tipo, viene por defecto Todos, pero se puede cambiar para filtrar
-    //y elegir unicamente de un tipo en especifico
+    private int obtenerIdDeRecurso(List<DTORecurso> catalogo, String nombre) {
+        if (catalogo != null) {
+            for (DTORecurso r : catalogo) {
+                if (r.getNombre().equalsIgnoreCase(nombre)) {
+                    return r.getIdRecurso();
+                }
+            }
+        }
+        return -1; 
+    }
+
     private void mostrarElementos(){
         String tipo = (String) cmbTipo.getSelectedItem();
         pnlElementos.removeAll();
@@ -141,12 +156,11 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         pnlElementos.repaint();
     }
 
-    //se encarga de obtener la cantidad de recursos que se han seleccionado 
-    public Map<String, Integer> getCantidades(){
-        Map<String, Integer> cantidades = new LinkedHashMap<>();
+    public Map<Integer, Integer> getCantidades(){
+        Map<Integer, Integer> cantidades = new LinkedHashMap<>();
         for (TarjetaElemento tarjeta : tarjetas){
             if (tarjeta.cantidad > 0){
-                cantidades.put(tarjeta.nombre, tarjeta.cantidad);
+                cantidades.put(tarjeta.idRecurso, tarjeta.cantidad);
             }
         }
         return cantidades;
@@ -156,7 +170,6 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         this.control.actualizarRecurso(this.tituloCategoria, getCantidades());
    }
     
-    //busca la imagen para luego cargarla, de no encontrar solo da un lugar vacio con Sin imagen (luego se añadiran)
     private Icon cargarImagen(String nombre){
         URL url = getClass().getResource("/imagenes/" + carpetaImagenes + "/" + aArchivo(nombre) + ".png");
         if (url != null){
@@ -180,18 +193,15 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         return new ImageIcon(marcador);
     }
 
-    //sirve solo para encontrar las imágenes sin escribir a mano el nombre de cada archivo
-    //convierte el nombre que se muestra  el nombre del archivo para evitar problemas con acentos y que sea mas consistente
-    //es provisional hasta que se conecte a una BD y no haya complicaciones con los nombres a la hora de manipular imagenes
     private static String aArchivo(String texto){
         String sinAcentos = Normalizer.normalize(texto, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
         return sinAcentos.toLowerCase().replaceAll("[^a-z0-9]+", "_").replaceAll("^_|_$", "");
     }
 
-    //tarjeta que encapsula el recurso y sus datos para la manipulacion del asesor
     private static class TarjetaElemento extends JPanel{
 
         private static final int MAXIMO = 99;
+        private final int idRecurso; // 🚨 CAMBIO 6: Nuevo atributo para guardar el ID
         private final String nombre;
         private final String tipo;
         private final JLabel lblCantidad = new JLabel("0", JLabel.CENTER);
@@ -200,7 +210,8 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         private int cantidad = 0;
         private final PanelCategoriaRecursos panelPadre;
         
-        TarjetaElemento(String nombre, String tipo, Icon imagen, PanelCategoriaRecursos panelPadre){
+        TarjetaElemento(int idRecurso, String nombre, String tipo, Icon imagen, PanelCategoriaRecursos panelPadre){
+            this.idRecurso = idRecurso;
             this.nombre = nombre;
             this.tipo = tipo;
             this.panelPadre = panelPadre;
@@ -250,7 +261,6 @@ public abstract class PanelCategoriaRecursos extends JPanel {
             }
         }
         
-
         private void actualizar() {
             lblCantidad.setText(String.valueOf(cantidad));
             btnMenos.setEnabled(cantidad > 0);
@@ -258,7 +268,6 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         }
     }
 
-    //botones para agregar o restar recurso
     private static class BotonMasMenos extends JButton{
 
         private final boolean esMas;

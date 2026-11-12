@@ -16,6 +16,11 @@
             <artifactId>persistencia</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.equipoGestionEventos</groupId>
+            <artifactId>presentacion_SistemaGestorEventos</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

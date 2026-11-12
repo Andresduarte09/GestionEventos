@@ -14,7 +14,9 @@ import dto.DTOLocalEvento;
 import dto.DTORecurso;
 import dto.DTOReserva;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import negocioEvento.BO.*;
 import negocioEvento.interfaces.*;
 
@@ -34,7 +36,11 @@ public class GestorEventos {
     private ILevantamientoBO iLevantamientoBO;
     private IDetalleSolicitudBO iDetalleSolicitudBO;
     private IReservaBO iReservaBO;
+    
+    //id -> cantidad
+    private Map<Integer, Integer> seleccionRecursos = new LinkedHashMap<>();
 
+    
     public GestorEventos() {
         //se hizo una inyeccion de dependencias con singleton aqui, de esta manera cuando se cambie la BD, solo
         //se ocupa cambiar el constructor y no todos los BO
@@ -76,14 +82,67 @@ public class GestorEventos {
         return iEventoBO.consultar(idEvento);
     }
 
+    //expone el recurso a la ui
     public DTORecurso obtenerRecurso(int idRecurso) {
         return iRecursoBO.consultarRecurso(idRecurso);
     }
-
+    //obtiene todos los recursos
+    public List<DTORecurso> obtenerCatalogoRecursos() {
+        return iRecursoBO.obtenerTodosLosRecursos();
+    }
+    //valida que existe para luego crear el DetalleSolicitud
     public DTODetalleSolicitud crearRecurso(DTODetalleSolicitud datos) {
-        return iDetalleSolicitudBO.crearDetalleSolicitud(datos);
+        if (datos == null) return null;
+
+        DTORecurso recursoValidado = iRecursoBO.consultarRecurso(datos.getIdRecurso());
+        if (recursoValidado != null) {
+            datos.setCategoriaSolicitada(recursoValidado.getTipoRecurso());
+            datos.setDescripcionSolicitud(recursoValidado.getNombre());
+
+            creaDetalleSolicitud(datos);
+            return datos;
+        }
+        return null;
     }
 
+    //guarda los recursos que seleccione el usuario en un map (cuando el asesor le da a -+)
+    //falta que valide por cantidades del recurso en el almacen/bd, que no deje agregar mas recursos
+    //de los que hay
+    public void actualizarRecursosTemporal(String categoria, Map<Integer, Integer> cantidades) {
+        System.out.println("DEBUG: Actualizando Map desde la UI. Categoría: " + categoria + ". Cantidades: " + cantidades.size());
+        seleccionRecursos.entrySet().removeIf(entry -> {
+            DTORecurso r = iRecursoBO.consultarRecurso(entry.getKey());
+            return r != null && r.getTipoRecurso().equalsIgnoreCase(categoria);
+        });
+
+        // Agregamos los nuevos IDs con sus cantidades
+        seleccionRecursos.putAll(cantidades);
+    }
+
+    //si el usuario regresa a la UI, recupera el borrador y lo muestra
+    public Map<Integer, Integer> obtenerRecursosSeleccionados() {
+        return seleccionRecursos;
+    }
+    
+    public void guardarRecursos(int idEvento) {
+        System.out.println("DEBUG: Entré al Gestor. ID Evento: " + idEvento); // <-- AGREGA ESTO
+    System.out.println("DEBUG: Tamaño del Map de selección: " + seleccionRecursos.size()); // <-- AGREGA ESTO
+    
+    if (seleccionRecursos.isEmpty()) {
+        System.out.println("DEBUG: El Map está vacío. No se guardará nada."); // <-- AGREGA ESTO
+        return;
+    }
+
+        for (Map.Entry<Integer, Integer> entry : seleccionRecursos.entrySet()) {
+            DTODetalleSolicitud detalle = new DTODetalleSolicitud();
+            detalle.setIdEvento(idEvento);
+            detalle.setIdRecurso(entry.getKey());
+            detalle.setCantidadEstimada(entry.getValue());
+
+            crearRecurso(detalle);
+        }
+        seleccionRecursos.clear();
+    }
     public void creaDetalleSolicitud(DTODetalleSolicitud datos) {
         iDetalleSolicitudBO.crearDetalleSolicitud(datos);
     }
@@ -98,30 +157,6 @@ public class GestorEventos {
 
     public boolean validarDatosLocal(DTOLocalEvento datos) {
         return datos != null && datos.getCapacidad() > 0;
-    }
-    
-   
-    public void guardarRecursos(List<DTODetalleSolicitud> detalles) {
-        if (detalles == null || detalles.isEmpty()) {
-            return;
-        }
-
-        for (DTODetalleSolicitud detalle : detalles) {
-            if (validarRecursos(detalle)) {
-                iDetalleSolicitudBO.crearDetalleSolicitud(detalle);
-            }
-        }
-    }
-
-    //por el momento solo valida que exista
-    private boolean validarRecursos(DTODetalleSolicitud detalle) {
-        if (detalle == null) {
-            return false;
-        }
-
-        DTORecurso recursoValidado = iRecursoBO.consultarRecurso(detalle.getIdRecurso());
-        
-        return recursoValidado != null;
     }
     
     public List<DTOLocalEvento> obtenerLocalesDisponibles(DTOEvento evento, String tipoLocal) {

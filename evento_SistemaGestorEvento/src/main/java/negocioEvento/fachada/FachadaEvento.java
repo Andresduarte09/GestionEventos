@@ -6,6 +6,7 @@ package negocioEvento.fachada;
 
 import dto.*;
 import java.util.List;
+import java.util.Map;
 import negocioEvento.gestor.GestorEventos;
 import negocioEvento.interfaces.ISubsistemaEvento;
 
@@ -46,11 +47,16 @@ public class FachadaEvento implements ISubsistemaEvento {
     public DTOLevantamiento registrarLevantamiento(DTOLevantamiento datos) {
         return gestor.registrarLevantamiento(datos);
     }
-    
     @Override
-    public void guardarRecursos(List<DTODetalleSolicitud> detalles) {
-        gestor.guardarRecursos(detalles);
+    public List<DTORecurso> obtenerCatalogoRecursos() {
+        return gestor.obtenerCatalogoRecursos();
     }
+
+    @Override
+public void guardarRecursos(int idEvento) {
+    System.out.println("DEBUG: Llegué a la Fachada. Mandando al Gestor...");
+    gestor.guardarRecursos(idEvento);
+}
     
     @Override
     public DTODetalleSolicitud registrarRecurso(DTODetalleSolicitud datos) {
@@ -70,5 +76,15 @@ public class FachadaEvento implements ISubsistemaEvento {
     @Override
     public List<DTOLocalEvento> obtenerLocalesDisponibles(DTOEvento evento, String tipoLocal) {
         return gestor.obtenerLocalesDisponibles(evento, tipoLocal);
+    }
+    
+    @Override
+    public void actualizarRecursosTemporal(String categoria, Map<Integer, Integer> cantidades) {
+        gestor.actualizarRecursosTemporal(categoria, cantidades);
+    }
+
+    @Override
+    public Map<Integer, Integer> obtenerRecursosSeleccionados() {
+        return gestor.obtenerRecursosSeleccionados();
     }
 }
