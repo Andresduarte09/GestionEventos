@@ -205,11 +205,11 @@ public class AlmacenDatos {
         equipos.add(new DTOEquipo(11, "Cableado y soportes", 15, 0));
 
         // id, especialidad, cantidad, horas de montaje, horas de operación, horas de desmontaje
-        personal.add(new DTOPersonal(1, "Técnico de audio", 3, 2, 5, 1));
-        personal.add(new DTOPersonal(4, "Montador", 6, 3, 0, 2));
-        personal.add(new DTOPersonal(5, "Cocinero", 3, 0, 6, 0));
-        personal.add(new DTOPersonal(6, "Mesero", 10, 0, 6, 0));
-        personal.add(new DTOPersonal(7, "Coordinador de evento", 2, 1, 6, 1));
+        personal.add(new DTOPersonal(1, "Técnico de audio", 0, 2, 5, 1));
+        personal.add(new DTOPersonal(4, "Montador", 0, 3, 0, 2));
+        personal.add(new DTOPersonal(5, "Cocinero", 0, 0, 6, 0));
+        personal.add(new DTOPersonal(6, "Mesero", 0, 0, 6, 0));
+        personal.add(new DTOPersonal(7, "Coordinador de evento", 0, 1, 6, 1));
 
         // Solo se mantienen servicios que no son de las categorías eliminadas
         servicios.add(new DTOServicio(1, "Audio", "Servicio de audio para evento", false, false, "Sin observaciones"));
@@ -222,7 +222,6 @@ public class AlmacenDatos {
         servicios.add(new DTOServicio(12, "Coordinación", "Planeación y logística general durante el evento", false, false, "Incluye un coordinador principal"));
         servicios.add(new DTOServicio(13, "Pirotecnia", "Efectos especiales y fuegos artificiales seguros", false, false, "Requiere permisos especiales del lugar"));
         servicios.add(new DTOServicio(14, "Souvenirs y recuerdos", "Artículos personalizados para los invitados", false, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(15, "Valet parking", "Servicio de estacionamiento para los asistentes", false, false, "Sujeto a la capacidad del recinto"));
     }
 
     //Inventarios (solo los que quedan válidos)
