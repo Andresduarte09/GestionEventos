@@ -78,21 +78,51 @@ public class AlmacenDatos {
 
     //Locales de evento
     private void cargarLocalesEvento() {
-        localesEvento.add(new DTOLocalEvento(1, "Salón", "30 x 20 m", "Escenario y pista",
+        localesEvento.add(new DTOLocalEvento(1, "Salón Los Ángeles", "Salón", "30 x 20 m", "Escenario y pista",
                 "Acceso por entrada principal", "No fumar",
                 "Se necesita conexión eléctrica", 200, 8));
-        localesEvento.add(new DTOLocalEvento(2, "Jardín", "40 x 25 m", "Área de mesas y pista al aire libre",
+        localesEvento.add(new DTOLocalEvento(2, "Jardín de Eventos La Colibrí", "Jardín", "40 x 25 m", "Área de mesas y pista al aire libre",
                 "Acceso por portón lateral; piso de pasto", "Música permitida hasta las 23:00",
                 "Se requieren extensiones de 50 m o planta eléctrica", 350, 6));
-        localesEvento.add(new DTOLocalEvento(3, "Auditorio", "35 x 22 m", "Escenario fijo y butacas",
+        localesEvento.add(new DTOLocalEvento(3, "Auditorio Cintermex", "Auditorio", "35 x 22 m", "Escenario fijo y butacas",
                 "Rampa de carga y elevador de equipo", "No pegar elementos en las paredes",
                 "Tomas trifásicas disponibles en el escenario", 400, 7));
-        localesEvento.add(new DTOLocalEvento(4, "Terraza", "25 x 15 m", "Zona de mesas y barra",
+        localesEvento.add(new DTOLocalEvento(4, "Salón Cristal", "Salón", "25 x 15 m", "Zona de mesas y barra",
                 "Acceso por escalera, sin elevador", "Máximo 220 personas",
                 "Cubrir las instalaciones por posible lluvia", 220, 8));
-        localesEvento.add(new DTOLocalEvento(5, "Salón de hotel", "28 x 18 m", "Salón con pista y mesa principal",
+        localesEvento.add(new DTOLocalEvento(5, "Jardín Las Fuentes", "Jardín", "28 x 18 m", "Área verde con fuente central",
                 "Acceso de carga por la parte trasera", "Montaje solo a partir de las 8:00",
-                "El aire acondicionado limita el uso de humo", 180, 6));
+                "El riego automático se programa por la noche", 180, 6));
+        localesEvento.add(new DTOLocalEvento(6, "Auditorio Metropolitano", "Auditorio", "50 x 30 m", "Butacas numeradas y pantalla gigante",
+                "Entrada principal con rampa para discapacitados", "Prohibido consumir alimentos en sala",
+                "Requiere operador de planta de luz residente", 800, 9));
+        localesEvento.add(new DTOLocalEvento(7, "Salón Versalles", "Salón", "32 x 20 m", "Pista de baile de madera y candiles",
+                "Acceso directo desde el estacionamiento", "Uso obligatorio de portagafetes",
+                "Verificar voltaje para iluminación robótica", 300, 8));
+        localesEvento.add(new DTOLocalEvento(8, "Jardín El Roble", "Jardín", "45 x 30 m", "Explanada de adoquín bajo árboles",
+                "Portón amplio para ingreso de camiones de carga", "Terminar eventos musicales a las 00:00",
+                "Instalación de iluminación exterior requerida", 500, 7));
+        localesEvento.add(new DTOLocalEvento(9, "Auditorio Magna", "Auditorio", "25 x 20 m", "Escenario modular y silletería móvil",
+                "Acceso por pasillo central del edificio", "No se permite equipo pesado sin protección",
+                "Salidas de emergencia libres de cables", 250, 7));
+        localesEvento.add(new DTOLocalEvento(10, "Salón Imperial", "Salón", "38 x 22 m", "Dos niveles con barandales de cristal",
+                "Montacargas disponible para proveedores", "No encender pirotecnia fría en interiores",
+                "Circuitos independientes para sonido y luces", 450, 9));
+        localesEvento.add(new DTOLocalEvento(11, "Jardín Rincón Escondido", "Jardín", "20 x 15 m", "Pérgola central y jardín floral",
+                "Acceso peatonal por calle privada", "Aforo estricto para eventos privados",
+                "Conexión limitada, se sugiere generador", 120, 5));
+        localesEvento.add(new DTOLocalEvento(12, "Auditorio Cultural Bicentenario", "Auditorio", "40 x 25 m", "Fosa de orquesta y tramoya",
+                "Muelle de carga con andén ajustable", "Cuidado con el piso de duela del escenario",
+                "Consola de audio integrada en cabina", 600, 9));
+        localesEvento.add(new DTOLocalEvento(13, "Salón Diamante", "Salón", "28 x 16 m", "Pista iluminada y muro de espejos",
+                "Acceso a nivel de calle por puerta doble", "Mantener salidas de aire libre de obstáculos",
+                "Aire acondicionado central programado", 200, 8));
+        localesEvento.add(new DTOLocalEvento(14, "Jardín Hacienda San José", "Jardín", "60 x 40 m", "Explanada empedrada y kiosco",
+                "Entrada principal por camino empedrado", "Apagar equipos de sonido al aire libre a la 1:00",
+                "Tomas de corriente distribuidas perimetralmente", 700, 9));
+        localesEvento.add(new DTOLocalEvento(15, "Auditorio Tecno", "Auditorio", "22 x 18 m", "Gradas retráctiles y proyector láser",
+                "Acceso por pasillo norte del campus", "No introducir bebidas azucaradas",
+                "Red de internet de alta velocidad dedicada", 150, 6));
     }
 
     //Eventos

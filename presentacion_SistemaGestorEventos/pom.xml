@@ -6,19 +6,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>presentacion_SistemaGestorEventos</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>21</maven.compiler.release>
-        <exec.mainClass>presentacion.control.SistemaGestorEventos</exec.mainClass>
-    </properties>
-
     <dependencies>
-        <dependency>
-            <groupId>com.github.lgooddatepicker</groupId>
-            <artifactId>LGoodDatePicker</artifactId>
-            <version>11.2.0</version>
-        </dependency>
         <dependency>
             <groupId>com.equipogestioneventos</groupId>
             <artifactId>objetosdto_SistemaGestorEvento</artifactId>
@@ -31,7 +19,7 @@
         </dependency>
         <dependency>
             <groupId>com.mycompany</groupId>
-            <artifactId>evento_SistemaGestorEvento</artifactId>
+            <artifactId>negocioCotizacion_SistemaGestorEventos</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -41,13 +29,25 @@
         </dependency>
         <dependency>
             <groupId>com.mycompany</groupId>
-            <artifactId>negocioCotizacion_SistemaGestorEventos</artifactId>
+            <artifactId>negocioOrden_SistemaGestorEventos</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.mycompany</groupId>
-            <artifactId>orden_SistemaGestorEventos</artifactId>
+            <artifactId>negocioEvento_SistemaGestorEvento</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.github.lgooddatepicker</groupId>
+            <artifactId>LGoodDatePicker</artifactId>
+            <version>11.2.1</version>
+        </dependency>
     </dependencies>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>24</maven.compiler.release>
+        <exec.mainClass>presentacion.control.SistemaGestorEventos</exec.mainClass>
+    </properties>
 </project>

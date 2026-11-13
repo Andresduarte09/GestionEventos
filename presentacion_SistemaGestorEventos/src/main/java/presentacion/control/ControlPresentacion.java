@@ -26,15 +26,15 @@ import negocioOrden.interfaces.ISubsistemaOrden;
  * @author lui
  */
 public class ControlPresentacion {
+
     private ISubsistemaEvento subsistemaEvento;
     private ISubsistemaPropuesta subsistemaPropuesta;
     private ISubsistemaCotizacion subsistemaCotizacion;
     private ISubsistemaOrden subsistemaOrden;
-    
+
     private AlmacenDatos almacen;
     private ProveedorExterno proveedorExterno;
-    
-    
+
     private JFrameRecursosEvento recursosFrmEvento;
     private Map<Integer, Integer> seleccionTemporalRecursos = new LinkedHashMap<>();
     private JFrameConfigurarPropuesta configurarPropuesta;
@@ -42,22 +42,21 @@ public class ControlPresentacion {
     private DTOCotizacion cotizacion;
     private DTOVersionCotizacion versionCotizacion;
     private DTODetalleCotizacion detalleCotizacion;
-    private DTOLevantamiento levantamiento; 
+    private DTOLevantamiento levantamiento;
     private List<DTOPersonal> personalSeleccionado = new ArrayList<>();
 
     public ControlPresentacion() {
         //nomas por el momento, controlPresentacion no debe conocer el almacen
         this.almacen = AlmacenDatos.getInstance();
         this.proveedorExterno = new ProveedorExterno();
-        
+
         //puede que en el futuro las fachadas ocupen mas peticiones conforme vayamos implementando
         this.subsistemaEvento = new FachadaEvento();
-        this.subsistemaPropuesta = new FachadaPropuesta(this.almacen, this.proveedorExterno);       
+        this.subsistemaPropuesta = new FachadaPropuesta(this.almacen, this.proveedorExterno);
         this.subsistemaCotizacion = new FachadaCotizacion();
         this.subsistemaOrden = new FachadaOrden(this.almacen);
     }
-    
- 
+
     private DTODecisionCliente decisionCliente;
     private List<DTOServicio> serviciosAceptados = new ArrayList<>();
     private LocalTime horarioMontajePropuesta;
@@ -74,7 +73,15 @@ public class ControlPresentacion {
         JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
         inicioSesion.setVisible(true);
     }
-    
+
+    //prueba para probar si funciona el filtro de locales
+    public List<DTOLocalEvento> consultarLocalesDisponibles() {
+        if (evento == null) {
+            return new ArrayList<>();
+        }
+        return subsistemaEvento.obtenerLocalesDisponibles(evento, evento.getUbicacion());
+    }
+
     /*
     Consulta lo del almacen para mostrarlo unicamente
      */
@@ -111,10 +118,7 @@ public class ControlPresentacion {
     public DTOEvento getEvento() {
         return evento;
     }
-    
-    
-    
-    
+
     //METODOS DE INICIO DE SESION/REGISTRO DE CLIENTE
     public boolean procesarTelefonoIngresado(String telefono) {
         if (!Validaciones.telefonoValido(telefono)) {
@@ -126,7 +130,7 @@ public class ControlPresentacion {
         }
         //crea el cliente a buscar si existe o no
         DTOCliente existente = subsistemaEvento.ingresarTelefono(telefono);
-    
+
         if (existente != null) {
             iniciarRegistrarEvento(existente);
         } else {
@@ -163,25 +167,24 @@ public class ControlPresentacion {
                     "Datos invalidos", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-        
+
         if (telefonoAlt != null && !telefonoAlt.trim().isEmpty()) {
             if (!Validaciones.telefonoValido(telefonoAlt)) {
                 errores.append("El teléfono alterno debe tener 10 dígitos numéricos.\n");
             }
-        }      
+        }
         this.cliente.setNombre(nombre);
         this.cliente.setCorreo(correo);
         this.cliente.setTelefono(telefono);
         this.cliente.setTelefonoAlt(telefonoAlt);
-        
+
         this.cliente = subsistemaEvento.registrarCliente(this.cliente);
 
         iniciarRegistrarEvento(this.cliente);
         return true;
     }
-    
+
     //METODOS PARA REGISTRAR EVENTOS
-   
     //Inicia el registro de datos del evento 
     public void iniciarRegistrarEvento(DTOCliente cliente) {
         this.cliente = cliente;
@@ -237,7 +240,7 @@ public class ControlPresentacion {
         evento.setFechaEvento(fecha);
         evento.setHoraInicio(hora);
         evento.setNumAsistentes(Integer.parseInt(asistentesTexto.trim()));
-        
+
         evento = subsistemaEvento.registrarDatosEvento(evento);
 
         //llama al metodo que guarda y mueve pantalla
@@ -260,19 +263,19 @@ public class ControlPresentacion {
             recursosFrmEvento.setVisible(true);
         }
     }
-    
+
     //metodo para el panelCategoriaRecursos, va delegando
     public List<DTORecurso> obtenerCatalogoRecursos() {
         return subsistemaEvento.obtenerCatalogoRecursos();
     }
-    
+
     public void cancelarRecursosEvento() {
         iniciarRegistrarEvento(this.cliente);
     }
-    
+
     //metodo actualizado para que limpie los recursos de la categoria para evitar seleccionados
     public void actualizarRecurso(String categoria, Map<Integer, Integer> cantidades) {
-       subsistemaEvento.actualizarRecursosTemporal(categoria,cantidades);
+        subsistemaEvento.actualizarRecursosTemporal(categoria, cantidades);
     }
 
     //Paneles de la pantalla de recursos del evento
@@ -281,10 +284,10 @@ public class ControlPresentacion {
             recursosFrmEvento.navegarA(panel);
         }
     }
-    
+
     public void finalizarRegistroRecursos(String necesidadesExtra) {
         evento.setNecesidadesIniciales(necesidadesExtra);
-        
+
         subsistemaEvento.guardarRecursos(evento.getIdEvento());
 
         //actualiza para traer la lista de detalleSolicitud
@@ -292,9 +295,7 @@ public class ControlPresentacion {
 
         iniciarAnalisisEvaluacion();
     }
-    
 
-    
     //METODOS DE ANALISIS EVALUACION AQUI INICIA F2
     public void iniciarAnalisisEvaluacion() {
         if (analisisEvaluacion != null && analisisEvaluacion.isDisplayable()) {
@@ -304,32 +305,31 @@ public class ControlPresentacion {
             analisisEvaluacion.setVisible(true);
         }
     }
-    
+
     public void cancelarAnalisisEvaluacion() {
         iniciarRecursosEvento();
     }
-    
+
     public void iniciarRevisarAnalisisEvaluacion() {
         JFrameRevisarAnalisisEvaluacion revisar = new JFrameRevisarAnalisisEvaluacion(this);
         revisar.setVisible(true);
     }
-    
+
     public void cancelarRevisarAnalisisEvaluacion() {
         iniciarAnalisisEvaluacion();
     }
 
-   
     //METODOS F3 PROPUESTA   
     //Aqui va la inicializacion de la pantalla de configuracion de propuesta
     //metodo modificado para agregar la validacion isDisplayable para evitar ventanas duplicadas
     public void iniciarConfigurarPropuesta() {
-        
+
         if (configurarPropuesta != null && configurarPropuesta.isDisplayable()) {
             configurarPropuesta.setVisible(true);
-            solicitarFolio(); 
+            solicitarFolio();
             return;
         }
-        
+
         configurarPropuesta = new JFrameConfigurarPropuesta(this);
         solicitarFolio();
         configurarPropuesta.setVisible(true);
@@ -386,10 +386,12 @@ public class ControlPresentacion {
         }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_EQUIPO);
     }
-    
+
     //MOVER AL SUBSISTEMA Y BORRAR
     public boolean procesarSeleccionCantidadEquipo(int idEquipo, String texto) {
-        if (!Validaciones.esEnteroPositivo(texto)) return false;
+        if (!Validaciones.esEnteroPositivo(texto)) {
+            return false;
+        }
         int cantidad = Integer.parseInt(texto.trim());
         for (DTOEquipo e : consultarTodosLosEquipos()) {
             if (e.getIdEquipo() == idEquipo) {
@@ -402,7 +404,7 @@ public class ControlPresentacion {
         }
         return false;
     }
-    
+
     public void solicitarInventario() {
         if (configurarPropuesta != null) {
             configurarPropuesta.solicitarInventario(obtenerInventarioDisponible());
@@ -423,24 +425,24 @@ public class ControlPresentacion {
         }
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_PERSONAL);
     }
-    
+
     //MOVER AL SUBSISTEMA Y BORRAR
     public boolean actualizarCantidadPersonal(int idEspecialidad, String texto) {
         if (!Validaciones.noEsNegativo(texto)) {
-            return false; 
+            return false;
         }
-        
+
         int cantidad = Integer.parseInt(texto.trim());
 
         for (DTOPersonal p : almacen.getPersonal()) {
             if (p.getIdEspecialidad() == idEspecialidad) {
                 p.setCantidad(cantidad);
-                return true; 
+                return true;
             }
         }
         return false;
     }
-    
+
     public void obtenerResumen() {
         if (configurarPropuesta != null) {
             configurarPropuesta.solicitarResumen(cliente, evento, consultarServiciosDisponibles(), consultarTodosLosEquipos(), obtenerPersonalDisponible());
@@ -448,7 +450,6 @@ public class ControlPresentacion {
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
     }
 
-    
     public DTOCotizacion getCotizacion() {
         return cotizacion;
     }
@@ -464,18 +465,18 @@ public class ControlPresentacion {
     public DTOLevantamiento getLevantamiento() {
         return levantamiento;
     }
-    
-    public void iniciarRegistrarCotizacion() {       
+
+    public void iniciarRegistrarCotizacion() {
         if (cotizacion == null || versionCotizacion == null) {
             generarCotizacion();
         }
 
-        JFrameRegistrarCotizacion registrarCotizacion =
-                new JFrameRegistrarCotizacion(this);
+        JFrameRegistrarCotizacion registrarCotizacion
+                = new JFrameRegistrarCotizacion(this);
 
         registrarCotizacion.setVisible(true);
     }
-    
+
     //metodo modificado para agregar la validacion isDisplayable para evitar ventanas duplicadas
     public void iniciarResumenCotizacion() {
         if (resumenCotizacion != null && resumenCotizacion.isDisplayable()) {
@@ -489,7 +490,7 @@ public class ControlPresentacion {
         mostrarResumenCotizacion();
         resumenCotizacion.setVisible(true);
     }
-    
+
     public void mostrarResumenCotizacion() {
         if (resumenCotizacion == null) {
             return;
@@ -545,7 +546,7 @@ public class ControlPresentacion {
         }
         return nombres;
     }
-    
+
     //MOVER AL SUBSISTEMA Y BORRAR
     private List<String> equiposSeleccionados() {
         List<String> nombres = new ArrayList<>();
@@ -575,7 +576,7 @@ public class ControlPresentacion {
 
     //MOVER AL SUBSISTEMA Y BORRAR
     public List<String> obtenerServiciosCotizadosConPrecio() {
-             List<String> resultado = new ArrayList<>();
+        List<String> resultado = new ArrayList<>();
 
         for (DTOServicio servicio : consultarServiciosDisponibles()) {
 
@@ -586,8 +587,8 @@ public class ControlPresentacion {
 
         return resultado;
     }
-    
-        //nunca se uso este metodo, lo comentareo por si acaso alguien tiene vista alguna funcionalidad despues?
+
+    //nunca se uso este metodo, lo comentareo por si acaso alguien tiene vista alguna funcionalidad despues?
 //    private String obtenerCategoriaServicio(String nombreServicio) {
 //
 //        switch (nombreServicio) {
@@ -614,7 +615,6 @@ public class ControlPresentacion {
 //                return null;
 //        }
 //    }
-    
     //MOVER AL SUBSISTEMA Y BORRAR
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
 
@@ -664,9 +664,9 @@ public class ControlPresentacion {
             JOptionPane.showMessageDialog(null, "El cliente solicita modificaciones. Regresando a la configuración de la propuesta.");
 
             //abre f3 nuevamente
-            iniciarConfigurarPropuesta(); 
+            iniciarConfigurarPropuesta();
 
-            return true; 
+            return true;
 
         } else if (decision.equals("Negación total")) {
             cotizacion.setEstadoGeneral("Rechazada");
@@ -693,8 +693,8 @@ public class ControlPresentacion {
 
         // Si llegó aquí es porque fue una aceptación (total o parcial)
         guardarDecisionCliente(decision, decision.equals("Aceptación parcial")
-                        ? "Servicios aceptados: " + obtenerNombresServiciosAceptados()
-                        : "El cliente aceptó todos los servicios cotizados."
+                ? "Servicios aceptados: " + obtenerNombresServiciosAceptados()
+                : "El cliente aceptó todos los servicios cotizados."
         );
 
         registrarCotizacionEnAlmacen();
@@ -704,7 +704,7 @@ public class ControlPresentacion {
 
         return true;
     }
-    
+
     //MOVER AL SUBSISTEMA Y BORRAR
     private String obtenerNombresServiciosAceptados() {
 
@@ -716,7 +716,7 @@ public class ControlPresentacion {
 
         return String.join(", ", nombres);
     }
-    
+
     //MOVER AL SUBSISTEMA Y BORRAR
     private void guardarDecisionCliente(String decision, String observaciones) {
 
@@ -732,7 +732,7 @@ public class ControlPresentacion {
 
         almacen.registrarDecisionCliente(nuevaDecision);
     }
-    
+
     //MOVER AL SUBSISTEMA Y BORRAR
     private void registrarCotizacionEnAlmacen() {
 
@@ -746,7 +746,7 @@ public class ControlPresentacion {
             almacen.registrarVersionCotizacion(versionCotizacion);
         }
     }
-    
+
     public List<DTOServicio> getServiciosAceptados() {
         return new ArrayList<>(serviciosAceptados);
     }
@@ -771,7 +771,7 @@ public class ControlPresentacion {
         }
         return false;
     }
-    
+
     //MOVER AL SUBSISTEMA Y BORRAR
     public void seleccionarEquipos(int idEquipo, int cantidad) {
         for (DTOEquipo e : consultarTodosLosEquipos()) {
@@ -859,6 +859,7 @@ public class ControlPresentacion {
         }
         return resultado;
     }
+
     //MOVER AL SUBSISTEMA Y BORRAR
     public void seleccionarPersonal(int idPersonal, int cantidad) {
         for (DTOPersonal p : almacen.getPersonal()) {
@@ -868,6 +869,7 @@ public class ControlPresentacion {
             }
         }
     }
+
     //MOVER AL SUBSISTEMA Y BORRAR
     public void seleccionarServicios(int idServicio, boolean seleccionado) {
         for (DTOServicio s : almacen.getServicios()) {
@@ -877,32 +879,32 @@ public class ControlPresentacion {
             }
         }
     }
-    
+
     //para cuando se presione el boton cancelar evento
-    public void cancelarEventoGuardandoRegistro() {       
+    public void cancelarEventoGuardandoRegistro() {
         if (evento != null) {
             evento.setEstadoAtencion("Cancelado");
-            subsistemaEvento.registrarDatosEvento(evento); 
+            subsistemaEvento.registrarDatosEvento(evento);
         }
 
         if (cliente != null && subsistemaEvento.ingresarTelefono(cliente.getTelefono()) == null) {
-            subsistemaEvento.registrarCliente(cliente); 
+            subsistemaEvento.registrarCliente(cliente);
         }
 
         this.cliente = null;
         this.evento = null;
         iniciarSesion();
     }
-    
+
     //MOVER AL SUBSISTEMA Y BORRAR
     public void generarOrdenServicio() {
         int nuevoId = almacen.getOrdenes().size() + 1;
         DTOOrdenServicio orden = new DTOOrdenServicio(
-            nuevoId,
-            evento.getIdEvento(), // Si no tienes ID asignado, usa 1 provisional
-            cotizacion.getID(),
-            LocalDate.now(),
-            serviciosAceptados
+                nuevoId,
+                evento.getIdEvento(), // Si no tienes ID asignado, usa 1 provisional
+                cotizacion.getID(),
+                LocalDate.now(),
+                serviciosAceptados
         );
         almacen.registrarOrden(orden);
     }

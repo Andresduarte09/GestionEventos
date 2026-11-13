@@ -116,6 +116,7 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
         txtFecha.addActionListener(this::txtFechaActionPerformed);
 
         txtHorario.setText("HH:mm");
+        txtHorario.addActionListener(this::txtHorarioActionPerformed);
 
         txtNumeroAsistentes.addActionListener(this::txtNumeroAsistentesActionPerformed);
 
@@ -242,6 +243,10 @@ public class JFrameRegistrarDatosEvento extends javax.swing.JFrame {
     private void txtNumeroAsistentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroAsistentesActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNumeroAsistentesActionPerformed
+
+    private void txtHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHorarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtHorarioActionPerformed
 
 
     private DatePicker datePickerFecha;

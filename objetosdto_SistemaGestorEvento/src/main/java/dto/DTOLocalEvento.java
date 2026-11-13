@@ -6,10 +6,11 @@ package dto;
 
 /**
  *
- * @author luise
+ * @author Ale
  */
 public class DTOLocalEvento {
     int idLocalEvento;
+    String nombreLocal;
     String tipoLocal;
     String dimensionesLugar;
     String dimensionesEspacios;
@@ -22,10 +23,11 @@ public class DTOLocalEvento {
     public DTOLocalEvento(){
     }
 
-    public DTOLocalEvento(int idLocalEvento, String tipoLocal, String dimensionesLugar, 
+    public DTOLocalEvento(int idLocalEvento, String nombreLocal, String tipoLocal, String dimensionesLugar, 
             String dimensionesEspacios, String condicionesAcceso, String restriccionesLocal,
             String necesidadesDetectadas, int capacidad, int duracionHoras) {
         this.idLocalEvento = idLocalEvento;
+        this.nombreLocal = nombreLocal;
         this.tipoLocal = tipoLocal;
         this.dimensionesLugar = dimensionesLugar;
         this.dimensionesEspacios = dimensionesEspacios;
@@ -35,8 +37,15 @@ public class DTOLocalEvento {
         this.capacidad = capacidad;
         this.duracionHoras = duracionHoras;
     }
-    
-    
+
+    public String getNombreLocal() {
+        return nombreLocal;
+    }
+
+    public void setNombreLocal(String nombreLocal) {
+        this.nombreLocal = nombreLocal;
+    }
+   
     public int getIdLocalEvento() {
         return idLocalEvento;
     }

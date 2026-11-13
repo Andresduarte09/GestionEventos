@@ -18,6 +18,7 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     private ControlPresentacion control;
 
     private DTOEvento evento;
+    private java.util.List<dto.DTOLocalEvento> locales = new java.util.ArrayList<>();
 
     /**
      * Creates new form JFrameRevisarAnalisisEvaluacion
@@ -31,31 +32,27 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         txtTipoEvento.setEditable(false);
         txtNumAsistentes.setEditable(false);
         txtFecha.setEditable(false);
+        txtHora.setEditable(false);
 
         lblImagenUbicacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblEjemploInfo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
         //configuracion de las opciones de ubicacion del comboBox
-        jComboBox1.removeAllItems();
-        jComboBox1.addItem("Salon Los Angeles");
-        jComboBox1.addItem("Salon La Joya");
-        jComboBox1.addItem("Jardín de Eventos La Colibrí");
-
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                actualizarUbicacion();
-            }
-        });
+        
+        locales = control.consultarLocalesDisponibles();
+        lblUbicacionInfo.removeAllItems();
+        for (dto.DTOLocalEvento local : locales) {
+            lblUbicacionInfo.addItem(local.getNombreLocal());
+        }
+        lblUbicacionInfo.addActionListener(e -> actualizarUbicacion());
 
         if (evento != null) {
             txtTipoEvento.setText(evento.getTipoEvento());
             txtNumAsistentes.setText(String.valueOf(evento.getNumAsistentes()));
             txtFecha.setText(String.valueOf(evento.getFechaEvento()));
-            if (evento.getUbicacion() != null) {
-                jComboBox1.setSelectedItem(evento.getUbicacion());
-            }
+            txtHora.setText(String.valueOf(evento.getHoraInicio()));
         }
+        
         actualizarUbicacion();
     }
 
@@ -63,33 +60,46 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     private static final int ALTO_IMAGEN = 280;
 
     private void actualizarUbicacion() {
-        String ubicacionSelec = (String) jComboBox1.getSelectedItem();
+        int i = lblUbicacionInfo.getSelectedIndex();
+        if (i < 0 || i >= locales.size()) {
+            lblEjemploInfo.setText("<html>No hay locales disponibles para este evento.</html>");
+            mostrarImagen(null);
+            return;
+        }
+        dto.DTOLocalEvento l = locales.get(i);
+        lblEjemploInfo.setText("<html>"
+                + "<b>Tipo:</b> " + l.getTipoLocal() + "<br>"
+                + "<b>Capacidad:</b> " + l.getCapacidad() + " personas<br>"
+                + "<b>Dimensiones:</b> " + l.getDimensionesLugar() + "<br>"
+                + "<b>Espacios:</b> " + l.getDimensionesEspacios() + "<br>"
+                + "<b>Acceso:</b> " + l.getCondicionesAcceso() + "<br>"
+                + "<b>Restricciones:</b> " + l.getRestriccionesLocal()
+                + "</html>");
+        mostrarImagen(rutaImagen(l.getNombreLocal()));
+    }
 
-        if (ubicacionSelec != null) {
-            switch (ubicacionSelec) {
-                case "Salon Los Angeles":
-                    lblEjemploInfo.setText("<html>Salón Los Angeles será el escenario perfecto para la celebración de todo tipo de eventos sociales.</html>");
-                    mostrarImagen("/imagenes/imagenSalonLosAngeles.png");
-                    break;
-
-                case "Salon La Joya":
-                    lblEjemploInfo.setText("<html>Salón La Joya ofrece espacios amplios y modernos para bodas y eventos exclusivos.</html>");
-                    mostrarImagen("/imagenes/imagenSalonLaJoya.png");
-                    break;
-
-                case "Jardín de Eventos La Colibrí":
-                    lblEjemploInfo.setText("<html>Disfruta de un ambiente único y agradable en el Jardín de Eventos La Colibrí.</html>");
-                    mostrarImagen("/imagenes/imagenJardinLaColibri.png");
-                    break;
-            }
+    //--LO SIGUIENTE ES TEMPORAL LO MAS PROBABLE POR QUE AUN ME FALTAN AGREGAR --
+    //              --IMAGENES PARA LOS DEMAS LOCALES--
+    private String rutaImagen(String nombreLocal) {
+        switch (nombreLocal) {
+            case "Salón Los Ángeles":
+                return "/imagenes/imagenSalonLosAngeles.png";
+            case "Jardín de Eventos La Colibrí":
+                return "/imagenes/imagenJardinLaColibri.png";
+            default:
+                return null;
+     
         }
     }
 
+
+
+    
     private void mostrarImagen(String ruta) {
-        java.net.URL url = getClass().getResource(ruta);
+        java.net.URL url = (ruta == null) ? null : getClass().getResource(ruta);
         if (url == null) {
             lblImagenUbicacion1.setIcon(null);
-            lblImagenUbicacion1.setText("Imagen no encontrada: " + ruta);
+            lblImagenUbicacion1.setText("Sin imagen disponible");
             return;
         }
         javax.swing.ImageIcon original = new javax.swing.ImageIcon(url);
@@ -124,9 +134,12 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         btnConfirmar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         lblTituloAnalisisEvaluacion = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        lblUbicacionInfo = new javax.swing.JComboBox<>();
         lblImagenUbicacion = new javax.swing.JLabel();
         lblImagenUbicacion1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtHora = new javax.swing.JTextPane();
+        lblHora = new javax.swing.JLabel();
 
         jMenuItem1.setText("jMenuItem1");
 
@@ -167,11 +180,16 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         lblTituloAnalisisEvaluacion.setText("Análisis y Evaluación de espacio");
         lblTituloAnalisisEvaluacion.setMaximumSize(new java.awt.Dimension(400, 40));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", " " }));
-        jComboBox1.setBorder(null);
-        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
+        lblUbicacionInfo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", " " }));
+        lblUbicacionInfo.setBorder(null);
+        lblUbicacionInfo.addActionListener(this::lblUbicacionInfoActionPerformed);
 
         lblImagenUbicacion1.setText("jLabel1");
+
+        jScrollPane1.setViewportView(txtHora);
+
+        lblHora.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblHora.setText("Hora");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -179,16 +197,18 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtFecha)
-                        .addComponent(txtNumAsistentes)
-                        .addComponent(lblTipoEvento1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblTipoEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtTipoEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblTipoEvento3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTipoEvento2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(txtFecha, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtNumAsistentes, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(lblTipoEvento1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblTipoEvento, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTipoEvento, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                        .addComponent(lblTipoEvento3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblUbicacionInfo, 0, 212, Short.MAX_VALUE)
+                        .addComponent(lblTipoEvento2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1))
+                    .addComponent(lblHora))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -234,14 +254,19 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
                         .addComponent(lblTipoEvento1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtNumAsistentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
+                        .addGap(15, 15, 15)
                         .addComponent(lblTipoEvento2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblUbicacionInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(24, 24, 24)
                         .addComponent(lblTipoEvento3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(19, 19, 19)
+                        .addComponent(lblHora)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
@@ -268,16 +293,17 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void lblUbicacionInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblUbicacionInfoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_lblUbicacionInfoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnConfirmar;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEjemploInfo;
+    private javax.swing.JLabel lblHora;
     private javax.swing.JLabel lblImagenUbicacion;
     private javax.swing.JLabel lblImagenUbicacion1;
     private javax.swing.JLabel lblTipoEvento;
@@ -286,7 +312,9 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     private javax.swing.JLabel lblTipoEvento3;
     private javax.swing.JLabel lblTipoEvento4;
     private javax.swing.JLabel lblTituloAnalisisEvaluacion;
+    private javax.swing.JComboBox<String> lblUbicacionInfo;
     private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextPane txtHora;
     private javax.swing.JTextField txtNumAsistentes;
     private javax.swing.JTextField txtTipoEvento;
     // End of variables declaration//GEN-END:variables

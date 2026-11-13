@@ -12,7 +12,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>21</maven.compiler.release>
+        <maven.compiler.release>24</maven.compiler.release>
         <exec.mainClass>com.mycompany.dto_sistemagestorevento.DTO_SistemaGestorEvento</exec.mainClass>
     </properties>
 </project>

@@ -35,55 +35,84 @@
               <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblUbicacion" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblFecha" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblAsistentes" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblTipo" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="lblRecursosEvento" min="-2" pref="165" max="-2" attributes="0"/>
-                                  <Component id="btnVerRecursos" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                              <Component id="lblTituloAnalisisEvaluacion" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="lblNecesidadesExtraInfo" min="-2" pref="478" max="-2" attributes="0"/>
                           <Component id="lblNecesidadesExtra" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
-                              <Component id="btnAtras" min="-2" pref="163" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
-                              <Component id="btnRevisar" min="-2" pref="158" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="179" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblTipoInfo" min="-2" pref="89" max="-2" attributes="0"/>
-                                  <Component id="lblNombreClienteInfo" min="-2" pref="274" max="-2" attributes="0"/>
-                                  <Component id="lblUbicacionInfo" alignment="0" min="-2" pref="135" max="-2" attributes="0"/>
-                                  <Component id="lblFechaInfo" alignment="0" min="-2" pref="157" max="-2" attributes="0"/>
-                                  <Component id="lblAsistentesInfo" alignment="0" min="-2" pref="146" max="-2" attributes="0"/>
+                  <Group type="102" alignment="1" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="179" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="lblNombreClienteInfo" min="-2" pref="274" max="-2" attributes="0"/>
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                  <Component id="lblHrsFin" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                                  <Component id="lblHrsInicio" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
+                                          <Component id="btnAtras" min="-2" pref="163" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+                                          <Component id="btnRevisar" min="-2" pref="158" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="lblNombreCliente" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="lblAsistentes" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblFecha" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblUbicacion" alignment="0" min="-2" max="-2" attributes="0"/>
+                                              <Component id="lblTipo" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="lblAsistentesInfo" alignment="0" min="-2" pref="146" max="-2" attributes="0"/>
+                                              <Component id="lblFechaInfo" alignment="0" min="-2" pref="157" max="-2" attributes="0"/>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="lblTipoInfo" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
+                                                      <Component id="lblUbicacionInfo" alignment="0" min="-2" pref="135" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace max="32767" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="btnVerRecursos" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                      <Group type="102" alignment="1" attributes="0">
+                                                          <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                                                          <Component id="lblRecursosEvento" min="-2" pref="165" max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                              </Group>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="lblNombreCliente" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblTituloAnalisisEvaluacion" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -99,37 +128,52 @@
                   <Component id="lblNombreCliente" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lblNombreClienteInfo" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="24" max="32767" attributes="0"/>
+              <EmptySpace pref="36" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="lblTipo" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblTipoInfo" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblTipoInfo" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblUbicacion" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblUbicacionInfo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="2" pref="2" max="-2" attributes="0"/>
                       <Component id="lblRecursosEvento" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btnVerRecursos" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblUbicacion" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblUbicacionInfo" alignment="3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblFecha" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblFechaInfo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblAsistentes" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblAsistentesInfo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblHrsInicio" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblHrsFin" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
               </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblFecha" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblFechaInfo" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblAsistentes" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblAsistentesInfo" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
               <Component id="lblNecesidadesExtra" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="lblNecesidadesExtraInfo" min="-2" pref="70" max="-2" attributes="0"/>
@@ -138,7 +182,7 @@
                   <Component id="btnRevisar" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
                   <Component id="btnAtras" alignment="3" min="-2" pref="41" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="40" max="32767" attributes="0"/>
+              <EmptySpace pref="18" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -273,6 +317,32 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVerRecursosActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="14" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Hora inicio:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel2">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="14" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Hora fin:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblHrsFin">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Hora fin"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblHrsInicio">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Hora inicio"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
