@@ -13,10 +13,16 @@ import presentacion.control.ControlPresentacion;
  * @author armen
  */
 public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameAnalisisEvaluacion.class.getName());
     private ControlPresentacion control;
     private DTOEvento evento;
+
+    private static final java.time.format.DateTimeFormatter FMT_FECHA
+            = java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final java.time.format.DateTimeFormatter FMT_HORA
+            = java.time.format.DateTimeFormatter.ofPattern("HH:mm");
+
     /**
      * Creates new form JFrameAnalisisEvalucacion
      */
@@ -26,13 +32,16 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         mostrarDatos();
-        
-        lblNecesidadesExtraInfo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+
+        //lblNecesidadesExtraInfo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        txtNecesidadesExtra.setEditable(false);
+        txtNecesidadesExtra.setLineWrap(true);
+        txtNecesidadesExtra.setWrapStyleWord(true);
     }
-    
-    private void mostrarDatos() {  
+
+    private void mostrarDatos() {
         DTOCliente cliente = control.getCliente();
-        DTOEvento evento = control.getEvento();
+        //DTOEvento evento = control.getEvento();
         if (cliente != null) {
             String nombre = cliente.getNombre();
             lblNombreClienteInfo.setText(nombre != null && !nombre.isBlank() ? nombre : cliente.getTelefono());
@@ -40,12 +49,12 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
         if (evento != null) {
             lblTipoInfo.setText(evento.getTipoEvento());
             lblUbicacionInfo.setText(evento.getUbicacion());
-            lblFechaInfo.setText(String.valueOf(evento.getFechaEvento()));
+            lblFechaInfo.setText(evento.getFechaEvento() != null ? evento.getFechaEvento().format(FMT_FECHA) : "—");
             lblAsistentesInfo.setText(String.valueOf(evento.getNumAsistentes()));
-            lblHrsInicio.setText(String.valueOf(evento.getHoraInicio()));
-            lblHrsFin.setText(String.valueOf(evento.getHoraFin()));
+            lblHrsInicio.setText(evento.getHoraInicio() != null ? evento.getHoraInicio().format(FMT_HORA) : "—");
+            lblHrsFin.setText(evento.getHoraFin() != null ? evento.getHoraFin().format(FMT_HORA) : "—");
             String extra = evento.getNecesidadesIniciales();
-            lblNecesidadesExtraInfo.setText(extra == null || extra.isEmpty() ? "Ninguna" : extra);         
+            txtNecesidadesExtra.setText(extra == null || extra.isBlank() ? "Ninguna" : extra);
         }
     }
 
@@ -71,7 +80,6 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
         lblUbicacionInfo = new javax.swing.JLabel();
         lblFechaInfo = new javax.swing.JLabel();
         lblAsistentesInfo = new javax.swing.JLabel();
-        lblNecesidadesExtraInfo = new javax.swing.JLabel();
         lblTituloAnalisisEvaluacion = new javax.swing.JLabel();
         btnAtras = new javax.swing.JButton();
         btnVerRecursos = new javax.swing.JButton();
@@ -79,11 +87,11 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         lblHrsFin = new javax.swing.JLabel();
         lblHrsInicio = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtNecesidadesExtra = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Análisis y Evaluación del espacio");
-        setMaximumSize(new java.awt.Dimension(700, 600));
-        setPreferredSize(new java.awt.Dimension(700, 600));
         setResizable(false);
 
         lblNombreCliente.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -122,9 +130,7 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
 
         lblAsistentesInfo.setText("Asistentes");
 
-        lblNecesidadesExtraInfo.setText("Requerimientos extra");
-
-        lblTituloAnalisisEvaluacion.setFont(new java.awt.Font("Segoe UI", 2, 38)); // NOI18N
+        lblTituloAnalisisEvaluacion.setFont(new java.awt.Font("Segoe UI", 2, 28)); // NOI18N
         lblTituloAnalisisEvaluacion.setText("Análisis y evaluación del espacio");
 
         btnAtras.setText("Atrás");
@@ -145,87 +151,90 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
 
         lblHrsInicio.setText("Hora inicio");
 
+        txtNecesidadesExtra.setColumns(20);
+        txtNecesidadesExtra.setRows(5);
+        jScrollPane1.setViewportView(txtNecesidadesExtra);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(59, 59, 59)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(179, 179, 179)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblNecesidadesExtraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblNecesidadesExtra))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblNombreClienteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 152, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(lblHrsFin))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(lblHrsInicio)))
+                                .addGap(63, 63, 63))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(179, 179, 179)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(lblNombreClienteInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(0, 0, Short.MAX_VALUE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                            .addGap(0, 0, Short.MAX_VALUE)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(jLabel2)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                    .addComponent(lblHrsFin))
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addComponent(jLabel1)
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                    .addComponent(lblHrsInicio)))
-                                            .addGap(25, 25, 25))))
+                                .addComponent(lblNombreCliente)
                                 .addGroup(layout.createSequentialGroup()
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGap(62, 62, 62)
-                                            .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(65, 65, 65)
-                                            .addComponent(btnRevisar, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(lblNombreCliente)
+                                        .addComponent(lblAsistentes)
+                                        .addComponent(lblFecha)
+                                        .addComponent(lblUbicacion)
+                                        .addComponent(lblTipo))
+                                    .addGap(47, 47, 47)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lblAsistentesInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(lblFechaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(layout.createSequentialGroup()
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(lblAsistentes)
-                                                .addComponent(lblFecha)
-                                                .addComponent(lblUbicacion)
-                                                .addComponent(lblTipo))
-                                            .addGap(47, 47, 47)
+                                                .addComponent(lblTipoInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(lblUbicacionInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(lblAsistentesInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(lblFechaInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGroup(layout.createSequentialGroup()
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(lblTipoInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(lblUbicacionInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(btnVerRecursos)
-                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                            .addGap(8, 8, 8)
-                                                            .addComponent(lblRecursosEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                                    .addGap(11, 11, 11)))
-                            .addComponent(lblTituloAnalisisEvaluacion))
-                        .addGap(38, 38, 38))))
+                                                .addComponent(btnVerRecursos)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                    .addGap(8, 8, 8)
+                                                    .addComponent(lblRecursosEvento, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(138, 138, 138)
+                                .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(65, 65, 65)
+                                .addComponent(btnRevisar, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(49, 49, 49))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNecesidadesExtra))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lblTituloAnalisisEvaluacion)
+                        .addGap(152, 152, 152))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(35, 35, 35)
                 .addComponent(lblTituloAnalisisEvaluacion)
-                .addGap(47, 47, 47)
+                .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNombreCliente)
                     .addComponent(lblNombreClienteInfo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblTipo)
-                            .addComponent(lblTipoInfo))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTipoInfo, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblTipo))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblUbicacion)
@@ -256,21 +265,16 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addComponent(lblNecesidadesExtra)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblNecesidadesExtraInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRevisar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnRevisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRevisarActionPerformed
-        control.iniciarRevisarAnalisisEvaluacion();
-        this.dispose();
-    }//GEN-LAST:event_btnRevisarActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         control.cancelarAnalisisEvaluacion();
@@ -279,15 +283,20 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     private void btnVerRecursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerRecursosActionPerformed
-         mostrarDialogoRecursos();
+        mostrarDialogoRecursos();
     }//GEN-LAST:event_btnVerRecursosActionPerformed
+
+    private void btnRevisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRevisarActionPerformed
+        control.iniciarRevisarAnalisisEvaluacion();
+        this.dispose();
+    }//GEN-LAST:event_btnRevisarActionPerformed
     //metodo que arma y muestra la ventana con la lista
     private void mostrarDialogoRecursos() {
         //valida que haya recursos
         if (evento == null || evento.getDetallesSolicitud() == null || evento.getDetallesSolicitud().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                    "No hay recursos seleccionados para este evento.", 
-                    "Recursos", 
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "No hay recursos seleccionados para este evento.",
+                    "Recursos",
                     javax.swing.JOptionPane.INFORMATION_MESSAGE);
             return;
         }
@@ -296,8 +305,8 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
         StringBuilder sb = new StringBuilder();
         for (dto.DTODetalleSolicitud detalle : evento.getDetallesSolicitud()) {
             sb.append("• ").append(detalle.getCategoriaSolicitada())
-              .append(" - ").append(detalle.getDescripcionSolicitud())
-              .append("  (Cantidad: ").append(detalle.getCantidadEstimada()).append(")\n");
+                    .append(" - ").append(detalle.getDescripcionSolicitud())
+                    .append("  (Cantidad: ").append(detalle.getCantidadEstimada()).append(")\n");
         }
 
         //area
@@ -312,9 +321,9 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
         scroll.setPreferredSize(new java.awt.Dimension(350, 200)); // Tamaño de la ventanita
 
         javax.swing.JOptionPane.showMessageDialog(
-                this, 
-                scroll, 
-                "Recursos del Evento", 
+                this,
+                scroll,
+                "Recursos del Evento",
                 javax.swing.JOptionPane.PLAIN_MESSAGE
         );
     }
@@ -325,6 +334,7 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
     private javax.swing.JButton btnVerRecursos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblAsistentes;
     private javax.swing.JLabel lblAsistentesInfo;
     private javax.swing.JLabel lblFecha;
@@ -332,7 +342,6 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
     private javax.swing.JLabel lblHrsFin;
     private javax.swing.JLabel lblHrsInicio;
     private javax.swing.JLabel lblNecesidadesExtra;
-    private javax.swing.JLabel lblNecesidadesExtraInfo;
     private javax.swing.JLabel lblNombreCliente;
     private javax.swing.JLabel lblNombreClienteInfo;
     private javax.swing.JLabel lblRecursosEvento;
@@ -341,5 +350,6 @@ public class JFrameAnalisisEvaluacion extends javax.swing.JFrame {
     private javax.swing.JLabel lblTituloAnalisisEvaluacion;
     private javax.swing.JLabel lblUbicacion;
     private javax.swing.JLabel lblUbicacionInfo;
+    private javax.swing.JTextArea txtNecesidadesExtra;
     // End of variables declaration//GEN-END:variables
 }
