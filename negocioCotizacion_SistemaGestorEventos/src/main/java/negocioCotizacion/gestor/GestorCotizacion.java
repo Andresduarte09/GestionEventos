@@ -15,7 +15,10 @@ import java.util.List;
 import negocioCotizacion.BO.CotizacionBO;
 import negocioCotizacion.interfaces.ICotizacionBO;
 import java.util.ArrayList;
-
+import dto.DTOPropuesta;
+import dto.DTOEquipo;
+import dto.DTOPersonal;
+import dto.DTOServicio;
 /**
  *
  * @author lui
@@ -201,7 +204,7 @@ public class GestorCotizacion {
             List<DTOInventario> inventario, float importe) {
 
         if (cotizacionBO.consultarVersion(idVersion) == null) {
-            throw new IllegalArgumentException("La versión indicada no existe.");
+            throw new IllegalArgumentException("La version indicada no existe.");
         }
 
         if (horario == null || inventario == null || inventario.isEmpty()) {
@@ -209,13 +212,13 @@ public class GestorCotizacion {
         }
 
         if (!Float.isFinite(importe) || importe < 0) {
-            throw new IllegalArgumentException("El importe no es válido.");
+            throw new IllegalArgumentException("El importe no es valido.");
         }
 
         int nuevoID = 1;
 
-        for (DTODetalleCotizacion detalle : almacen.getDetallesCotizacion()) {
-            nuevoID = Math.max(nuevoID, detalle.getID() + 1);
+        for (DTODetalleCotizacion existente : almacen.getDetallesCotizacion()) {
+            nuevoID = Math.max(nuevoID, existente.getID() + 1);
         }
 
         DTODetalleCotizacion detalle = new DTODetalleCotizacion();
@@ -225,7 +228,108 @@ public class GestorCotizacion {
         detalle.setInventario(inventario);
         detalle.setImporte(importe);
 
-        return cotizacionBO.guardarDetalle(detalle);
+        DTODetalleCotizacion guardado = cotizacionBO.guardarDetalle(detalle);
+        calcularImportesVersion(idVersion);
+
+        return guardado;
+    }
+
+    public DTOVersionCotizacion consultarUltimaVersion(int idCotizacion) {
+        if (cotizacionBO.consultar(idCotizacion) == null) {
+            throw new IllegalArgumentException("La cotizacion indicada no existe.");
+        }
+
+        DTOVersionCotizacion ultimaVersion = null;
+
+        for (DTOVersionCotizacion version : almacen.getVersionesCotizacion()) {
+            if (version.getIdCotizacion() == idCotizacion) {
+                if (ultimaVersion == null || version.getNumero() > ultimaVersion.getNumero()) {
+                    ultimaVersion = version;
+                }
+            }
+        }
+
+        return ultimaVersion;
+    }
+    
+    public DTOCotizacion obtenerOCrearCotizacion(DTOPropuesta propuesta) {
+        if (propuesta == null || propuesta.getIdPropuesta() <= 0) {
+            throw new IllegalArgumentException("La propuesta debe tener un ID valido.");
+        }
+
+        DTOCotizacion existente = consultarCotizacionPorPropuesta(propuesta.getIdPropuesta());
+
+        if (existente != null) {
+            return existente;
+        }
+
+        int nuevoID = 1;
+
+        for (DTOCotizacion cotizacion : almacen.getCotizaciones()) {
+            nuevoID = Math.max(nuevoID, cotizacion.getID() + 1);
+        }
+
+        DTOCotizacion nuevaCotizacion = new DTOCotizacion();
+        nuevaCotizacion.setID(nuevoID);
+        nuevaCotizacion.setIdPropuesta(propuesta.getIdPropuesta());
+        nuevaCotizacion.setFecha(LocalDate.now());
+        nuevaCotizacion.setEstadoGeneral("Pendiente");
+
+        return cotizacionBO.guardar(nuevaCotizacion);
+    }
+    
+    public boolean validarInventario(DTOInventario inventario) {
+        if (inventario == null) {
+            return false;
+        }
+
+        boolean tieneRecursos = false;
+
+        if (inventario.getServicios() != null) {
+            for (DTOServicio servicio : inventario.getServicios()) {
+                if (servicio == null || servicio.getIdServicio() <= 0) {
+                    return false;
+                }
+                if (servicio.isSeleccionado()) {
+                    tieneRecursos = true;
+                }
+            }
+        }
+
+        if (inventario.getEquipos() != null) {
+            for (DTOEquipo equipo : inventario.getEquipos()) {
+                if (equipo == null || equipo.getIdEquipo() <= 0 || equipo.getCantidadSeleccionada() < 0) {
+                    return false;
+                }
+                if (equipo.getCantidadSeleccionada() > equipo.getDisponibilidad()) {
+                    return false;
+                }
+                if (equipo.getCantidadSeleccionada() > 0) {
+                    tieneRecursos = true;
+                }
+            }
+        }
+
+        if (inventario.getPersonal() != null) {
+            for (DTOPersonal personal : inventario.getPersonal()) {
+                if (personal == null || personal.getIdEspecialidad() <= 0 || personal.getCantidad() < 0) {
+                    return false;
+                }
+                if (personal.getHorasMontaje() < 0 || personal.getHorasOperacion() < 0
+                        || personal.getHorasDesmontaje() < 0) {
+                    return false;
+                }
+                if (personal.getCantidad() > 0) {
+                    tieneRecursos = true;
+                }
+            }
+        }
+
+        return tieneRecursos;
+    }
+
+    public List<DTOVersionCotizacion> consultarVersionesCotizacion(int idCotizacion) {
+        return cotizacionBO.consultarVersionesCotizacion(idCotizacion);
     }
 
 }

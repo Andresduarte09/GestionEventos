@@ -8,6 +8,7 @@ import dto.DTOCotizacion;
 import dto.DTODetalleCotizacion;
 import dto.DTOVersionCotizacion;
 import java.util.List;
+import java.util.List;
 
 /**
  *
@@ -30,5 +31,6 @@ public interface ICotizacionBO {
     DTODetalleCotizacion guardarDetalle(DTODetalleCotizacion detalle);
 
     List<DTODetalleCotizacion> consultarDetallesVersion(int idVersion);
-
+    
+    List<DTOVersionCotizacion> consultarVersionesCotizacion(int idCotizacion);
 }

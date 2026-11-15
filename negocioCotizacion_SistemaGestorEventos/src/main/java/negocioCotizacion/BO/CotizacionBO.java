@@ -12,7 +12,7 @@ import dto.DTODetalleCotizacion;
 import dto.DTOVersionCotizacion;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.util.ArrayList;
 /**
  *
  * @author lui
@@ -24,15 +24,23 @@ public class CotizacionBO implements ICotizacionBO {
     public CotizacionBO(AlmacenDatos almacen) {
         this.almacen = almacen;
     }
-
+    
     @Override
     public DTOCotizacion guardar(DTOCotizacion cotizacion) {
         if (cotizacion == null || cotizacion.getID() <= 0) {
-            throw new IllegalArgumentException("La cotización debe tener un ID válido.");
+            throw new IllegalArgumentException("La cotizacion debe tener un ID valido.");
+        }
+
+        if (cotizacion.getIdPropuesta() <= 0) {
+            throw new IllegalArgumentException("La cotizacion debe tener una propuesta valida.");
         }
 
         if (consultar(cotizacion.getID()) != null) {
-            throw new IllegalArgumentException("Ya existe una cotización con ese ID.");
+            throw new IllegalArgumentException("Ya existe una cotizacion con ese ID.");
+        }
+
+        if (consultarPorPropuesta(cotizacion.getIdPropuesta()) != null) {
+            throw new IllegalArgumentException("Ya existe una cotizacion para esta propuesta.");
         }
 
         almacen.registrarCotizacion(cotizacion);
@@ -64,17 +72,27 @@ public class CotizacionBO implements ICotizacionBO {
 
         return null;
     }
-
+ 
     @Override
     public void actualizar(DTOCotizacion cotizacion) {
         if (cotizacion == null) {
-            throw new IllegalArgumentException("La cotización no puede ser nula.");
+            throw new IllegalArgumentException("La cotizacion no puede ser nula.");
         }
 
         DTOCotizacion existente = consultar(cotizacion.getID());
 
         if (existente == null) {
-            throw new IllegalArgumentException("La cotización no existe.");
+            throw new IllegalArgumentException("La cotizacion no existe.");
+        }
+
+        if (cotizacion.getIdPropuesta() <= 0) {
+            throw new IllegalArgumentException("La propuesta debe tener un ID valido.");
+        }
+
+        DTOCotizacion asociada = consultarPorPropuesta(cotizacion.getIdPropuesta());
+
+        if (asociada != null && asociada.getID() != cotizacion.getID()) {
+            throw new IllegalArgumentException("La propuesta ya tiene otra cotizacion asociada.");
         }
 
         existente.setFecha(cotizacion.getFecha());
@@ -86,11 +104,26 @@ public class CotizacionBO implements ICotizacionBO {
     @Override
     public DTOVersionCotizacion guardarVersion(DTOVersionCotizacion version) {
         if (version == null || version.getID() <= 0) {
-            throw new IllegalArgumentException("La versión debe tener un ID válido.");
+            throw new IllegalArgumentException("La version debe tener un ID valido.");
+        }
+
+        if (version.getIdCotizacion() <= 0 || consultar(version.getIdCotizacion()) == null) {
+            throw new IllegalArgumentException("La cotizacion asociada no existe.");
+        }
+
+        if (version.getNumero() <= 0) {
+            throw new IllegalArgumentException("El numero de version debe ser mayor que cero.");
         }
 
         if (consultarVersion(version.getID()) != null) {
-            throw new IllegalArgumentException("Ya existe una versión con ese ID.");
+            throw new IllegalArgumentException("Ya existe una version con ese ID.");
+        }
+
+        for (DTOVersionCotizacion existente : almacen.getVersionesCotizacion()) {
+            if (existente.getIdCotizacion() == version.getIdCotizacion()
+                    && existente.getNumero() == version.getNumero()) {
+                throw new IllegalArgumentException("Ya existe ese numero de version para la cotizacion.");
+            }
         }
 
         almacen.registrarVersionCotizacion(version);
@@ -111,7 +144,19 @@ public class CotizacionBO implements ICotizacionBO {
     @Override
     public DTODetalleCotizacion guardarDetalle(DTODetalleCotizacion detalle) {
         if (detalle == null || detalle.getID() <= 0) {
-            throw new IllegalArgumentException("El detalle debe tener un ID válido.");
+            throw new IllegalArgumentException("El detalle debe tener un ID valido.");
+        }
+
+        if (detalle.getIdVersion() <= 0 || consultarVersion(detalle.getIdVersion()) == null) {
+            throw new IllegalArgumentException("La version asociada al detalle no existe.");
+        }
+
+        if (detalle.getHorarioFases() == null || detalle.getInventario() == null || detalle.getInventario().isEmpty()) {
+            throw new IllegalArgumentException("El detalle debe tener horario e inventario.");
+        }
+
+        if (!Float.isFinite(detalle.getImporte()) || detalle.getImporte() < 0) {
+            throw new IllegalArgumentException("El importe del detalle no es valido.");
         }
 
         for (DTODetalleCotizacion existente : almacen.getDetallesCotizacion()) {
@@ -135,6 +180,24 @@ public class CotizacionBO implements ICotizacionBO {
         }
 
         return detalles;
+    }
+
+    @Override
+    public List<DTOVersionCotizacion> consultarVersionesCotizacion(int idCotizacion) {
+        if (consultar(idCotizacion) == null) {
+            throw new IllegalArgumentException("La cotizacion indicada no existe.");
+        }
+
+        List<DTOVersionCotizacion> versiones = new ArrayList<>();
+
+        for (DTOVersionCotizacion version : almacen.getVersionesCotizacion()) {
+            if (version.getIdCotizacion() == idCotizacion) {
+                versiones.add(version);
+            }
+        }
+
+        versiones.sort((v1, v2) -> Integer.compare(v1.getNumero(), v2.getNumero()));
+        return versiones;
     }
 
 }
