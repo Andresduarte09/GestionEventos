@@ -46,6 +46,10 @@ public class GestorCotizacion {
     public DTOCotizacion consultarCotizacion(int idCotizacion) {
         return cotizacionBO.consultar(idCotizacion);
     }
+    
+    public DTOCotizacion consultarCotizacionPorPropuesta(int idPropuesta) {
+        return cotizacionBO.consultarPorPropuesta(idPropuesta);
+    }
 
     public void actualizarCotizacion(DTOCotizacion cotizacion) {
         cotizacionBO.actualizar(cotizacion);
@@ -61,6 +65,10 @@ public class GestorCotizacion {
 
     public DTODetalleCotizacion guardarDetalle(DTODetalleCotizacion detalle) {
         return cotizacionBO.guardarDetalle(detalle);
+    }
+      
+    public boolean hayDetalles(int idVersion) {
+        return !cotizacionBO.consultarDetallesVersion(idVersion).isEmpty();
     }
 
     public double calcularSubtotal(List<DTODetalleCotizacion> detalles) {
@@ -84,16 +92,9 @@ public class GestorCotizacion {
     public double calcularSubtotalVersion(int idVersion) {
         if (cotizacionBO.consultarVersion(idVersion) == null) {
             throw new IllegalArgumentException("La versión indicada no existe.");
-        }
+    }
 
-        List<DTODetalleCotizacion> detalles = new ArrayList<>();
-
-        for (DTODetalleCotizacion detalle : almacen.getDetallesCotizacion()) {
-            if (detalle.getIdVersion() == idVersion) {
-                detalles.add(detalle);
-            }
-        }
-
+        List<DTODetalleCotizacion> detalles = cotizacionBO.consultarDetallesVersion(idVersion);
         return calcularSubtotal(detalles);
     }
 
@@ -102,6 +103,10 @@ public class GestorCotizacion {
 
         if (version == null) {
             throw new IllegalArgumentException("La versión indicada no existe.");
+        }
+        
+        if (!hayDetalles(idVersion)) {
+            throw new IllegalStateException("No hay detalles para calcular esta versión.");
         }
 
         double subtotal = calcularSubtotalVersion(idVersion);
@@ -115,6 +120,26 @@ public class GestorCotizacion {
 
         return version;
     }
+    
+    public DTOVersionCotizacion actualizarDescuentoVersion(int idVersion, float porcentaje) {
+        DTOVersionCotizacion version = cotizacionBO.consultarVersion(idVersion);
+
+        if (version == null) {
+            throw new IllegalArgumentException("La versión indicada no existe.");
+        }
+
+        if (!Float.isFinite(porcentaje) || porcentaje < 0 || porcentaje > 10) {
+            throw new IllegalArgumentException("El descuento debe estar entre 0 y 10%.");
+        }
+
+        if (!hayDetalles(idVersion)) {
+            throw new IllegalStateException("No hay detalles para calcular esta versión.");
+        }
+
+        version.setDescuento(porcentaje);
+        return calcularImportesVersion(idVersion);
+    }
+
 
     public double calcularDescuento(double subtotal, double porcentaje) {
         if (!Double.isFinite(subtotal) || subtotal < 0 || !Double.isFinite(porcentaje)

@@ -7,6 +7,7 @@ package negocioCotizacion.interfaces;
 import dto.DTOCotizacion;
 import dto.DTODetalleCotizacion;
 import dto.DTOVersionCotizacion;
+import java.util.List;
 
 /**
  *
@@ -17,6 +18,8 @@ public interface ICotizacionBO {
     DTOCotizacion guardar(DTOCotizacion cotizacion);
 
     DTOCotizacion consultar(int idCotizacion);
+    
+    DTOCotizacion consultarPorPropuesta(int idPropuesta);
 
     void actualizar(DTOCotizacion cotizacion);
 
@@ -25,4 +28,7 @@ public interface ICotizacionBO {
     DTOVersionCotizacion consultarVersion(int idVersion);
 
     DTODetalleCotizacion guardarDetalle(DTODetalleCotizacion detalle);
+
+    List<DTODetalleCotizacion> consultarDetallesVersion(int idVersion);
+
 }

@@ -11,6 +11,7 @@ import dto.DTOCotizacion;
 import dto.DTODetalleCotizacion;
 import dto.DTOVersionCotizacion;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -48,6 +49,21 @@ public class CotizacionBO implements ICotizacionBO {
 
         return null;
     }
+    
+    @Override
+    public DTOCotizacion consultarPorPropuesta(int idPropuesta) {
+        if (idPropuesta <= 0) {
+            throw new IllegalArgumentException("El ID de la propuesta debe ser mayor que cero.");
+        }
+
+        for (DTOCotizacion cotizacion : almacen.getCotizaciones()) {
+            if (cotizacion.getIdPropuesta() == idPropuesta) {
+                return cotizacion;
+            }
+        }
+
+        return null;
+    }
 
     @Override
     public void actualizar(DTOCotizacion cotizacion) {
@@ -64,6 +80,7 @@ public class CotizacionBO implements ICotizacionBO {
         existente.setFecha(cotizacion.getFecha());
         existente.setEstadoGeneral(cotizacion.getEstadoGeneral());
         existente.setReglaDescuento(cotizacion.getReglaDescuento());
+        existente.setIdPropuesta(cotizacion.getIdPropuesta());
     }
 
     @Override
@@ -106,4 +123,18 @@ public class CotizacionBO implements ICotizacionBO {
         almacen.getDetallesCotizacion().add(detalle);
         return detalle;
     }
+
+    @Override
+    public List<DTODetalleCotizacion> consultarDetallesVersion(int idVersion) {
+        List<DTODetalleCotizacion> detalles = new ArrayList<>();
+
+        for (DTODetalleCotizacion detalle : almacen.getDetallesCotizacion()) {
+            if (detalle.getIdVersion() == idVersion) {
+                detalles.add(detalle);
+            }
+        }
+
+        return detalles;
+    }
+
 }

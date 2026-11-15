@@ -6,6 +6,8 @@ package negocioCotizacion.fachada;
 import dto.DTOCotizacion;
 import negocioCotizacion.gestor.GestorCotizacion;
 import negocioCotizacion.interfaces.ISubsistemaCotizacion;
+import dto.DTOVersionCotizacion;
+
 /**
  *
  * @author Andres
@@ -22,4 +24,10 @@ public class FachadaCotizacion implements ISubsistemaCotizacion {
     public DTOCotizacion calcularCotizacion(int idPropuesta){
         return gestor.calcularCotizacion(idPropuesta);
     }    
+    
+    @Override
+    public DTOVersionCotizacion actualizarDescuentoVersion(int idVersion, float porcentaje) {
+        return gestor.actualizarDescuentoVersion(idVersion, porcentaje);
+    }
+
 }

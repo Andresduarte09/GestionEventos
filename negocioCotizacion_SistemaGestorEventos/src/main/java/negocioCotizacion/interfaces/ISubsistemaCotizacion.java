@@ -4,10 +4,15 @@
  */
 package negocioCotizacion.interfaces;
 import dto.DTOCotizacion;
+import dto.DTOVersionCotizacion;
+
 /**
  *
  * @author lui
  */
 public interface ISubsistemaCotizacion {   
     DTOCotizacion calcularCotizacion(int idPropuesta);
+    
+    DTOVersionCotizacion actualizarDescuentoVersion(int idVersion, float porcentaje);
+    
 }

@@ -16,7 +16,9 @@ public class DTOCotizacion {
     private LocalDate fecha;
     private String estadoGeneral;
     private String reglaDescuento;
-    private final int porcentajeMaximoDescuento = 10;
+    private final int porcentajeMaximoDescuento = 10; 
+    private int idPropuesta;
+
     
     public DTOCotizacion() {
     }
@@ -33,6 +35,14 @@ public class DTOCotizacion {
 
     public void setID(int ID) {
         this.ID = ID;
+    }
+    
+    public int getIdPropuesta() {
+        return idPropuesta;
+    }
+
+    public void setIdPropuesta(int idPropuesta) {
+        this.idPropuesta = idPropuesta;
     }
 
     public LocalDate getFecha() {
