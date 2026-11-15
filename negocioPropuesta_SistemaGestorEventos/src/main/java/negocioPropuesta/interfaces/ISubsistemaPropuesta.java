@@ -4,11 +4,17 @@
  */
 package negocioPropuesta.interfaces;
 
+import dto.DTOInventario;
 import dto.DTOPropuesta;
 
 public interface ISubsistemaPropuesta {
 
-    void seleccionarServicios(int idServicio, boolean seleccionado);
+    void establecerEventoActual(int idEvento);
+
+    void seleccionarServicios(
+            int idServicio,
+            boolean seleccionado
+    );
 
     void seleccionarEquipos(int idEquipo, int cantidad);
 
@@ -18,8 +24,13 @@ public interface ISubsistemaPropuesta {
 
     boolean verificarSeleccionPersonal();
 
-    /**
-     * @throws IllegalArgumentException si un horario no tiene formato HH:mm
-     */
-    DTOPropuesta enviarPropuestaHaciaCotizacion(String horarioMontaje, String horarioDesmontaje, String comentarios);
+    DTOPropuesta enviarPropuestaHaciaCotizacion(
+            String horarioMontaje,
+            String horarioDesmontaje,
+            String comentarios
+    );
+
+    DTOPropuesta consultarPropuesta(int idPropuesta);
+
+    DTOInventario consultarRecursosPropuesta(int idPropuesta);
 }

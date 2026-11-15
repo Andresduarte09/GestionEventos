@@ -4,18 +4,16 @@
  */
 package dto;
 
-/**
- *
- * @author Andres
- */
 public class DTOPropuesta {
-    int idPropuesta;
-    int idEvento;
-    String folio;
-    String horarioMontaje;
-    String horarioDesmontaje;
-    String comentarios;
-    String estadoFolio;
+
+    private int idPropuesta;
+    private int idEvento;
+    private String folio;
+    private String horarioMontaje;
+    private String horarioDesmontaje;
+    private String comentarios;
+    private String estadoFolio;
+    private DTOInventario inventario;
 
     public int getIdPropuesta() {
         return idPropuesta;
@@ -72,6 +70,12 @@ public class DTOPropuesta {
     public void setEstadoFolio(String estadoFolio) {
         this.estadoFolio = estadoFolio;
     }
-    
-    
+
+    public DTOInventario getInventario() {
+        return inventario;
+    }
+
+    public void setInventario(DTOInventario inventario) {
+        this.inventario = inventario;
+    }
 }

@@ -324,13 +324,31 @@ public class ControlPresentacion {
     //metodo modificado para agregar la validacion isDisplayable para evitar ventanas duplicadas
     public void iniciarConfigurarPropuesta() {
 
-        if (configurarPropuesta != null && configurarPropuesta.isDisplayable()) {
+        if (evento == null || evento.getIdEvento() <= 0) {
+
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Debes registrar un evento antes de configurar la propuesta."
+            );
+
+            return;
+        }
+
+        subsistemaPropuesta.establecerEventoActual(
+                evento.getIdEvento()
+        );
+
+        if (configurarPropuesta != null
+                && configurarPropuesta.isDisplayable()) {
+
             configurarPropuesta.setVisible(true);
             solicitarFolio();
             return;
         }
 
-        configurarPropuesta = new JFrameConfigurarPropuesta(this);
+        configurarPropuesta
+                = new JFrameConfigurarPropuesta(this);
+
         solicitarFolio();
         configurarPropuesta.setVisible(true);
     }

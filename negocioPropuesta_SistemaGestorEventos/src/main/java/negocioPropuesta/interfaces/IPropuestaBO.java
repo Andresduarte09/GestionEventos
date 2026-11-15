@@ -12,11 +12,16 @@ import dto.DTOPropuesta;
  * @author Andres
  */
 public interface IPropuestaBO {
-    public DTOPropuesta guardar(DTOPropuesta propuesta);
-    
-    public DTOPropuesta consultar(int idPropuesta);
-    
-    public DTOInventario consultarSeleccion(int idEvento);
-    
-    public void actualizarSeleccion(DTOInventario cambios);
+
+    DTOPropuesta guardar(DTOPropuesta propuesta);
+
+    DTOPropuesta consultar(int idPropuesta);
+
+    DTOInventario consultarRecursosPropuesta(int idPropuesta);
+
+    DTOInventario consultarSeleccion(int idEvento);
+
+    void registrarSeleccionEvento(int idEvento, DTOInventario seleccion);
+
+    void actualizarSeleccion(DTOInventario cambios);
 }
