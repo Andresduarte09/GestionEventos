@@ -17,7 +17,7 @@ public class DTOVersionCotizacion {
     private String observaciones;
     private float descuento;
     private float subtotal;
-    private final int IVA = 16;
+    private final float IVA = 0.16f;
     private float total;
 
     public DTOVersionCotizacion() {
@@ -104,5 +104,9 @@ public class DTOVersionCotizacion {
 
     public void setIdCotizacion(int idCotizacion) {
         this.idCotizacion = idCotizacion;
+    }
+
+    public float getIVA() {
+        return IVA;
     }
 }

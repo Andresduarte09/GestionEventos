@@ -179,6 +179,16 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
         );
     }
 
+    @Override
+    public DTOPropuesta consultarPropuesta(int idPropuesta) {
+        return gestor.consultarPropuesta(idPropuesta);
+    }
+
+    @Override
+    public DTOInventario consultarRecursosPropuesta(int idPropuesta) {
+        return gestor.consultarRecursosPropuesta(idPropuesta);
+    }
+
     private void validarHorario(String texto) {
 
         if (texto == null || texto.trim().isEmpty()) {
@@ -197,4 +207,5 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
             );
         }
     }
+
 }

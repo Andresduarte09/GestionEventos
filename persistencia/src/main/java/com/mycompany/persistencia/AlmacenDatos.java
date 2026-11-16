@@ -242,6 +242,19 @@ public class AlmacenDatos {
         agregarRecurso(29, "Proyector", "Proyección: proyector de alta luminosidad", 100, 1200f, "personas", "Pantallas", "pieza", "Activo");
         agregarRecurso(30, "Pantalla de proyección", "Proyección: pantalla con tripié", 100, 500f, "personas", "Pantallas", "pieza", "Activo");
         agregarRecurso(31, "Televisión", "Televisión: pantalla de 55 pulgadas", 30, 800f, "personas", "Pantallas", "pieza", "Activo");
+        
+        // Personal - tarifas simuladas por hora
+        agregarRecurso(32, "Técnico de audio", "Operación y supervisión de audio",
+                1, 100f, "trabajador", "Personal", "hora", "Activo");
+        agregarRecurso(33, "Montador", "Montaje y desmontaje de equipo",
+                1, 65f, "trabajador", "Personal", "hora", "Activo");
+        agregarRecurso(34, "Cocinero", "Preparación de alimentos para eventos",
+                1, 90f, "trabajador", "Personal", "hora", "Activo");
+        agregarRecurso(35, "Mesero", "Atención y servicio durante el evento",
+                1, 70f, "trabajador", "Personal", "hora", "Activo");
+        agregarRecurso(36, "Coordinador de evento", "Coordinación y supervisión del evento",
+                1, 120f, "trabajador", "Personal", "hora", "Activo");
+
     }
 
     private void agregarRecurso(int id, String nombre, String descripcion, int capacidad, float precioReferencia,

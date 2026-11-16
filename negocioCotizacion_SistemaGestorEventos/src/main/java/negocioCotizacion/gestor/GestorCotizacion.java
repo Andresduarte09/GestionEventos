@@ -19,6 +19,10 @@ import dto.DTOPropuesta;
 import dto.DTOEquipo;
 import dto.DTOPersonal;
 import dto.DTOServicio;
+import negocioPropuesta.interfaces.ISubsistemaPropuesta;
+import dto.DTORecurso;
+import dto.DTOConceptoCotizacion;
+
 /**
  *
  * @author lui
@@ -28,18 +32,94 @@ public class GestorCotizacion {
     private final AlmacenDatos almacen;
     private final ICotizacionBO cotizacionBO;
     private DTOVersionCotizacion versionActual;
+    private ISubsistemaPropuesta subsistemaPropuesta;
 
     public GestorCotizacion() {
         this.almacen = AlmacenDatos.getInstance();
         this.cotizacionBO = new CotizacionBO(this.almacen);
     }
 
-    public DTOCotizacion calcularCotizacion(int idPropuesta) {
+    public GestorCotizacion(ISubsistemaPropuesta subsistemaPropuesta) {
+        this();
+        if (subsistemaPropuesta == null) {
+            throw new IllegalArgumentException("El subsistema de propuesta no puede ser nulo.");
+        }
+        this.subsistemaPropuesta = subsistemaPropuesta;
+    }
+
+    public DTOPropuesta consultarPropuestaParaCotizar(int idPropuesta) {
         if (idPropuesta <= 0) {
             throw new IllegalArgumentException("El ID de la propuesta debe ser mayor que cero.");
         }
 
-        throw new UnsupportedOperationException("Pendiente conectar F4 con la propuesta de F3.");
+        if (subsistemaPropuesta == null) {
+            throw new IllegalStateException("El subsistema de propuesta no está conectado.");
+        }
+
+        DTOPropuesta propuesta = subsistemaPropuesta.consultarPropuesta(idPropuesta);
+
+        if (propuesta == null) {
+            throw new IllegalArgumentException("No existe una propuesta con ese ID.");
+        }
+
+        if (propuesta.getIdEvento() <= 0) {
+            throw new IllegalStateException("La propuesta no tiene un evento válido.");
+        }
+
+        DTOInventario inventario = subsistemaPropuesta.consultarRecursosPropuesta(idPropuesta);
+
+        if (!validarInventario(inventario)) {
+            throw new IllegalStateException("La propuesta no tiene recursos válidos para cotizar.");
+        }
+
+        propuesta.setInventario(inventario);
+        return propuesta;
+    }
+
+    public DTOCotizacion calcularCotizacion(int idPropuesta) {
+        DTOPropuesta propuesta = consultarPropuestaParaCotizar(idPropuesta);
+        DTOInventario inventario = propuesta.getInventario();
+
+        double importe = calcularImporteInventario(inventario);
+
+        if (importe <= 0 || importe > Float.MAX_VALUE) {
+            throw new IllegalStateException("La propuesta no tiene un importe válido.");
+        }
+
+        String horarioMontaje = propuesta.getHorarioMontaje();
+
+        if (horarioMontaje == null || horarioMontaje.trim().isEmpty()) {
+            throw new IllegalStateException("La propuesta no tiene horario de montaje.");
+        }
+
+        LocalTime horario;
+
+        try {
+            horario = LocalTime.parse(horarioMontaje.trim());
+        } catch (java.time.format.DateTimeParseException ex) {
+            throw new IllegalStateException("El horario de montaje no tiene un formato válido.", ex);
+        }
+
+        DTOCotizacion cotizacion = consultarCotizacionPorPropuesta(idPropuesta);
+
+        if (cotizacion != null) {
+            DTOVersionCotizacion ultimaVersion = consultarUltimaVersion(cotizacion.getID());
+
+            if (ultimaVersion != null) {
+                if (!hayDetalles(ultimaVersion.getID())) {
+                    throw new IllegalStateException("La última versión no tiene detalles registrados.");
+                }
+
+                return cotizacion;
+            }
+        } else {
+            cotizacion = obtenerOCrearCotizacion(propuesta);
+        }
+
+        DTOVersionCotizacion version = crearNuevaVersion(cotizacion.getID());
+        registrarDetalleInventario(version.getID(), horario, inventario);
+
+        return cotizacion;
     }
 
     public DTOCotizacion guardarCotizacion(DTOCotizacion cotizacion) {
@@ -49,7 +129,7 @@ public class GestorCotizacion {
     public DTOCotizacion consultarCotizacion(int idCotizacion) {
         return cotizacionBO.consultar(idCotizacion);
     }
-    
+
     public DTOCotizacion consultarCotizacionPorPropuesta(int idPropuesta) {
         return cotizacionBO.consultarPorPropuesta(idPropuesta);
     }
@@ -69,9 +149,17 @@ public class GestorCotizacion {
     public DTODetalleCotizacion guardarDetalle(DTODetalleCotizacion detalle) {
         return cotizacionBO.guardarDetalle(detalle);
     }
-      
+
     public boolean hayDetalles(int idVersion) {
         return !cotizacionBO.consultarDetallesVersion(idVersion).isEmpty();
+    }
+
+    public List<DTODetalleCotizacion> consultarDetallesVersion(int idVersion) {
+        if (consultarVersion(idVersion) == null) {
+            throw new IllegalArgumentException("La versión indicada no existe.");
+        }
+
+        return cotizacionBO.consultarDetallesVersion(idVersion);
     }
 
     public double calcularSubtotal(List<DTODetalleCotizacion> detalles) {
@@ -95,7 +183,7 @@ public class GestorCotizacion {
     public double calcularSubtotalVersion(int idVersion) {
         if (cotizacionBO.consultarVersion(idVersion) == null) {
             throw new IllegalArgumentException("La versión indicada no existe.");
-    }
+        }
 
         List<DTODetalleCotizacion> detalles = cotizacionBO.consultarDetallesVersion(idVersion);
         return calcularSubtotal(detalles);
@@ -107,7 +195,7 @@ public class GestorCotizacion {
         if (version == null) {
             throw new IllegalArgumentException("La versión indicada no existe.");
         }
-        
+
         if (!hayDetalles(idVersion)) {
             throw new IllegalStateException("No hay detalles para calcular esta versión.");
         }
@@ -123,7 +211,292 @@ public class GestorCotizacion {
 
         return version;
     }
-    
+
+    public int calcularHorasPersonal(DTOPersonal personal) {
+        if (personal == null || personal.getIdEspecialidad() <= 0 || personal.getCantidad() < 0
+                || personal.getHorasMontaje() < 0 || personal.getHorasOperacion() < 0
+                || personal.getHorasDesmontaje() < 0) {
+            throw new IllegalArgumentException("Los datos del personal no son válidos.");
+        }
+
+        if (personal.getCantidad() == 0) {
+            return 0;
+        }
+
+        long horas = (long) personal.getHorasMontaje() + personal.getHorasOperacion()
+                + personal.getHorasDesmontaje();
+
+        if (horas == 0) {
+            throw new IllegalStateException("El personal seleccionado no tiene horas asignadas.");
+        }
+
+        long total = horas * personal.getCantidad();
+
+        if (total > Integer.MAX_VALUE) {
+            throw new IllegalStateException("La cantidad de horas excede el límite permitido.");
+        }
+
+        return (int) total;
+    }
+
+    public int calcularTotalHorasPersonal(DTOInventario inventario) {
+        if (inventario == null || inventario.getPersonal() == null) {
+            throw new IllegalArgumentException("El inventario de personal no es válido.");
+        }
+
+        long total = 0;
+
+        for (DTOPersonal personal : inventario.getPersonal()) {
+            total += calcularHorasPersonal(personal);
+
+            if (total > Integer.MAX_VALUE) {
+                throw new IllegalStateException("El total de horas excede el límite permitido.");
+            }
+        }
+
+        return (int) total;
+    }
+
+    public double calcularImportePersonal(DTOInventario inventario) {
+        if (inventario == null || inventario.getPersonal() == null) {
+            throw new IllegalArgumentException("El inventario de personal no es válido.");
+        }
+
+        double total = 0;
+
+        for (DTOPersonal personal : inventario.getPersonal()) {
+            int horas = calcularHorasPersonal(personal);
+
+            if (horas == 0) {
+                continue;
+            }
+
+            DTORecurso recursoEncontrado = null;
+
+            for (DTORecurso recurso : almacen.getRecursos()) {
+                if (recurso.getNombre() != null && personal.getEspecialidad() != null
+                        && recurso.getNombre().trim().equalsIgnoreCase(personal.getEspecialidad().trim())) {
+                    if (recursoEncontrado != null) {
+                        throw new IllegalStateException("Hay tarifas duplicadas: " + personal.getEspecialidad());
+                    }
+                    recursoEncontrado = recurso;
+                }
+            }
+
+            if (recursoEncontrado == null) {
+                throw new IllegalStateException("No hay tarifa para: " + personal.getEspecialidad());
+            }
+
+            if (!"hora".equalsIgnoreCase(recursoEncontrado.getUnidadMedida())) {
+                throw new IllegalStateException("La tarifa no es por hora: " + personal.getEspecialidad());
+            }
+
+            float tarifa = consultarTarifaRecurso(personal.getEspecialidad());
+            total += horas * (double) tarifa;
+
+            if (!Double.isFinite(total)) {
+                throw new IllegalStateException("El importe de personal excede el rango permitido.");
+            }
+        }
+
+        return total;
+    }
+
+    public double calcularImporteInventario(DTOInventario inventario) {
+        if (!validarInventario(inventario)) {
+            throw new IllegalArgumentException("El inventario no contiene recursos válidos.");
+        }
+
+        if (inventario.getServicios() == null || inventario.getEquipos() == null
+                || inventario.getPersonal() == null) {
+            throw new IllegalArgumentException("Las listas del inventario no pueden ser nulas.");
+        }
+
+        validarPaqueteAudio(inventario);
+
+        double importeServicios = calcularImporteServicios(inventario);
+        double importeEquipos = calcularImporteEquipos(inventario);
+        double importePersonal = calcularImportePersonal(inventario);
+
+        double total = importeServicios + importeEquipos + importePersonal;
+
+        if (!Double.isFinite(total) || total < 0 || total > Float.MAX_VALUE) {
+            throw new IllegalStateException("El importe total del inventario no es válido.");
+        }
+
+        return total;
+    }
+
+    public List<DTOConceptoCotizacion> generarDesgloseInventario(DTOInventario inventario) {
+        if (!validarInventario(inventario)) {
+            throw new IllegalArgumentException("El inventario no contiene recursos válidos.");
+        }
+
+        if (inventario.getServicios() == null || inventario.getEquipos() == null
+                || inventario.getPersonal() == null) {
+            throw new IllegalArgumentException("Las listas del inventario no pueden ser nulas.");
+        }
+
+        validarPaqueteAudio(inventario);
+
+        List<DTOConceptoCotizacion> conceptos = new ArrayList<>();
+
+        for (DTOServicio servicio : inventario.getServicios()) {
+            if (servicio == null) {
+                throw new IllegalArgumentException("Existe un servicio nulo.");
+            }
+
+            if (!servicio.isSeleccionado()) {
+                continue;
+            }
+
+            float tarifa = consultarTarifaRecurso(servicio.getNombre());
+            conceptos.add(new DTOConceptoCotizacion("Servicio", servicio.getNombre(), 1, tarifa));
+        }
+
+        for (DTOEquipo equipo : inventario.getEquipos()) {
+            if (equipo == null) {
+                throw new IllegalArgumentException("Existe un equipo nulo.");
+            }
+
+            if (equipo.getCantidadSeleccionada() == 0) {
+                continue;
+            }
+
+            float tarifa = consultarTarifaRecurso(equipo.getNombre());
+            conceptos.add(new DTOConceptoCotizacion("Equipo", equipo.getNombre(),
+                    equipo.getCantidadSeleccionada(), tarifa));
+        }
+
+        for (DTOPersonal personal : inventario.getPersonal()) {
+            if (personal == null) {
+                throw new IllegalArgumentException("Existe personal nulo.");
+            }
+
+            int horas = calcularHorasPersonal(personal);
+
+            if (horas == 0) {
+                continue;
+            }
+
+            float tarifa = consultarTarifaRecurso(personal.getEspecialidad());
+            conceptos.add(new DTOConceptoCotizacion("Personal", personal.getEspecialidad(),
+                    horas, tarifa));
+        }
+
+        double subtotal = 0;
+
+        for (DTOConceptoCotizacion concepto : conceptos) {
+            subtotal += concepto.getImporte();
+        }
+
+        double importeInventario = calcularImporteInventario(inventario);
+
+        if (Math.abs(subtotal - importeInventario) > 0.01) {
+            throw new IllegalStateException("El desglose no coincide con el importe del inventario.");
+        }
+
+        return conceptos;
+    }
+
+    public DTODetalleCotizacion registrarDetalleInventario(int idVersion, LocalTime horario,
+            DTOInventario inventario) {
+
+        if (consultarVersion(idVersion) == null) {
+            throw new IllegalArgumentException("La versión indicada no existe.");
+        }
+
+        if (horario == null) {
+            throw new IllegalArgumentException("El horario del detalle es obligatorio.");
+        }
+
+        if (hayDetalles(idVersion)) {
+            throw new IllegalStateException("La versión ya contiene detalles registrados.");
+        }
+
+        double importe = calcularImporteInventario(inventario);
+
+        if (importe <= 0 || importe > Float.MAX_VALUE) {
+            throw new IllegalStateException("El importe del inventario no es válido.");
+        }
+
+        List<DTOConceptoCotizacion> conceptos = generarDesgloseInventario(inventario);
+
+        List<DTOInventario> inventarios = new ArrayList<>();
+        inventarios.add(inventario);
+
+        DTODetalleCotizacion detalle = crearDetalleCotizacion(
+                idVersion, horario, inventarios, (float) importe);
+
+        detalle.setConceptos(conceptos);
+        return detalle;
+    }
+
+    public DTOVersionCotizacion generarVersionModificada(int idCotizacion,
+            LocalTime horario, DTOInventario inventario) {
+
+        DTOCotizacion cotizacion = consultarCotizacion(idCotizacion);
+
+        if (cotizacion == null) {
+            throw new IllegalArgumentException("La cotización indicada no existe.");
+        }
+
+        DTOVersionCotizacion anterior = consultarUltimaVersion(idCotizacion);
+
+        if (anterior == null || !hayDetalles(anterior.getID())) {
+            throw new IllegalStateException("La cotización no tiene una versión completa.");
+        }
+
+        if (horario == null) {
+            throw new IllegalArgumentException("El horario es obligatorio.");
+        }
+
+        // Validamos los recursos y sus precios antes de guardar otra versión.
+        List<DTOConceptoCotizacion> conceptos = generarDesgloseInventario(inventario);
+        double subtotal = calcularImporteInventario(inventario);
+
+        if (conceptos.isEmpty() || subtotal <= 0 || subtotal > Float.MAX_VALUE) {
+            throw new IllegalStateException("El nuevo inventario no tiene un importe válido.");
+        }
+
+        DTOVersionCotizacion nuevaVersion = crearNuevaVersion(idCotizacion);
+        registrarDetalleInventario(nuevaVersion.getID(), horario, inventario);
+
+        return consultarVersion(nuevaVersion.getID());
+    }
+
+    private void validarPaqueteAudio(DTOInventario inventario) {
+        boolean paqueteAudio = false;
+        boolean equiposAudio = false;
+
+        for (DTOServicio servicio : inventario.getServicios()) {
+            if (servicio != null && servicio.isSeleccionado()
+                    && "Sistema de audio completo".equalsIgnoreCase(servicio.getNombre())) {
+                paqueteAudio = true;
+            }
+        }
+
+        for (DTOEquipo equipo : inventario.getEquipos()) {
+            if (equipo == null || equipo.getCantidadSeleccionada() <= 0) {
+                continue;
+            }
+
+            String nombre = equipo.getNombre();
+
+            if (nombre != null && ("Consola de audio".equalsIgnoreCase(nombre)
+                    || "Micrófono inalámbrico".equalsIgnoreCase(nombre)
+                    || "Bocina".equalsIgnoreCase(nombre)
+                    || "Bocina amplificada".equalsIgnoreCase(nombre))) {
+                equiposAudio = true;
+            }
+        }
+
+        if (paqueteAudio && equiposAudio) {
+            throw new IllegalStateException(
+                    "El paquete de audio completo no puede cobrarse junto con sus equipos incluidos.");
+        }
+    }
+
     public DTOVersionCotizacion actualizarDescuentoVersion(int idVersion, float porcentaje) {
         DTOVersionCotizacion version = cotizacionBO.consultarVersion(idVersion);
 
@@ -142,7 +515,6 @@ public class GestorCotizacion {
         version.setDescuento(porcentaje);
         return calcularImportesVersion(idVersion);
     }
-
 
     public double calcularDescuento(double subtotal, double porcentaje) {
         if (!Double.isFinite(subtotal) || subtotal < 0 || !Double.isFinite(porcentaje)
@@ -251,7 +623,7 @@ public class GestorCotizacion {
 
         return ultimaVersion;
     }
-    
+
     public DTOCotizacion obtenerOCrearCotizacion(DTOPropuesta propuesta) {
         if (propuesta == null || propuesta.getIdPropuesta() <= 0) {
             throw new IllegalArgumentException("La propuesta debe tener un ID valido.");
@@ -277,7 +649,7 @@ public class GestorCotizacion {
 
         return cotizacionBO.guardar(nuevaCotizacion);
     }
-    
+
     public boolean validarInventario(DTOInventario inventario) {
         if (inventario == null) {
             return false;
@@ -326,6 +698,175 @@ public class GestorCotizacion {
         }
 
         return tieneRecursos;
+    }
+
+    public float consultarTarifaRecurso(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del recurso no es válido.");
+        }
+
+        DTORecurso encontrado = null;
+
+        for (DTORecurso recurso : almacen.getRecursos()) {
+            if (recurso.getNombre() != null && recurso.getNombre().trim().equalsIgnoreCase(nombre.trim())) {
+                if (encontrado != null) {
+                    throw new IllegalStateException("Existen varios recursos con el nombre: " + nombre);
+                }
+                encontrado = recurso;
+            }
+        }
+
+        if (encontrado == null) {
+            throw new IllegalArgumentException("No existe una tarifa registrada para: " + nombre);
+        }
+
+        if (!"Activo".equalsIgnoreCase(encontrado.getEstadoEnCatalogo())) {
+            throw new IllegalStateException("El recurso no está activo: " + nombre);
+        }
+
+        if (!Float.isFinite(encontrado.getPrecioReferencia()) || encontrado.getPrecioReferencia() < 0) {
+            throw new IllegalStateException("El recurso tiene una tarifa inválida: " + nombre);
+        }
+
+        return encontrado.getPrecioReferencia();
+    }
+
+    public List<String> consultarRecursosSinTarifa(DTOInventario inventario) {
+        if (!validarInventario(inventario)) {
+            throw new IllegalArgumentException("El inventario no es válido.");
+        }
+
+        List<String> sinTarifa = new ArrayList<>();
+
+        if (inventario.getServicios() != null) {
+            for (DTOServicio servicio : inventario.getServicios()) {
+                if (servicio.isSeleccionado() && !existeTarifaRecurso(servicio.getNombre())) {
+                    sinTarifa.add("Servicio: " + servicio.getNombre());
+                }
+            }
+        }
+
+        if (inventario.getEquipos() != null) {
+            for (DTOEquipo equipo : inventario.getEquipos()) {
+                if (equipo.getCantidadSeleccionada() > 0 && !existeTarifaRecurso(equipo.getNombre())) {
+                    sinTarifa.add("Equipo: " + equipo.getNombre());
+                }
+            }
+        }
+
+        if (inventario.getPersonal() != null) {
+            for (DTOPersonal personal : inventario.getPersonal()) {
+                if (personal.getCantidad() > 0 && !existeTarifaRecurso(personal.getEspecialidad())) {
+                    sinTarifa.add("Personal: " + personal.getEspecialidad());
+                }
+            }
+        }
+
+        return sinTarifa;
+    }
+
+    public double calcularImporteEquipos(DTOInventario inventario) {
+        if (inventario == null || inventario.getEquipos() == null) {
+            throw new IllegalArgumentException("El inventario de equipos no es válido.");
+        }
+
+        double total = 0;
+
+        for (DTOEquipo equipo : inventario.getEquipos()) {
+            if (equipo == null || equipo.getIdEquipo() <= 0 || equipo.getCantidadSeleccionada() < 0
+                    || equipo.getCantidadSeleccionada() > equipo.getDisponibilidad()) {
+                throw new IllegalArgumentException("Existe un equipo con datos inválidos.");
+            }
+
+            if (equipo.getCantidadSeleccionada() == 0) {
+                continue;
+            }
+
+            DTORecurso recursoEncontrado = null;
+
+            for (DTORecurso recurso : almacen.getRecursos()) {
+                if (recurso.getNombre() != null && equipo.getNombre() != null
+                        && recurso.getNombre().trim().equalsIgnoreCase(equipo.getNombre().trim())) {
+                    if (recursoEncontrado != null) {
+                        throw new IllegalStateException("Hay recursos duplicados: " + equipo.getNombre());
+                    }
+                    recursoEncontrado = recurso;
+                }
+            }
+
+            if (recursoEncontrado == null) {
+                throw new IllegalStateException("No hay tarifa para el equipo: " + equipo.getNombre());
+            }
+
+            if (!"pieza".equalsIgnoreCase(recursoEncontrado.getUnidadMedida())) {
+                throw new IllegalStateException("El equipo no tiene una tarifa por pieza: " + equipo.getNombre());
+            }
+
+            float tarifa = consultarTarifaRecurso(equipo.getNombre());
+            total += (double) equipo.getCantidadSeleccionada() * tarifa;
+
+            if (!Double.isFinite(total)) {
+                throw new IllegalStateException("El importe calculado excede el rango permitido.");
+            }
+        }
+
+        return total;
+    }
+
+    public double calcularImporteServicios(DTOInventario inventario) {
+        if (inventario == null || inventario.getServicios() == null) {
+            throw new IllegalArgumentException("El inventario de servicios no es válido.");
+        }
+
+        double total = 0;
+
+        for (DTOServicio servicio : inventario.getServicios()) {
+            if (servicio == null || servicio.getIdServicio() <= 0) {
+                throw new IllegalArgumentException("Existe un servicio con datos inválidos.");
+            }
+
+            if (!servicio.isSeleccionado()) {
+                continue;
+            }
+
+            DTORecurso recursoEncontrado = null;
+
+            for (DTORecurso recurso : almacen.getRecursos()) {
+                if (recurso.getNombre() != null && servicio.getNombre() != null
+                        && recurso.getNombre().trim().equalsIgnoreCase(servicio.getNombre().trim())) {
+                    if (recursoEncontrado != null) {
+                        throw new IllegalStateException("Hay recursos duplicados: " + servicio.getNombre());
+                    }
+                    recursoEncontrado = recurso;
+                }
+            }
+
+            if (recursoEncontrado == null) {
+                throw new IllegalStateException("No hay tarifa para el servicio: " + servicio.getNombre());
+            }
+
+            if (!"servicio".equalsIgnoreCase(recursoEncontrado.getUnidadMedida())) {
+                throw new IllegalStateException("La tarifa no corresponde a un servicio: " + servicio.getNombre());
+            }
+
+            float tarifa = consultarTarifaRecurso(servicio.getNombre());
+            total += tarifa;
+
+            if (!Double.isFinite(total)) {
+                throw new IllegalStateException("El importe de servicios excede el rango permitido.");
+            }
+        }
+
+        return total;
+    }
+
+    private boolean existeTarifaRecurso(String nombre) {
+        try {
+            consultarTarifaRecurso(nombre);
+            return true;
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            return false;
+        }
     }
 
     public List<DTOVersionCotizacion> consultarVersionesCotizacion(int idCotizacion) {

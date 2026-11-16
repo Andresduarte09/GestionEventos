@@ -24,6 +24,10 @@ public interface ISubsistemaPropuesta {
     boolean verificarSeleccionPersonal();
 
     boolean validarCantidadEquipo(int idEquipo, int cantidad);
+    
+    DTOPropuesta consultarPropuesta(int idPropuesta);
+
+    DTOInventario consultarRecursosPropuesta(int idPropuesta);
 
     DTOInventario obtenerResumenSeleccion(int idEvento);
 

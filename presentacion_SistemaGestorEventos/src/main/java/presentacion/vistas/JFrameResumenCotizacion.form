@@ -32,10 +32,10 @@
                       <EmptySpace min="-2" pref="930" max="-2" attributes="0"/>
                       <Component id="btnAprobar" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="lblDesgloseServicios" min="-2" max="-2" attributes="0"/>
-                      <Component id="pnelCentral" max="32767" attributes="0"/>
-                      <Component id="pnlSuperior" alignment="0" max="32767" attributes="0"/>
+                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                      <Component id="pnlSuperior" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnelCentral" alignment="1" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblDesgloseServicios" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -97,25 +97,29 @@
                                           <Component id="lblCalculo" min="-2" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="159" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" attributes="0">
-                                                  <Component id="lblDescuento" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace pref="599" max="32767" attributes="0"/>
-                                                  <Component id="lblMostrarDescuento" min="-2" pref="38" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="lblSubtotal" min="-2" max="-2" attributes="0"/>
-                                                  <EmptySpace max="32767" attributes="0"/>
-                                                  <Component id="lblMostrarSubtotal" min="-2" pref="27" max="-2" attributes="0"/>
-                                              </Group>
                                               <Group type="102" alignment="1" attributes="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="lblIVA" alignment="0" min="-2" max="-2" attributes="0"/>
                                                       <Component id="lblTotal" alignment="0" min="-2" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <EmptySpace max="32767" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="467" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="lblMostrarTotal" min="-2" max="-2" attributes="0"/>
-                                                      <Component id="lblMostrarIVA" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="lblMostrarIVA" max="32767" attributes="0"/>
+                                                      <Group type="102" attributes="0">
+                                                          <Component id="lblMostrarTotal" max="32767" attributes="0"/>
+                                                          <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                                                      </Group>
+                                                  </Group>
+                                              </Group>
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <Group type="103" groupAlignment="0" attributes="0">
+                                                      <Component id="lblSubtotal" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="lblDescuento" alignment="0" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace min="534" pref="544" max="32767" attributes="0"/>
+                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                                      <Component id="lblMostrarDescuento" max="32767" attributes="0"/>
+                                                      <Component id="lblMostrarSubtotal" pref="103" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -213,37 +217,32 @@
                           </Group>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="lblOperacion" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="lblMostrarOperacion" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="lblDesmontaje" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Component id="lblMostrarDesmontaje" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                          </Group>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="lblMontaje" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
-                              <Component id="lblMostrarMontaje" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="146" max="-2" attributes="0"/>
-                              <Component id="lblEquipos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lblMostrarEquipos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="390" max="32767" attributes="0"/>
-                              <Component id="lblPesos" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lblMostrarImportes" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
+                              <Component id="lblMostrarMontaje" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="lblOperacion" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="lblMostrarOperacion" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="lblDesmontaje" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="lblMostrarDesmontaje" min="-2" pref="54" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="lblEquipos" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+                      <Component id="lblMostrarEquipos" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="lblPesos" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblMostrarImportes" min="-2" pref="65" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -466,12 +465,12 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblEvento" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="lblMostrarNombreEvento" max="32767" attributes="0"/>
+                  <Component id="lblMostrarNombreEvento" pref="302" max="32767" attributes="0"/>
                   <EmptySpace min="-2" pref="144" max="-2" attributes="0"/>
                   <Component id="lblVersion" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblMostrarVersionCotizacion" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="294" max="32767" attributes="0"/>
                   <Component id="lblEstado" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lblMostrarEstadoCotizacion" min="-2" max="-2" attributes="0"/>

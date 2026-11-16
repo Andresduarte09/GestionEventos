@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package negocioCotizacion.interfaces;
+
 import dto.DTOCotizacion;
 import dto.DTOVersionCotizacion;
 
@@ -10,9 +11,12 @@ import dto.DTOVersionCotizacion;
  *
  * @author lui
  */
-public interface ISubsistemaCotizacion {   
+public interface ISubsistemaCotizacion {
+
     DTOCotizacion calcularCotizacion(int idPropuesta);
-    
+
     DTOVersionCotizacion actualizarDescuentoVersion(int idVersion, float porcentaje);
-    
+
+    DTOVersionCotizacion consultarUltimaVersion(int idCotizacion);
+
 }

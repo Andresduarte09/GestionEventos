@@ -14,6 +14,7 @@ public class DTODetalleCotizacion {
     private LocalTime horarioFases;
     List<DTOInventario> inventario = new ArrayList<>();
     private float importe;
+    private List<DTOConceptoCotizacion> conceptos = new ArrayList<>();
 
     public int getID() {
         return ID;
@@ -55,7 +56,34 @@ public class DTODetalleCotizacion {
 
     public void setIdVersion(int idVersion) {
         this.idVersion = idVersion;
-        
+
+    }
+
+    public List<DTOConceptoCotizacion> getConceptos() {
+        return java.util.Collections.unmodifiableList(conceptos);
+    }
+
+    public void setConceptos(List<DTOConceptoCotizacion> conceptos) {
+        if (conceptos == null || conceptos.isEmpty()) {
+            throw new IllegalArgumentException("El desglose económico no puede estar vacío.");
+        }
+
+        double suma = 0;
+
+        for (DTOConceptoCotizacion concepto : conceptos) {
+            if (concepto == null || concepto.getCantidad() <= 0
+                    || !Float.isFinite(concepto.getImporte()) || concepto.getImporte() < 0) {
+                throw new IllegalArgumentException("Existe un concepto económico inválido.");
+            }
+
+            suma += concepto.getImporte();
+        }
+
+        if (!Double.isFinite(suma) || Math.abs(suma - importe) > 0.01) {
+            throw new IllegalArgumentException("El desglose no coincide con el importe del detalle.");
+        }
+
+        this.conceptos = new ArrayList<>(conceptos);
     }
 
 }
