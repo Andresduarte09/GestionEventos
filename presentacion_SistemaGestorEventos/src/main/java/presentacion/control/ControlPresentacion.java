@@ -31,8 +31,7 @@ public class ControlPresentacion {
     private ProveedorExterno proveedorExterno;
 
     private JFrameRecursosEvento recursosFrmEvento;
-    private Map<Integer, Integer> seleccionTemporalRecursos
-            = new LinkedHashMap<>();
+    private Map<Integer, Integer> seleccionTemporalRecursos = new LinkedHashMap<>();
 
     private JFrameConfigurarPropuesta configurarPropuesta;
     private JFrameResumenCotizacion resumenCotizacion;
@@ -361,14 +360,8 @@ public class ControlPresentacion {
         iniciarRegistrarEvento(this.cliente);
     }
 
-    public void actualizarRecurso(
-            String categoria,
-            Map<Integer, Integer> cantidades) {
-
-        subsistemaEvento.actualizarRecursosTemporal(
-                categoria,
-                cantidades
-        );
+    public void actualizarRecurso(String categoria, Map<Integer, Integer> cantidades) {
+       subsistemaEvento.actualizarRecursos(categoria, cantidades);
     }
 
     private void mostrarPanelRecursos(String panel) {
@@ -379,18 +372,10 @@ public class ControlPresentacion {
     }
 
     public void finalizarRegistroRecursos(String necesidadesExtra) {
-
-        evento.setNecesidadesIniciales(necesidadesExtra);
-
-        subsistemaEvento.guardarRecursos(
-                evento.getIdEvento()
-        );
-
-        this.evento
-                = subsistemaEvento.consultarInformacionEvento(
-                        evento.getIdEvento()
-                );
-
+        if(evento != null) {
+            evento.setNecesidadesIniciales(necesidadesExtra);
+            subsistemaEvento.guardarRecursos(evento.getIdEvento());
+        }
         iniciarAnalisisEvaluacion();
     }
 

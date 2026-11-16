@@ -29,6 +29,6 @@ public interface ISubsistemaEvento {
     public DTORecurso consultarRecurso(int idRecurso);
     public DTOLocalEvento consultarLocal(int idLocalEvento);
     public List<DTOLocalEvento> obtenerLocalesDisponibles(DTOEvento evento, String tipoLocal);
-    public void actualizarRecursosTemporal(String categoria, Map<Integer, Integer> cantidades);
+    public void actualizarRecursos(String categoria, Map<Integer, Integer> cantidades);
     public Map<Integer, Integer> obtenerRecursosSeleccionados();
 }

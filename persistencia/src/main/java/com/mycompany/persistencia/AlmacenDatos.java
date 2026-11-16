@@ -199,7 +199,6 @@ public class AlmacenDatos {
         return d;
     }
 
-    //Recursos (solo Audio y Comida)
     private void cargarRecursos() {
         // Audio
         recursos.add(new DTORecurso(1, "Bocina", "Bocina amplificada", 100, 1500.0f, "personas", "Audio", "pieza", "Activo"));
@@ -216,6 +215,33 @@ public class AlmacenDatos {
         agregarRecurso(10, "Gelatina", "Postre: gelatina individual", 1, 25f, "porción", "Comida", "porción", "Inactivo");
         agregarRecurso(11, "Agua de jamaica", "Bebida: agua fresca", 1, 20f, "porción", "Comida", "vaso", "Activo");
         agregarRecurso(12, "Refresco", "Bebida: refresco embotellado", 1, 25f, "porción", "Comida", "pieza", "Activo");
+        
+        // Entretenimiento
+        agregarRecurso(13, "DJ", "Música: DJ con equipo básico por 5 horas", 300, 4500f, "personas", "Entretenimiento", "servicio", "Activo");
+        agregarRecurso(14, "Banda en vivo", "Música: banda musical en vivo", 300, 6000f, "personas", "Entretenimiento", "servicio", "Activo");
+        agregarRecurso(15, "Payaso", "Infantil: show con payaso de 2 horas", 40, 1800f, "niños", "Entretenimiento", "servicio", "Activo");
+        agregarRecurso(16, "Brincolín", "Infantil: brincolín inflable", 20, 1200f, "niños", "Entretenimiento", "pieza", "Activo");
+        agregarRecurso(17, "Mago", "Show: espectáculo de magia", 100, 2500f, "personas", "Entretenimiento", "servicio", "Activo");
+
+        // Iluminación
+        agregarRecurso(18, "Lámparas colgantes", "Interior: lámparas decorativas", 10, 300f, "m²", "Iluminación", "pieza", "Activo");
+        agregarRecurso(19, "Luces LED", "Interior: tiras y focos LED", 20, 450f, "m²", "Iluminación", "pieza", "Activo");
+        agregarRecurso(20, "Reflectores", "Escenario: reflectores de escenario", 40, 600f, "m²", "Iluminación", "pieza", "Activo");
+        agregarRecurso(21, "Luces robóticas", "Escenario: cabezas móviles", 60, 900f, "m²", "Iluminación", "pieza", "Activo");
+        agregarRecurso(22, "Máquina de humo", "Efectos: humo para efectos", 100, 700f, "m²", "Iluminación", "pieza", "Activo");
+
+        // Decoración
+        agregarRecurso(23, "Mesas redondas", "Mobiliario: mesa para 10 personas", 10, 120f, "personas", "Decoración", "pieza", "Activo");
+        agregarRecurso(24, "Sillas Tiffany", "Mobiliario: silla decorativa", 1, 25f, "personas", "Decoración", "pieza", "Activo");
+        agregarRecurso(25, "Centros de mesa", "Ambientación: arreglo floral", 1, 180f, "mesa", "Decoración", "pieza", "Activo");
+        agregarRecurso(26, "Globos", "Ambientación: arco o racimos de globos", 1, 900f, "arco", "Decoración", "pieza", "Activo");
+        agregarRecurso(27, "Mantelería", "Textiles: mantel y camino de mesa", 1, 60f, "mesa", "Decoración", "juego", "Activo");
+
+        // Pantallas
+        agregarRecurso(28, "Pantalla LED", "LED: pantalla modular de 3 x 2 m", 150, 5500f, "personas", "Pantallas", "pieza", "Activo");
+        agregarRecurso(29, "Proyector", "Proyección: proyector de alta luminosidad", 100, 1200f, "personas", "Pantallas", "pieza", "Activo");
+        agregarRecurso(30, "Pantalla de proyección", "Proyección: pantalla con tripié", 100, 500f, "personas", "Pantallas", "pieza", "Activo");
+        agregarRecurso(31, "Televisión", "Televisión: pantalla de 55 pulgadas", 30, 800f, "personas", "Pantallas", "pieza", "Activo");
     }
 
     private void agregarRecurso(int id, String nombre, String descripcion, int capacidad, float precioReferencia,

@@ -112,13 +112,13 @@ public class GestorEventos {
     //guarda los recursos que seleccione el usuario en un map (cuando el asesor le da a -+)
     //falta que valide por cantidades del recurso en el almacen, que no deje agregar mas recursos
     //de los que hay
-    public void actualizarRecursosTemporal(String categoria, Map<Integer, Integer> cantidades) {
+    public void actualizarRecursos(String categoria, Map<Integer, Integer> cantidades) {
         seleccionRecursos.entrySet().removeIf(entry -> {
             DTORecurso r = iRecursoBO.consultarRecurso(entry.getKey());
             return r != null && r.getTipoRecurso().equalsIgnoreCase(categoria);
         });
 
-        // Agregamos los nuevos IDs con sus cantidades
+        //agregamos los nuevos IDs con sus cantidades
         seleccionRecursos.putAll(cantidades);
     }
 

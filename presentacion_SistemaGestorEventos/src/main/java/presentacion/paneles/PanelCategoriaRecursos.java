@@ -4,17 +4,7 @@
  */
 package presentacion.paneles;
 
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.text.Normalizer;
@@ -22,21 +12,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import presentacion.control.ControlPresentacion;
-import dto.DTORecurso; 
+import dto.DTORecurso;
 
-/**
- * 
- * @author Andres
- */
 public abstract class PanelCategoriaRecursos extends JPanel {
 
     private static final Color FONDO = new Color(217, 217, 217);
@@ -77,14 +56,17 @@ public abstract class PanelCategoriaRecursos extends JPanel {
         pnlNorte.add(lblTitulo, BorderLayout.NORTH);
         pnlNorte.add(pnlTipo, BorderLayout.CENTER);
         
+        // 1. OBTENEMOS EL CATÁLOGO
         List<DTORecurso> catalogo = control.obtenerCatalogoRecursos();
         
         for(String[] elemento : elementos){
             String nombre = elemento[0];
             String tipo = elemento[1];
             
+            // 2. BUSCAMOS EL ID
             int idRecurso = obtenerIdDeRecurso(catalogo, nombre);
             
+            // 3. CREAMOS LA TARJETA CON EL ID Y EL PADRE
             tarjetas.add(new TarjetaElemento(idRecurso, nombre, tipo, cargarImagen(nombre), this));
         }
         
@@ -141,7 +123,7 @@ public abstract class PanelCategoriaRecursos extends JPanel {
                 }
             }
         }
-        return -1; 
+        return -1;
     }
 
     private void mostrarElementos(){
@@ -199,9 +181,8 @@ public abstract class PanelCategoriaRecursos extends JPanel {
     }
 
     private static class TarjetaElemento extends JPanel{
-
         private static final int MAXIMO = 99;
-        private final int idRecurso; // 🚨 CAMBIO 6: Nuevo atributo para guardar el ID
+        private final int idRecurso;
         private final String nombre;
         private final String tipo;
         private final JLabel lblCantidad = new JLabel("0", JLabel.CENTER);
@@ -256,11 +237,13 @@ public abstract class PanelCategoriaRecursos extends JPanel {
             }
             cantidad = nueva;
             actualizar();
+            
+            // 🚨 ESTA ES LA LÍNEA QUE TE BORRARON EN EL PULL
             if (panelPadre != null) {
                 panelPadre.notificarCambios();
             }
         }
-        
+
         private void actualizar() {
             lblCantidad.setText(String.valueOf(cantidad));
             btnMenos.setEnabled(cantidad > 0);
@@ -269,9 +252,7 @@ public abstract class PanelCategoriaRecursos extends JPanel {
     }
 
     private static class BotonMasMenos extends JButton{
-
         private final boolean esMas;
-
         BotonMasMenos(boolean esMas){
             this.esMas = esMas;
             setPreferredSize(new Dimension(36, 30));

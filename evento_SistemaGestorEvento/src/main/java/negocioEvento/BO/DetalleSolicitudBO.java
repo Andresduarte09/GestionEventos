@@ -26,7 +26,7 @@ public class DetalleSolicitudBO implements IDetalleSolicitudBO {
         int nuevoId = almacen.getDetallesSolicitud().size() + 1;
         detalle.setIdDetalleSolicitud(nuevoId);
         almacen.getDetallesSolicitud().add(detalle);
-
+        
         for (DTOEvento e : almacen.getEventos()) {
             if (e.getIdEvento() == detalle.getIdEvento()) {
                 if (e.getDetallesSolicitud() == null) {

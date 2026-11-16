@@ -78,8 +78,8 @@ public class FachadaEvento implements ISubsistemaEvento {
     }
     
     @Override
-    public void actualizarRecursosTemporal(String categoria, Map<Integer, Integer> cantidades) {
-        gestor.actualizarRecursosTemporal(categoria, cantidades);
+    public void actualizarRecursos(String categoria, Map<Integer, Integer> cantidades) {
+        gestor.actualizarRecursos(categoria, cantidades);
     }
 
     @Override
