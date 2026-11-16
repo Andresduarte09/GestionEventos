@@ -9,15 +9,25 @@ import java.util.List;
 
 public interface IConfigPropuestaBO {
 
-    DTODetalleSolicitud guardarDetalleSolicitud(DTODetalleSolicitud detalle);
+    DTODetalleSolicitud guardarDetalleSolicitud(
+            DTODetalleSolicitud detalle
+    );
 
-    List<DTODetalleSolicitud> consultarDetallesPorEvento(int idEvento);
+    List<DTODetalleSolicitud> consultarDetallesPorEvento(
+            int idEvento
+    );
 
     List<DTOServicio> consultarServicios();
 
     List<DTOEquipo> consultarEquipos();
 
     List<DTOPersonal> consultarPersonal();
+
+    List<DTOEquipo> consultarEquiposPropios();
+
+    List<DTOEquipo> consultarEquiposExternos();
+
+    List<DTOInventario> consultarInventariosDisponibles();
 
     boolean verificarDisponibilidad(DTOInventario seleccion);
 }

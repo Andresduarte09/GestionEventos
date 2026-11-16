@@ -54,29 +54,86 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
     }
 
     @Override
-    public void seleccionarEquipos(int idEquipo, int cantidad) {
+    public boolean seleccionarEquipos(
+            int idEquipo,
+            int cantidad) {
+
+        if (cantidad < 0) {
+            return false;
+        }
 
         for (DTOEquipo e : gestor.solicitarEquipos()) {
 
             if (e.getIdEquipo() == idEquipo) {
+
+                if (cantidad > e.getDisponibilidad()) {
+                    return false;
+                }
+
                 e.setCantidadSeleccionada(cantidad);
-                return;
+                return true;
             }
         }
+
+        return false;
     }
 
     @Override
-    public void seleccionarPersonal(
+    public boolean seleccionarPersonal(
             int idPersonal,
             int cantidad) {
+
+        if (cantidad < 0) {
+            return false;
+        }
 
         for (DTOPersonal p : gestor.solicitarPersonal()) {
 
             if (p.getIdEspecialidad() == idPersonal) {
+
                 p.setCantidad(cantidad);
-                return;
+                return true;
             }
         }
+
+        return false;
+    }
+
+    @Override
+    public DTOInventario obtenerResumenSeleccion(int idEvento) {
+        return gestor.obtenerResumen(idEvento);
+    }
+
+    @Override
+    public boolean verificarSeleccionServicios() {
+
+        for (DTOServicio s : gestor.solicitarServicios()) {
+
+            if (s.isSeleccionado()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean validarCantidadEquipo(
+            int idEquipo,
+            int cantidad) {
+
+        if (cantidad <= 0) {
+            return false;
+        }
+
+        for (DTOEquipo e : gestor.solicitarEquipos()) {
+
+            if (e.getIdEquipo() == idEquipo) {
+                return cantidad <= e.getDisponibilidad();
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -120,18 +177,6 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
                 horarioDesmontaje,
                 comentarios
         );
-    }
-
-    @Override
-    public DTOPropuesta consultarPropuesta(int idPropuesta) {
-        return gestor.consultarPropuesta(idPropuesta);
-    }
-
-    @Override
-    public DTOInventario consultarRecursosPropuesta(
-            int idPropuesta) {
-
-        return gestor.consultarRecursosPropuesta(idPropuesta);
     }
 
     private void validarHorario(String texto) {

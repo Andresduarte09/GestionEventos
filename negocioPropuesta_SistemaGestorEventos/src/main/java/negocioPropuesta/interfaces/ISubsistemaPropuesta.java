@@ -11,26 +11,25 @@ public interface ISubsistemaPropuesta {
 
     void establecerEventoActual(int idEvento);
 
-    void seleccionarServicios(
-            int idServicio,
-            boolean seleccionado
-    );
+    void seleccionarServicios(int idServicio, boolean seleccionado);
 
-    void seleccionarEquipos(int idEquipo, int cantidad);
+    boolean seleccionarEquipos(int idEquipo, int cantidad);
 
-    void seleccionarPersonal(int idPersonal, int cantidad);
+    boolean seleccionarPersonal(int idPersonal, int cantidad);
+
+    boolean verificarSeleccionServicios();
 
     boolean verificarSeleccionEquipo();
 
     boolean verificarSeleccionPersonal();
+
+    boolean validarCantidadEquipo(int idEquipo, int cantidad);
+
+    DTOInventario obtenerResumenSeleccion(int idEvento);
 
     DTOPropuesta enviarPropuestaHaciaCotizacion(
             String horarioMontaje,
             String horarioDesmontaje,
             String comentarios
     );
-
-    DTOPropuesta consultarPropuesta(int idPropuesta);
-
-    DTOInventario consultarRecursosPropuesta(int idPropuesta);
 }

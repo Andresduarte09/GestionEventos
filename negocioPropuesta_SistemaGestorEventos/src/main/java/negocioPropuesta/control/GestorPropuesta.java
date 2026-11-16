@@ -5,6 +5,7 @@ import dto.DTOInventario;
 import dto.DTOPersonal;
 import dto.DTOPropuesta;
 import dto.DTOServicio;
+import java.util.ArrayList;
 import java.util.List;
 import negocioPropuesta.interfaces.IConfigPropuestaBO;
 import negocioPropuesta.interfaces.IPropuestaBO;
@@ -26,9 +27,11 @@ public class GestorPropuesta {
     }
 
     public void establecerEventoActual(int idEvento) {
+
         if (idEvento <= 0) {
             throw new IllegalArgumentException(
-                    "El ID del evento debe ser positivo.");
+                    "El ID del evento debe ser positivo."
+            );
         }
 
         this.idEventoActual = idEvento;
@@ -46,8 +49,12 @@ public class GestorPropuesta {
         return configPropuestaBO.consultarPersonal();
     }
 
-    public boolean verificarSeleccion(DTOInventario seleccion) {
-        return configPropuestaBO.verificarDisponibilidad(seleccion);
+    public boolean verificarSeleccion(
+            DTOInventario seleccion) {
+
+        return configPropuestaBO.verificarDisponibilidad(
+                seleccion
+        );
     }
 
     private DTOInventario capturarSeleccionActual() {
@@ -55,18 +62,21 @@ public class GestorPropuesta {
         DTOInventario seleccion = new DTOInventario();
 
         for (DTOServicio s : solicitarServicios()) {
+
             if (s.isSeleccionado()) {
                 seleccion.getServicios().add(s);
             }
         }
 
         for (DTOEquipo e : solicitarEquipos()) {
+
             if (e.getCantidadSeleccionada() > 0) {
                 seleccion.getEquipos().add(e);
             }
         }
 
         for (DTOPersonal p : solicitarPersonal()) {
+
             if (p.getCantidad() > 0) {
                 seleccion.getPersonal().add(p);
             }
@@ -97,8 +107,10 @@ public class GestorPropuesta {
             String comentarios) {
 
         if (idEventoActual <= 0) {
+
             throw new IllegalStateException(
-                    "Primero debes establecer el evento actual.");
+                    "Primero debes establecer el evento actual."
+            );
         }
 
         propuestaBO.registrarSeleccionEvento(
@@ -120,7 +132,8 @@ public class GestorPropuesta {
                 comentarios == null ? "" : comentarios.trim()
         );
 
-        DTOPropuesta guardada = propuestaBO.guardar(propuesta);
+        DTOPropuesta guardada =
+                propuestaBO.guardar(propuesta);
 
         if (guardada.getFolio() == null
                 || guardada.getFolio().trim().isEmpty()) {
@@ -139,8 +152,12 @@ public class GestorPropuesta {
         return propuestaBO.consultar(idPropuesta);
     }
 
-    public DTOInventario consultarRecursosPropuesta(int idPropuesta) {
-        return propuestaBO.consultarRecursosPropuesta(idPropuesta);
+    public DTOInventario consultarRecursosPropuesta(
+            int idPropuesta) {
+
+        return propuestaBO.consultarRecursosPropuesta(
+                idPropuesta
+        );
     }
 
     public void actualizarPropuesta(DTOInventario cambios) {
@@ -172,5 +189,35 @@ public class GestorPropuesta {
 
     public List<DTOPersonal> obtenerPersonalDisponible() {
         return configPropuestaBO.consultarPersonal();
+    }
+
+    public List<DTOEquipo> consultarEquiposPropios() {
+        return configPropuestaBO.consultarEquiposPropios();
+    }
+
+    public List<DTOEquipo> consultarEquiposExternos() {
+        return configPropuestaBO.consultarEquiposExternos();
+    }
+
+    public List<DTOInventario> consultarInventariosDisponibles() {
+        return configPropuestaBO.consultarInventariosDisponibles();
+    }
+
+    public List<DTOEquipo> buscarEquiposExternos(String texto) {
+
+        List<DTOEquipo> resultado = new ArrayList<>();
+
+        String filtro = texto == null ? "" : texto.trim().toLowerCase();
+
+        for (DTOEquipo equipo : consultarEquiposExternos()) {
+            if (equipo.getNombre() != null
+                    && equipo.getNombre()
+                            .toLowerCase()
+                            .contains(filtro)) {
+                resultado.add(equipo);
+            }
+        }
+
+        return resultado;
     }
 }
