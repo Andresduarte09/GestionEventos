@@ -48,12 +48,12 @@ public class GestorEventos {
         
         this.iEventoBO = new EventoBO(this.almacen);
         this.iClienteBO = new ClienteBO(this.almacen);
-            this.iRecursoBO = new RecursoBO(this.almacen);
-            this.iLocalEventoBO = new LocalEventoBO(this.almacen);
-            this.iLevantamientoBO = new LevantamientoBO(this.almacen);
-            this.iDetalleSolicitudBO = new DetalleSolicitudBO(this.almacen);
-            this.iReservaBO = new ReservaBO(this.almacen);
-        }
+        this.iRecursoBO = new RecursoBO(this.almacen);
+        this.iLocalEventoBO = new LocalEventoBO(this.almacen);
+        this.iLevantamientoBO = new LevantamientoBO(this.almacen);
+        this.iDetalleSolicitudBO = new DetalleSolicitudBO(this.almacen);
+         this.iReservaBO = new ReservaBO(this.almacen);
+    }
 
     public DTOCliente obtenerCliente(String telefono) {
         return iClienteBO.consultarPorTelefono(telefono);
@@ -86,6 +86,7 @@ public class GestorEventos {
     public List<DTORecurso> obtenerCatalogoRecursos() {
         return iRecursoBO.obtenerTodosLosRecursos();
     }
+    
     //valida que existe para luego crear el DetalleSolicitud
     public DTODetalleSolicitud crearRecurso(DTODetalleSolicitud datos) {
         if (datos == null) return null;
@@ -102,7 +103,7 @@ public class GestorEventos {
     }
 
     //guarda los recursos que seleccione el usuario en un map (cuando el asesor le da a -+)
-    //falta que valide por cantidades del recurso en el almacen/bd, que no deje agregar mas recursos
+    //falta que valide por cantidades del recurso en el almacen, que no deje agregar mas recursos
     //de los que hay
     public void actualizarRecursosTemporal(String categoria, Map<Integer, Integer> cantidades) {
         seleccionRecursos.entrySet().removeIf(entry -> {

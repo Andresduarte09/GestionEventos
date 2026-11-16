@@ -239,7 +239,11 @@ public class ControlPresentacion {
         return true;
     }
 
-    // REGISTRO DE EVENTOS
+
+    //METODOS PARA REGISTRAR EVENTOS
+    
+    //Inicia el registro de datos del evento 
+
     public void iniciarRegistrarEvento(DTOCliente cliente) {
 
         this.cliente = cliente;

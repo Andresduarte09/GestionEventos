@@ -43,9 +43,9 @@ public class LocalEventoBO implements ILocalEventoBO {
     public List<DTOLocalEvento> obtenerLocalFiltrado(String tipoLocal, int asistentes) {
         List<DTOLocalEvento> filtrados = new ArrayList<>();
         for (DTOLocalEvento l : almacen.getLocalesEvento()) {
-            
-            //POR EL MOMENTO SOLO HAY 2 FILTROS, PERO CONSIDERAR AGREGAR MAS
-            if (l.getTipoLocal().equalsIgnoreCase(tipoLocal) && l.getCapacidad() >= asistentes) {
+            boolean coincide = (tipoLocal == null || l.getTipoLocal().equalsIgnoreCase(tipoLocal));
+
+            if (coincide && l.getCapacidad() >= asistentes) {
                 filtrados.add(l);
             }
         }
