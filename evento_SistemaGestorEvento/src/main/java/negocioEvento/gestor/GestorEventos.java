@@ -37,6 +37,8 @@ public class GestorEventos {
     private IDetalleSolicitudBO iDetalleSolicitudBO;
     private IReservaBO iReservaBO;
     
+    private static final int DURACION_EVENTO_HORAS = 5;
+    
     //id -> cantidad
     private Map<Integer, Integer> seleccionRecursos = new LinkedHashMap<>();
 
@@ -65,6 +67,11 @@ public class GestorEventos {
 
     public DTOEvento crearEvento(DTOEvento datos) {
         if (validarDatosEvento(datos)) {
+            
+            if(datos.getHoraFin()== null && datos.getHoraInicio() != null){
+                datos.setHoraFin(datos.getHoraInicio().plusHours(DURACION_EVENTO_HORAS));
+            }
+            
             return iEventoBO.guardar(datos);
         }
         return null;
