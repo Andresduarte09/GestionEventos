@@ -494,8 +494,7 @@ public class ControlPresentacion {
         resumenCotizacion.setHorariosPropuesta(
                 horarioMontajePropuesta == null ? "Por definir" : horarioMontajePropuesta.toString(),
                 horarioDesmontajePropuesta == null ? "Por definir" : horarioDesmontajePropuesta.toString());
-
-        // Tomamos los recursos de la propuesta guardada, no de los catálogos globales.
+        
         DTOInventario inventario = obtenerInventarioPropuestaActual();
         if (inventario != null) {
             resumenCotizacion.setServicios(serviciosDeInventario(inventario));
@@ -742,7 +741,6 @@ public class ControlPresentacion {
             }
 
             propuestaActual = guardada;
-            // No reutilizamos una cotización perteneciente a otra propuesta.
             if (cotizacion != null && cotizacion.getIdPropuesta() != guardada.getIdPropuesta()) {
                 cotizacion = null;
                 versionCotizacion = null;
