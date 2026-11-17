@@ -26,6 +26,7 @@ import negocioOrden.interfaces.ISubsistemaOrden;
  * @author lui
  */
 public class ControlPresentacion {
+
     private ISubsistemaEvento subsistemaEvento;
     private ISubsistemaPropuesta subsistemaPropuesta;
     private ISubsistemaCotizacion subsistemaCotizacion;
@@ -51,6 +52,7 @@ public class ControlPresentacion {
     private JFrameAnalisisEvaluacion analisisEvaluacion;
     private DTOCliente cliente;
     private DTOEvento evento;
+
     public ControlPresentacion(ISubsistemaPropuesta subsistemaPropuesta, AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
         this.almacen = almacen;
         this.proveedorExterno = proveedorExterno;
@@ -478,9 +480,44 @@ public class ControlPresentacion {
         resumenCotizacion.setVisible(true);
     }
 
+    private Object[][] obtenerFilasConceptosCotizacion() {
+        List<Object[]> filas = new ArrayList<>();
+
+        if (versionCotizacion == null) {
+            return new Object[0][4];
+        }
+
+        List<DTODetalleCotizacion> detalles = subsistemaCotizacion.consultarDetallesVersion(versionCotizacion.getID());
+
+        if (detalles == null) {
+            return new Object[0][4];
+        }
+
+        for (DTODetalleCotizacion detalle : detalles) {
+            if (detalle == null || detalle.getConceptos() == null) {
+                continue;
+            }
+
+            for (DTOConceptoCotizacion concepto : detalle.getConceptos()) {
+                filas.add(new Object[]{
+                    concepto.getNombre(),
+                    concepto.getCantidad(),
+                    String.format(java.util.Locale.US, "$%,.2f", concepto.getPrecioUnitario()),
+                    String.format(java.util.Locale.US, "$%,.2f", concepto.getImporte())
+                });
+            }
+        }
+
+        return filas.toArray(new Object[0][]);
+    }
+
     public void mostrarResumenCotizacion() {
-        if (resumenCotizacion == null) return;
-        if (cotizacion != null) resumenCotizacion.setIDCotizacion(String.valueOf(cotizacion.getID()));
+        if (resumenCotizacion == null) {
+            return;
+        }
+        if (cotizacion != null) {
+            resumenCotizacion.setIDCotizacion(String.valueOf(cotizacion.getID()));
+        }
         if (versionCotizacion != null) {
             resumenCotizacion.setVersion(String.valueOf(versionCotizacion.getNumero()));
             resumenCotizacion.setEstado(versionCotizacion.getEstado());
@@ -494,7 +531,7 @@ public class ControlPresentacion {
         resumenCotizacion.setHorariosPropuesta(
                 horarioMontajePropuesta == null ? "Por definir" : horarioMontajePropuesta.toString(),
                 horarioDesmontajePropuesta == null ? "Por definir" : horarioDesmontajePropuesta.toString());
-        
+
         DTOInventario inventario = obtenerInventarioPropuestaActual();
         if (inventario != null) {
             resumenCotizacion.setServicios(serviciosDeInventario(inventario));
@@ -510,26 +547,52 @@ public class ControlPresentacion {
             resumenCotizacion.setImportes(versionCotizacion.getSubtotal(), versionCotizacion.getDescuento(), versionCotizacion.getIVA(), versionCotizacion.getTotal());
         }
 
+        resumenCotizacion.setConceptosCotizacion(obtenerFilasConceptosCotizacion());
         resumenCotizacion.ajustarTamano();
+
+    }
+
+    public void actualizarDescuentoCotizacion(float porcentaje) {
+        if (versionCotizacion == null) {
+            JOptionPane.showMessageDialog(null, "No hay una versión de cotización disponible.");
+            return;
+        }
+
+        try {
+            versionCotizacion = subsistemaCotizacion.actualizarDescuentoVersion(
+                    versionCotizacion.getID(), porcentaje);
+            mostrarResumenCotizacion();
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(),
+                    "Error al actualizar descuento", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private DTOInventario obtenerInventarioPropuestaActual() {
-        if (propuestaActual == null || propuestaActual.getIdPropuesta() <= 0) return null;
+        if (propuestaActual == null || propuestaActual.getIdPropuesta() <= 0) {
+            return null;
+        }
         return subsistemaPropuesta.consultarRecursosPropuesta(propuestaActual.getIdPropuesta());
     }
 
     private List<String> serviciosDeInventario(DTOInventario inventario) {
         List<String> nombres = new ArrayList<>();
-        if (inventario.getServicios() == null) return nombres;
+        if (inventario.getServicios() == null) {
+            return nombres;
+        }
         for (DTOServicio servicio : inventario.getServicios()) {
-            if (servicio != null && servicio.isSeleccionado()) nombres.add(servicio.getNombre());
+            if (servicio != null && servicio.isSeleccionado()) {
+                nombres.add(servicio.getNombre());
+            }
         }
         return nombres;
     }
 
     private List<String> equiposDeInventario(DTOInventario inventario) {
         List<String> nombres = new ArrayList<>();
-        if (inventario.getEquipos() == null) return nombres;
+        if (inventario.getEquipos() == null) {
+            return nombres;
+        }
         for (DTOEquipo equipo : inventario.getEquipos()) {
             if (equipo != null && equipo.getCantidadSeleccionada() > 0) {
                 nombres.add(equipo.getNombre() + " (x" + equipo.getCantidadSeleccionada() + ")");
@@ -540,7 +603,9 @@ public class ControlPresentacion {
 
     private List<String> personalDeInventario(DTOInventario inventario) {
         List<String> nombres = new ArrayList<>();
-        if (inventario.getPersonal() == null) return nombres;
+        if (inventario.getPersonal() == null) {
+            return nombres;
+        }
         for (DTOPersonal personal : inventario.getPersonal()) {
             if (personal != null && personal.getCantidad() > 0) {
                 nombres.add(personal.getEspecialidad() + " (x" + personal.getCantidad() + ")");
@@ -706,7 +771,7 @@ public class ControlPresentacion {
             almacen.registrarCotizacion(cotizacion);
         }
 
-        if (versionCotizacion != null && !almacen.getVersionesCotizacion() .contains(versionCotizacion)) {
+        if (versionCotizacion != null && !almacen.getVersionesCotizacion().contains(versionCotizacion)) {
             almacen.registrarVersionCotizacion(versionCotizacion);
         }
     }

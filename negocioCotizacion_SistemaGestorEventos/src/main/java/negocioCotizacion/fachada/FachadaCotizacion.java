@@ -9,10 +9,12 @@ import negocioCotizacion.gestor.GestorCotizacion;
 import negocioCotizacion.interfaces.ISubsistemaCotizacion;
 import dto.DTOVersionCotizacion;
 import negocioPropuesta.interfaces.ISubsistemaPropuesta;
+import dto.DTODetalleCotizacion;
+import java.util.List;
 
 /**
  *
- * @author Andres
+ * @author lui
  */
 public class FachadaCotizacion implements ISubsistemaCotizacion {
 
@@ -39,6 +41,11 @@ public class FachadaCotizacion implements ISubsistemaCotizacion {
     @Override
     public DTOVersionCotizacion actualizarDescuentoVersion(int idVersion, float porcentaje) {
         return gestor.actualizarDescuentoVersion(idVersion, porcentaje);
+    }
+
+    @Override
+    public List<DTODetalleCotizacion> consultarDetallesVersion(int idVersion) {
+        return gestor.consultarDetallesVersion(idVersion);
     }
 
 }

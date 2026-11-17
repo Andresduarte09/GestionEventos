@@ -6,6 +6,8 @@ package negocioCotizacion.interfaces;
 
 import dto.DTOCotizacion;
 import dto.DTOVersionCotizacion;
+import dto.DTODetalleCotizacion;
+import java.util.List;
 
 /**
  *
@@ -18,5 +20,7 @@ public interface ISubsistemaCotizacion {
     DTOVersionCotizacion actualizarDescuentoVersion(int idVersion, float porcentaje);
 
     DTOVersionCotizacion consultarUltimaVersion(int idCotizacion);
+
+    List<DTODetalleCotizacion> consultarDetallesVersion(int idVersion);
 
 }
