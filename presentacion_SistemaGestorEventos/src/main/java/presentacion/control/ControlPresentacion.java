@@ -23,7 +23,7 @@ import negocioOrden.interfaces.ISubsistemaOrden;
 /**
  * Control de navegación y comunicación entre las pantallas y los subsistemas.
  *
- * @author lui
+ * @author todoElTeam
  */
 public class ControlPresentacion {
 
@@ -40,10 +40,6 @@ public class ControlPresentacion {
     private DTOCotizacion cotizacion;
     private DTOPropuesta propuestaActual;
     private DTOVersionCotizacion versionCotizacion;
-    private DTODetalleCotizacion detalleCotizacion;
-    private DTOLevantamiento levantamiento;
-    private List<DTOPersonal> personalSeleccionado = new ArrayList<>();
-    private DTODecisionCliente decisionCliente;
     private List<DTOServicio> serviciosAceptados = new ArrayList<>();
     private LocalTime horarioMontajePropuesta;
     private LocalTime horarioDesmontajePropuesta;
@@ -438,14 +434,6 @@ public class ControlPresentacion {
         return versionCotizacion;
     }
 
-    public DTODetalleCotizacion getDetalleCotizacion() {
-        return detalleCotizacion;
-    }
-
-    public DTOLevantamiento getLevantamiento() {
-        return levantamiento;
-    }
-
     public int getIdPropuestaActual() {
         return propuestaActual == null ? 0 : propuestaActual.getIdPropuesta();
     }
@@ -654,16 +642,6 @@ public class ControlPresentacion {
         return inventario == null ? new ArrayList<>() : serviciosDeInventario(inventario);
     }
 
-    private List<String> equiposSeleccionados() {
-        DTOInventario inventario = obtenerInventarioPropuestaActual();
-        return inventario == null ? new ArrayList<>() : equiposDeInventario(inventario);
-    }
-
-    private List<String> personalSeleccionado() {
-        DTOInventario inventario = obtenerInventarioPropuestaActual();
-        return inventario == null ? new ArrayList<>() : personalDeInventario(inventario);
-    }
-
     public void iniciarGenerarOrden() {
         JFrameGenerarOrden generarOrden = new JFrameGenerarOrden(this);
         generarOrden.setVisible(true);
@@ -809,7 +787,6 @@ public class ControlPresentacion {
             if (cotizacion != null && cotizacion.getIdPropuesta() != guardada.getIdPropuesta()) {
                 cotizacion = null;
                 versionCotizacion = null;
-                detalleCotizacion = null;
             }
 
             horarioMontajePropuesta = (horarioMontaje == null || horarioMontaje.isBlank()) ? null : LocalTime.parse(horarioMontaje.trim());
