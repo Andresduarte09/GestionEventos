@@ -10,7 +10,6 @@ import javax.swing.JOptionPane;
 import presentacion.validaciones.Validaciones;
 import java.time.LocalTime;
 import java.time.LocalDate;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import negocioEvento.fachada.FachadaEvento;
 import negocioEvento.interfaces.ISubsistemaEvento;
@@ -27,6 +26,10 @@ import negocioOrden.interfaces.ISubsistemaOrden;
  */
 public class ControlPresentacion {
 
+    //quitAR ALMACEN CUANDO LO LIMPIEN DE TODOS LOS METODOS
+    //TAMBIEN FALTA VER SI SE PUEDEN MOVER VALIDACIONES O ASI DEJARLAS
+    
+    
     private ISubsistemaEvento subsistemaEvento;
     private ISubsistemaPropuesta subsistemaPropuesta;
     private ISubsistemaCotizacion subsistemaCotizacion;
@@ -34,13 +37,16 @@ public class ControlPresentacion {
     private AlmacenDatos almacen;
     private ProveedorExterno proveedorExterno;
     private JFrameRecursosEvento recursosFrmEvento;
-    private Map<Integer, Integer> seleccionTemporalRecursos = new LinkedHashMap<>();
     private JFrameConfigurarPropuesta configurarPropuesta;
     private JFrameResumenCotizacion resumenCotizacion;
     private DTOCotizacion cotizacion;
     private DTOPropuesta propuestaActual;
     private DTOVersionCotizacion versionCotizacion;
+    
+    //ARREGLEN EL METODO DONDE SE MANDA A LLAMAR Y LUEGO QUITENLO
     private List<DTOServicio> serviciosAceptados = new ArrayList<>();
+    
+    
     private LocalTime horarioMontajePropuesta;
     private LocalTime horarioDesmontajePropuesta;
     private String comentariosPropuesta = "";
@@ -57,49 +63,7 @@ public class ControlPresentacion {
         this.subsistemaCotizacion = new FachadaCotizacion(this.subsistemaPropuesta);
         this.subsistemaOrden = new FachadaOrden(almacen);
     }
-
-    public void iniciarSesion() {
-        JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
-        inicioSesion.setVisible(true);
-    }
-
-    public List<DTOLocalEvento> consultarLocalesDisponibles() {
-        if (evento == null) {
-            return new ArrayList<>();
-        }
-
-        return subsistemaEvento.obtenerLocalesDisponibles(evento, evento.getUbicacion());
-    }
-
-    // CONSULTAS DE F3
-    // Los catalogos se consultan en los almacenes existentes.
-    // La seleccion y el guardado siguen delegandose al subsistemaPropuesta.
-    public List<DTOServicio> consultarServiciosDisponibles() {
-        return new ArrayList<>(almacen.getServicios());
-    }
-
-    public List<DTOEquipo> obtenerEquiposDisponibles() {
-        return new ArrayList<>(almacen.getEquipos());
-    }
-
-    public List<DTOInventario> obtenerInventarioDisponible() {
-        return new ArrayList<>(almacen.getInventario());
-    }
-
-    public List<DTOPersonal> obtenerPersonalDisponible() {
-        return new ArrayList<>(almacen.getPersonal());
-    }
-
-    public List<DTOEquipo> consultarEquiposExternos() {
-        return new ArrayList<>(proveedorExterno.getEquipos());
-    }
-
-    private List<DTOEquipo> consultarTodosLosEquipos() {
-        List<DTOEquipo> equipos = obtenerEquiposDisponibles();
-        equipos.addAll(consultarEquiposExternos());
-        return equipos;
-    }
-
+    
     public DTOCliente getCliente() {
         return cliente;
     }
@@ -108,7 +72,19 @@ public class ControlPresentacion {
         return evento;
     }
 
-    // INICIO DE SESION Y REGISTRO DE CLIENTE
+    public List<DTOLocalEvento> consultarLocalesDisponibles() {
+        if (evento == null) {
+            return new ArrayList<>();
+        }
+        return subsistemaEvento.obtenerLocalesDisponibles(evento, evento.getUbicacion());
+    }
+
+    //--------------------------INICIO DE SESION Y REGISTRO DE CLIENTE----------------------------F1
+    public void iniciarSesion() {
+        JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
+        inicioSesion.setVisible(true);
+    }
+    
     public boolean procesarTelefonoIngresado(String telefono) {
         if (!Validaciones.telefonoValido(telefono)) {
             JOptionPane.showMessageDialog(null, "Ingresa un teléfono válido de 10 dígitos numéricos.", "Teléfono inválido", JOptionPane.WARNING_MESSAGE);
@@ -157,7 +133,6 @@ public class ControlPresentacion {
                 errores.append("El teléfono alterno debe tener 10 dígitos numéricos.\n");
             }
         }
-
         this.cliente.setNombre(nombre);
         this.cliente.setCorreo(correo);
         this.cliente.setTelefono(telefono);
@@ -167,7 +142,7 @@ public class ControlPresentacion {
         return true;
     }
 
-    //METODOS PARA REGISTRAR EVENTOS
+    //--------------------METODOS PARA REGISTRAR EVENTOS-----------------------
     //Inicia el registro de datos del evento
     public void iniciarRegistrarEvento(DTOCliente cliente) {
         this.cliente = cliente;
@@ -184,7 +159,8 @@ public class ControlPresentacion {
         this.evento = evento;
         iniciarRecursosEvento();
     }
-
+    
+    //creo q hay que solo mandar llamar las validaciones aqui
     public boolean procesarDatosEvento(String tipoEvento, String ubicacion, java.time.LocalDate fecha, java.time.LocalTime hora, String asistentesTexto) {
         StringBuilder errores = new StringBuilder();
         if (!Validaciones.textoValido(tipoEvento)) {
@@ -229,7 +205,9 @@ public class ControlPresentacion {
         iniciarSesion();
     }
 
-    // RECURSOS DEL EVENTO
+    //--------------RECURSOS DEL EVENTO------------------------
+    
+        
     public void iniciarRecursosEvento() {
         if (recursosFrmEvento != null && recursosFrmEvento.isDisplayable()) {
             recursosFrmEvento.setVisible(true);
@@ -265,7 +243,7 @@ public class ControlPresentacion {
         iniciarAnalisisEvaluacion();
     }
 
-    // ANALISIS Y EVALUACION - F2
+    //--------------------ANALISIS Y EVALUACION------------- F2
     public void iniciarAnalisisEvaluacion() {
         if (analisisEvaluacion != null && analisisEvaluacion.isDisplayable()) {
             analisisEvaluacion.setVisible(true);
@@ -288,7 +266,41 @@ public class ControlPresentacion {
         iniciarAnalisisEvaluacion();
     }
 
-    // FLUJO 3: CONFIGURACION DE PROPUESTAS
+    //------------------CONFIGURACION DE PROPUESTAS-------------------F3
+    
+        // CONSULTAS DE F3
+    // Los catalogos se consultan en los almacenes existentes.
+    // La seleccion y el guardado siguen delegandose al subsistemaPropuesta.
+    
+    //ALMACNE QITENLO
+    //   
+    public List<DTOServicio> consultarServiciosDisponibles() {
+        return new ArrayList<>(almacen.getServicios());
+    }
+
+    public List<DTOEquipo> obtenerEquiposDisponibles() {
+        return new ArrayList<>(almacen.getEquipos());
+    }
+
+    public List<DTOInventario> obtenerInventarioDisponible() {
+        return new ArrayList<>(almacen.getInventario());
+    }
+
+    public List<DTOPersonal> obtenerPersonalDisponible() {
+        return new ArrayList<>(almacen.getPersonal());
+    }
+
+    public List<DTOEquipo> consultarEquiposExternos() {
+        return new ArrayList<>(proveedorExterno.getEquipos());
+    }
+
+    private List<DTOEquipo> consultarTodosLosEquipos() {
+        List<DTOEquipo> equipos = obtenerEquiposDisponibles();
+        equipos.addAll(consultarEquiposExternos());
+        return equipos;
+    }
+    
+    
     public void iniciarConfigurarPropuesta() {
         if (evento == null || evento.getIdEvento() <= 0) {
             JOptionPane.showMessageDialog(null, "Debes registrar un evento antes de configurar la propuesta.");
@@ -425,7 +437,7 @@ public class ControlPresentacion {
         }
     }
 
-    // COTIZACION - F4
+    // -----------------COTIZACION---------------------- F4
     public DTOCotizacion getCotizacion() {
         return cotizacion;
     }
@@ -468,6 +480,7 @@ public class ControlPresentacion {
         resumenCotizacion.setVisible(true);
     }
 
+    
     private Object[][] obtenerFilasConceptosCotizacion() {
         List<Object[]> filas = new ArrayList<>();
 
@@ -537,7 +550,6 @@ public class ControlPresentacion {
 
         resumenCotizacion.setConceptosCotizacion(obtenerFilasConceptosCotizacion());
         resumenCotizacion.ajustarTamano();
-
     }
 
     public void actualizarDescuentoCotizacion(float porcentaje) {
@@ -614,6 +626,7 @@ public class ControlPresentacion {
         return inicio + " - " + fin;
     }
 
+   
     private boolean generarCotizacion() {
         try {
             if (propuestaActual == null || propuestaActual.getIdPropuesta() <= 0) {
@@ -651,6 +664,7 @@ public class ControlPresentacion {
         return serviciosSeleccionados();
     }
 
+    
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
         if (decision == null || decision.equals("Selecciona una decisión")) {
             JOptionPane.showMessageDialog(null, "Selecciona el tipo de decisión del cliente.");
