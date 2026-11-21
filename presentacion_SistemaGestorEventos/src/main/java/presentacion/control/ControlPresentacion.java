@@ -28,8 +28,6 @@ public class ControlPresentacion {
 
     //quitAR ALMACEN CUANDO LO LIMPIEN DE TODOS LOS METODOS
     //TAMBIEN FALTA VER SI SE PUEDEN MOVER VALIDACIONES O ASI DEJARLAS
-    
-    
     private ISubsistemaEvento subsistemaEvento;
     private ISubsistemaPropuesta subsistemaPropuesta;
     private ISubsistemaCotizacion subsistemaCotizacion;
@@ -42,11 +40,10 @@ public class ControlPresentacion {
     private DTOCotizacion cotizacion;
     private DTOPropuesta propuestaActual;
     private DTOVersionCotizacion versionCotizacion;
-    
+
     //ARREGLEN EL METODO DONDE SE MANDA A LLAMAR Y LUEGO QUITENLO
     private List<DTOServicio> serviciosAceptados = new ArrayList<>();
-    
-    
+
     private LocalTime horarioMontajePropuesta;
     private LocalTime horarioDesmontajePropuesta;
     private String comentariosPropuesta = "";
@@ -63,7 +60,7 @@ public class ControlPresentacion {
         this.subsistemaCotizacion = new FachadaCotizacion(this.subsistemaPropuesta);
         this.subsistemaOrden = new FachadaOrden(almacen);
     }
-    
+
     public DTOCliente getCliente() {
         return cliente;
     }
@@ -84,7 +81,7 @@ public class ControlPresentacion {
         JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
         inicioSesion.setVisible(true);
     }
-    
+
     public boolean procesarTelefonoIngresado(String telefono) {
         if (!Validaciones.telefonoValido(telefono)) {
             JOptionPane.showMessageDialog(null, "Ingresa un teléfono válido de 10 dígitos numéricos.", "Teléfono inválido", JOptionPane.WARNING_MESSAGE);
@@ -159,7 +156,7 @@ public class ControlPresentacion {
         this.evento = evento;
         iniciarRecursosEvento();
     }
-    
+
     //creo q hay que solo mandar llamar las validaciones aqui
     public boolean procesarDatosEvento(String tipoEvento, String ubicacion, java.time.LocalDate fecha, java.time.LocalTime hora, String asistentesTexto) {
         StringBuilder errores = new StringBuilder();
@@ -206,8 +203,6 @@ public class ControlPresentacion {
     }
 
     //--------------RECURSOS DEL EVENTO------------------------
-    
-        
     public void iniciarRecursosEvento() {
         if (recursosFrmEvento != null && recursosFrmEvento.isDisplayable()) {
             recursosFrmEvento.setVisible(true);
@@ -267,11 +262,9 @@ public class ControlPresentacion {
     }
 
     //------------------CONFIGURACION DE PROPUESTAS-------------------F3
-    
-        // CONSULTAS DE F3
+    // CONSULTAS DE F3
     // Los catalogos se consultan en los almacenes existentes.
     // La seleccion y el guardado siguen delegandose al subsistemaPropuesta.
-    
     //ALMACNE QITENLO
     //   
     public List<DTOServicio> consultarServiciosDisponibles() {
@@ -299,8 +292,7 @@ public class ControlPresentacion {
         equipos.addAll(consultarEquiposExternos());
         return equipos;
     }
-    
-    
+
     public void iniciarConfigurarPropuesta() {
         if (evento == null || evento.getIdEvento() <= 0) {
             JOptionPane.showMessageDialog(null, "Debes registrar un evento antes de configurar la propuesta.");
@@ -480,7 +472,6 @@ public class ControlPresentacion {
         resumenCotizacion.setVisible(true);
     }
 
-    
     private Object[][] obtenerFilasConceptosCotizacion() {
         List<Object[]> filas = new ArrayList<>();
 
@@ -545,7 +536,8 @@ public class ControlPresentacion {
         }
 
         if (versionCotizacion != null) {
-            resumenCotizacion.setImportes(versionCotizacion.getSubtotal(), versionCotizacion.getDescuento(), versionCotizacion.getIVA(), versionCotizacion.getTotal());
+            resumenCotizacion.setImportes(versionCotizacion.getSubtotal(), versionCotizacion.getDescuento(),
+                    versionCotizacion.getImporteDescuento(), versionCotizacion.getImporteIVA(), versionCotizacion.getTotal());
         }
 
         resumenCotizacion.setConceptosCotizacion(obtenerFilasConceptosCotizacion());
@@ -626,7 +618,6 @@ public class ControlPresentacion {
         return inicio + " - " + fin;
     }
 
-   
     private boolean generarCotizacion() {
         try {
             if (propuestaActual == null || propuestaActual.getIdPropuesta() <= 0) {
@@ -664,7 +655,6 @@ public class ControlPresentacion {
         return serviciosSeleccionados();
     }
 
-    
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
         if (decision == null || decision.equals("Selecciona una decisión")) {
             JOptionPane.showMessageDialog(null, "Selecciona el tipo de decisión del cliente.");

@@ -515,14 +515,11 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         }
     }
 
-    public void setImportes(float subtotal, float descuento, float tasaIVA, float total) {
-        float importeDescuento = subtotal * (descuento / 100f);
-        float importeIVA = (subtotal - importeDescuento) * tasaIVA;
-
+    public void setImportes(float subtotal, float descuento, float importeDescuento, float importeIVA, float total) {
         lblMostrarSubtotal.setText(formatearMoneda(subtotal));
-        lblMostrarDescuento.setText(formatearMoneda(importeDescuento) + " (" + descuento + "%)");
-        lblMostrarIVA.setText(formatearMoneda(importeIVA));
-        lblMostrarTotal.setText(formatearMoneda(total));
+    lblMostrarDescuento.setText(formatearMoneda(importeDescuento) + " (" + descuento + "%)");
+    lblMostrarIVA.setText(formatearMoneda(importeIVA));
+    lblMostrarTotal.setText(formatearMoneda(total));
     }
 
     private String formatearMoneda(float importe) {

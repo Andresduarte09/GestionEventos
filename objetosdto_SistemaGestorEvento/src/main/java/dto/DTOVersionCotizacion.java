@@ -16,8 +16,10 @@ public class DTOVersionCotizacion {
     private String estado;
     private String observaciones;
     private float descuento;
+    private float importeDescuento;
     private float subtotal;
     private final float IVA = 0.16f;
+    private float importeIVA;
     private float total;
 
     public DTOVersionCotizacion() {
@@ -108,5 +110,21 @@ public class DTOVersionCotizacion {
 
     public float getIVA() {
         return IVA;
+    }
+
+    public float getImporteDescuento() {
+        return importeDescuento;
+    }
+
+    public void setImporteDescuento(float importeDescuento) {
+        this.importeDescuento = importeDescuento;
+    }
+
+    public float getImporteIVA() {
+        return importeIVA;
+    }
+
+    public void setImporteIVA(float importeIVA) {
+        this.importeIVA = importeIVA;
     }
 }

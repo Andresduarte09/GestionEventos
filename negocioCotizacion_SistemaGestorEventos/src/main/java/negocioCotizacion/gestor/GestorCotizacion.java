@@ -207,6 +207,8 @@ public class GestorCotizacion {
         double total = calcularTotal(subtotal, descuento, iva);
 
         version.setSubtotal((float) subtotal);
+        version.setImporteDescuento((float) descuento);
+        version.setImporteIVA((float) iva);
         version.setTotal((float) total);
 
         return version;
@@ -271,17 +273,7 @@ public class GestorCotizacion {
                 continue;
             }
 
-            DTORecurso recursoEncontrado = null;
-
-            for (DTORecurso recurso : almacen.getRecursos()) {
-                if (recurso.getNombre() != null && personal.getEspecialidad() != null
-                        && recurso.getNombre().trim().equalsIgnoreCase(personal.getEspecialidad().trim())) {
-                    if (recursoEncontrado != null) {
-                        throw new IllegalStateException("Hay tarifas duplicadas: " + personal.getEspecialidad());
-                    }
-                    recursoEncontrado = recurso;
-                }
-            }
+            DTORecurso recursoEncontrado = buscarRecursoPorNombre(personal.getEspecialidad());
 
             if (recursoEncontrado == null) {
                 throw new IllegalStateException("No hay tarifa para: " + personal.getEspecialidad());
@@ -700,21 +692,36 @@ public class GestorCotizacion {
         return tieneRecursos;
     }
 
-    public float consultarTarifaRecurso(String nombre) {
+    private DTORecurso buscarRecursoPorNombre(String nombre) {
         if (nombre == null || nombre.trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre del recurso no es válido.");
+        }
+
+        String nombreCatalogo = nombre.trim();
+
+        if (nombreCatalogo.equalsIgnoreCase("Bocina amplificada")) {
+            nombreCatalogo = "Bocina";
+        } else if (nombreCatalogo.equalsIgnoreCase("Mesa redonda")) {
+            nombreCatalogo = "Mesas redondas";
         }
 
         DTORecurso encontrado = null;
 
         for (DTORecurso recurso : almacen.getRecursos()) {
-            if (recurso.getNombre() != null && recurso.getNombre().trim().equalsIgnoreCase(nombre.trim())) {
+            if (recurso.getNombre() != null && recurso.getNombre().trim().equalsIgnoreCase(nombreCatalogo)) {
                 if (encontrado != null) {
                     throw new IllegalStateException("Existen varios recursos con el nombre: " + nombre);
                 }
+
                 encontrado = recurso;
             }
         }
+
+        return encontrado;
+    }
+
+    public float consultarTarifaRecurso(String nombre) {
+        DTORecurso encontrado = buscarRecursoPorNombre(nombre);
 
         if (encontrado == null) {
             throw new IllegalArgumentException("No existe una tarifa registrada para: " + nombre);
@@ -782,17 +789,7 @@ public class GestorCotizacion {
                 continue;
             }
 
-            DTORecurso recursoEncontrado = null;
-
-            for (DTORecurso recurso : almacen.getRecursos()) {
-                if (recurso.getNombre() != null && equipo.getNombre() != null
-                        && recurso.getNombre().trim().equalsIgnoreCase(equipo.getNombre().trim())) {
-                    if (recursoEncontrado != null) {
-                        throw new IllegalStateException("Hay recursos duplicados: " + equipo.getNombre());
-                    }
-                    recursoEncontrado = recurso;
-                }
-            }
+            DTORecurso recursoEncontrado = buscarRecursoPorNombre(equipo.getNombre());
 
             if (recursoEncontrado == null) {
                 throw new IllegalStateException("No hay tarifa para el equipo: " + equipo.getNombre());
@@ -814,51 +811,41 @@ public class GestorCotizacion {
     }
 
     public double calcularImporteServicios(DTOInventario inventario) {
-        if (inventario == null || inventario.getServicios() == null) {
-            throw new IllegalArgumentException("El inventario de servicios no es válido.");
-        }
-
-        double total = 0;
-
-        for (DTOServicio servicio : inventario.getServicios()) {
-            if (servicio == null || servicio.getIdServicio() <= 0) {
-                throw new IllegalArgumentException("Existe un servicio con datos inválidos.");
-            }
-
-            if (!servicio.isSeleccionado()) {
-                continue;
-            }
-
-            DTORecurso recursoEncontrado = null;
-
-            for (DTORecurso recurso : almacen.getRecursos()) {
-                if (recurso.getNombre() != null && servicio.getNombre() != null
-                        && recurso.getNombre().trim().equalsIgnoreCase(servicio.getNombre().trim())) {
-                    if (recursoEncontrado != null) {
-                        throw new IllegalStateException("Hay recursos duplicados: " + servicio.getNombre());
-                    }
-                    recursoEncontrado = recurso;
-                }
-            }
-
-            if (recursoEncontrado == null) {
-                throw new IllegalStateException("No hay tarifa para el servicio: " + servicio.getNombre());
-            }
-
-            if (!"servicio".equalsIgnoreCase(recursoEncontrado.getUnidadMedida())) {
-                throw new IllegalStateException("La tarifa no corresponde a un servicio: " + servicio.getNombre());
-            }
-
-            float tarifa = consultarTarifaRecurso(servicio.getNombre());
-            total += tarifa;
-
-            if (!Double.isFinite(total)) {
-                throw new IllegalStateException("El importe de servicios excede el rango permitido.");
-            }
-        }
-
-        return total;
+    if (inventario == null || inventario.getServicios() == null) {
+        throw new IllegalArgumentException("El inventario de servicios no es válido.");
     }
+
+    double total = 0;
+
+    for (DTOServicio servicio : inventario.getServicios()) {
+        if (servicio == null || servicio.getIdServicio() <= 0) {
+            throw new IllegalArgumentException("Existe un servicio con datos inválidos.");
+        }
+
+        if (!servicio.isSeleccionado()) {
+            continue;
+        }
+
+        DTORecurso recursoEncontrado = buscarRecursoPorNombre(servicio.getNombre());
+
+        if (recursoEncontrado == null) {
+            throw new IllegalStateException("No hay tarifa para el servicio: " + servicio.getNombre());
+        }
+
+        if (!"servicio".equalsIgnoreCase(recursoEncontrado.getUnidadMedida())) {
+            throw new IllegalStateException("La tarifa no corresponde a un servicio: " + servicio.getNombre());
+        }
+
+        float tarifa = consultarTarifaRecurso(servicio.getNombre());
+        total += tarifa;
+
+        if (!Double.isFinite(total)) {
+            throw new IllegalStateException("El importe de servicios excede el rango permitido.");
+        }
+    }
+
+    return total;
+}
 
     private boolean existeTarifaRecurso(String nombre) {
         try {
