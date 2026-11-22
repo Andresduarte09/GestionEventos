@@ -27,7 +27,17 @@ public class FachadaOrden implements ISubsistemaOrden {
     }
 
     @Override
+    public void establecerContextoOrden(int idEvento, int idCotizacion) {
+        gestor.establecerContextoOrden(idEvento, idCotizacion);
+    }
+
+    @Override
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
         return gestor.registrarDecisionCotizacion(decision, serviciosSeleccionados);
+    }
+
+    @Override
+    public List<String> obtenerServiciosCotizados() {
+        return gestor.obtenerServiciosCotizados();
     }
 }

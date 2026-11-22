@@ -14,62 +14,59 @@ import negocioOrden.interfaces.IOrdenServicioBO;
 
 public class GestorOrden {
 
-    private int idVersionActual;
-    private final IOrdenServicioBO IOrdenBO;
-    private final IDecisionClienteBO IDecisionClienteBO;
+    private final IOrdenServicioBO ordenBO;
+    private final IDecisionClienteBO decisionBO;
 
-    public GestorOrden(IOrdenServicioBO ordenBO, IDecisionClienteBO decisionClienteBO) {
-        this.IOrdenBO = ordenBO;
-        this.IDecisionClienteBO = decisionClienteBO;
+    private int idEventoActual = -1;
+    private int idCotizacionActual = -1;
+
+    public GestorOrden(IOrdenServicioBO ordenBO, IDecisionClienteBO decisionBO) {
+        this.ordenBO = ordenBO;
+        this.decisionBO = decisionBO;
     }
 
-    public void guardarDecisionCliente(String decision, String observaciones) {
-        IDecisionClienteBO.guardarDecisionCliente(decision, observaciones);
+    public void establecerContextoOrden(int idEvento, int idCotizacion) {
+        this.idEventoActual = idEvento;
+        this.idCotizacionActual = idCotizacion;
     }
 
-    public void registrarCotizacionEnAlmacen() {
-        IOrdenBO.registrarCotizacionEnAlmacen();
-    }
-
-    public void generarOrdenServicio() {
-        IOrdenBO.generarOrdenServicio();
+    public List<String> obtenerServiciosCotizados() {
+        return ordenBO.obtenerServiciosCotizados();
     }
 
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
-        if (decision == null || decision.equals("Selecciona una decisión")) {
+        if (decision == null || decision.isBlank()) {
             return false;
         }
 
-        if (decision.equals("Aceptación total")) {
-            guardarDecisionCliente(decision, "El cliente aceptó todos los servicios cotizados.");
-            registrarCotizacionEnAlmacen();
-            generarOrdenServicio();
+        if ("Aceptación total".equals(decision)) {
+            decisionBO.registrarDecision(decision, "El cliente aceptó todos los servicios cotizados.");
+            ordenBO.registrarCotizacionEnAlmacen();
+            ordenBO.generarOrdenServicio(idEventoActual, idCotizacionActual, null);
             return true;
-        } else if (decision.equals("Aceptación parcial")) {
+        }
+
+        if ("Aceptación parcial".equals(decision)) {
             if (serviciosSeleccionados == null || serviciosSeleccionados.isEmpty()) {
                 return false;
             }
-            guardarDecisionCliente(decision, "Servicios aceptados: " + String.join(", ", serviciosSeleccionados));
-            registrarCotizacionEnAlmacen();
-            generarOrdenServicio();
+            String observaciones = "Servicios aceptados: " + String.join(", ", serviciosSeleccionados);
+            decisionBO.registrarDecision(decision, observaciones);
+            ordenBO.registrarCotizacionEnAlmacen();
+            ordenBO.generarOrdenServicio(idEventoActual, idCotizacionActual, serviciosSeleccionados);
             return true;
-        } else if (decision.equals("Solicitud de modificación")) {
-            guardarDecisionCliente(decision, "El cliente solicitó modificaciones.");
+        }
+
+        if ("Solicitud de modificación".equals(decision) || "Solicitud de modificacion".equals(decision)) {
             return true;
-        } else if (decision.equals("Negación total")) {
-            guardarDecisionCliente(decision, "El cliente rechazó todos los servicios.");
-            registrarCotizacionEnAlmacen();
+        }
+
+        if ("Negación total".equals(decision)) {
+            decisionBO.registrarDecision(decision, "El cliente rechazó todos los servicios.");
+            ordenBO.registrarCotizacionEnAlmacen();
             return true;
         }
 
         return false;
-    }
-
-    public int getIdVersionActual() {
-        return idVersionActual;
-    }
-
-    public void setIdVersionActual(int idVersionActual) {
-        this.idVersionActual = idVersionActual;
     }
 }

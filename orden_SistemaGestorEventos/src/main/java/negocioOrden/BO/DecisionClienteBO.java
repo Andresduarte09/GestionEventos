@@ -10,10 +10,9 @@ package negocioOrden.BO;
  * @author Andres
  */
 import com.mycompany.persistencia.AlmacenDatos;
+import dto.DTOCotizacion;
 import dto.DTODecisionCliente;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import negocioOrden.interfaces.IDecisionClienteBO;
 
 public class DecisionClienteBO implements IDecisionClienteBO {
@@ -25,31 +24,33 @@ public class DecisionClienteBO implements IDecisionClienteBO {
     }
 
     @Override
-    public void guardarDecisionCliente(String decision, String observaciones) {
-        int nuevoID = 1;
+    public boolean registrarDecision(String decision, String observaciones) {
+        if (decision == null || decision.isBlank()) {
+            return false;
+        }
 
-        for (DTODecisionCliente d : almacen.getDecisionesCliente()) {
-            if (d.getIdDecision() >= nuevoID) {
-                nuevoID = d.getIdDecision() + 1;
+        if (almacen != null && almacen.getCotizaciones() != null && !almacen.getCotizaciones().isEmpty()) {
+            DTOCotizacion ultima = almacen.getCotizaciones().get(almacen.getCotizaciones().size() - 1);
+            if (ultima != null) {
+                if ("Aceptación total".equals(decision)) {
+                    ultima.setEstadoGeneral("Aceptada");
+                } else if ("Aceptación parcial".equals(decision)) {
+                    ultima.setEstadoGeneral("Aceptada parcialmente");
+                } else if ("Negación total".equals(decision)) {
+                    ultima.setEstadoGeneral("Rechazada");
+                }
             }
         }
 
-        DTODecisionCliente nuevaDecision = new DTODecisionCliente(nuevoID, LocalDate.now(), decision, observaciones);
-        almacen.registrarDecisionCliente(nuevaDecision);
-    }
+        DTODecisionCliente dtoDecision = new DTODecisionCliente();
+        dtoDecision.setFecha(LocalDate.now());
+        dtoDecision.setTipoDecision(decision);
+        dtoDecision.setObservaciones(observaciones == null ? "" : observaciones);
 
-    @Override
-    public DTODecisionCliente consultarDecisionPorId(int idDecision) {
-        for (DTODecisionCliente d : almacen.getDecisionesCliente()) {
-            if (d.getIdDecision() == idDecision) {
-                return d;
-            }
+        if (almacen != null) {
+            almacen.registrarDecisionCliente(dtoDecision);
         }
-        return null;
-    }
 
-    @Override
-    public List<DTODecisionCliente> consultarHistorialDecisiones() {
-        return new ArrayList<>(almacen.getDecisionesCliente());
+        return true;
     }
 }

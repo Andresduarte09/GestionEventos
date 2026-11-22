@@ -23,10 +23,21 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
         this.control = control;
 
         initComponents();
+        
+        listServicios.setSelectionMode(
+                javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION
+        );
+
+        cargarServiciosCotizados();
+
+        if (control.getCliente() != null) {
+            lblClienteInfo.setText(control.getCliente().getNombre());
+        }
+
+        this.setLocationRelativeTo(null);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(
                 new String[]{
-                    "Selecciona una decisión",
                     "Aceptación total",
                     "Aceptación parcial",
                     "Solicitud de modificacion",
@@ -246,10 +257,9 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
     
     private void cargarServiciosCotizados() {
 
-        javax.swing.DefaultListModel<String> modelo =
-                new javax.swing.DefaultListModel<>();
+        javax.swing.DefaultListModel<String> modelo = new javax.swing.DefaultListModel<>();
 
-        for (String servicio : control.obtenerServiciosCotizadosConPrecio()) {
+        for (String servicio : control.obtenerServiciosCotizados()) {
             modelo.addElement(servicio);
         }
 

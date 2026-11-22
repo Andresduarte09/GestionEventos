@@ -13,5 +13,7 @@ import negocioOrden.BO.OrdenServicioBO;
 import java.util.List;
 
 public interface ISubsistemaOrden {
+    void establecerContextoOrden(int idEvento, int idCotizacion);
+    List<String> obtenerServiciosCotizados();
     boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados);
 }

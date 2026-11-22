@@ -8,11 +8,6 @@ package negocioOrden.interfaces;
  *
  * @author Andres
  */
-import dto.DTODecisionCliente;
-import java.util.List;
-
 public interface IDecisionClienteBO {
-    void guardarDecisionCliente(String decision, String observaciones);
-    DTODecisionCliente consultarDecisionPorId(int idDecision);
-    List<DTODecisionCliente> consultarHistorialDecisiones();
+    boolean registrarDecision(String decision, String observaciones);
 }
