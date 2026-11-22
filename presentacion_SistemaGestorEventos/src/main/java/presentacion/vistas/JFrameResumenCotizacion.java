@@ -398,7 +398,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         btnAprobar.setText("Aprobar");
         btnAprobar.addActionListener(this::btnAprobarActionPerformed);
 
-        spnDescuento.setModel(new javax.swing.SpinnerNumberModel(0, 0, 10, 1));
+        spnDescuento.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(10.0f), Float.valueOf(0.1f)));
 
         lblPorcentajeDescuento.setText("Descuento(%):");
 
@@ -517,9 +517,10 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
 
     public void setImportes(float subtotal, float descuento, float importeDescuento, float importeIVA, float total) {
         lblMostrarSubtotal.setText(formatearMoneda(subtotal));
-    lblMostrarDescuento.setText(formatearMoneda(importeDescuento) + " (" + descuento + "%)");
-    lblMostrarIVA.setText(formatearMoneda(importeIVA));
-    lblMostrarTotal.setText(formatearMoneda(total));
+        lblMostrarDescuento.setText(formatearMoneda(importeDescuento) + " (" + descuento + "%)");
+        lblMostrarIVA.setText(formatearMoneda(importeIVA));
+        lblMostrarTotal.setText(formatearMoneda(total));
+        spnDescuento.setValue((double) descuento);
     }
 
     private String formatearMoneda(float importe) {

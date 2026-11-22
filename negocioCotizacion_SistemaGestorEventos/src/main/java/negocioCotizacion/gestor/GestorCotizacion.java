@@ -76,50 +76,146 @@ public class GestorCotizacion {
         return propuesta;
     }
 
+    private List<String> obtenerFirmaDetalle(DTOInventario inventario, List<DTOConceptoCotizacion> conceptos) {
+        List<String> firma = new ArrayList<>();
+        if (inventario == null || conceptos == null) {
+            return firma;
+        }
+
+        if (inventario.getServicios() != null) {
+            for (DTOServicio servicio : inventario.getServicios()) {
+                if (servicio != null && servicio.isSeleccionado()) {
+                    firma.add("S|" + servicio.getIdServicio() + "|" + servicio.getNombre() + "|" + servicio.getDescripcion()
+                            + "|" + servicio.isEsAdicional() + "|" + servicio.getObservaciones());
+                }
+            }
+        }
+
+        if (inventario.getEquipos() != null) {
+            for (DTOEquipo equipo : inventario.getEquipos()) {
+                if (equipo != null && equipo.getCantidadSeleccionada() > 0) {
+                    firma.add("E|" + equipo.getIdEquipo() + "|" + equipo.getNombre() + "|" + equipo.getCantidadSeleccionada());
+                }
+            }
+        }
+
+        if (inventario.getPersonal() != null) {
+            for (DTOPersonal personal : inventario.getPersonal()) {
+                if (personal != null && personal.getCantidad() > 0) {
+                    firma.add("P|" + personal.getIdEspecialidad() + "|" + personal.getEspecialidad() + "|" + personal.getCantidad()
+                            + "|" + personal.getHorasMontaje() + "|" + personal.getHorasOperacion() + "|" + personal.getHorasDesmontaje());
+                }
+            }
+        }
+
+        for (DTOConceptoCotizacion concepto : conceptos) {
+            if (concepto != null) {
+                firma.add("C|" + concepto.getTipo() + "|" + concepto.getNombre() + "|" + concepto.getCantidad()
+                        + "|" + Float.floatToIntBits(concepto.getPrecioUnitario()) + "|" + Float.floatToIntBits(concepto.getImporte()));
+            }
+        }
+
+        firma.sort(String::compareTo);
+        return firma;
+    }
+
+    private boolean coincideConUltimaVersion(DTOVersionCotizacion version, LocalTime horario, DTOInventario inventario,
+            List<DTOConceptoCotizacion> conceptos) {
+        List<DTODetalleCotizacion> detalles = consultarDetallesVersion(version.getID());
+        if (detalles.size() != 1) {
+            return false;
+        }
+
+        DTODetalleCotizacion detalle = detalles.get(0);
+        if (!horario.equals(detalle.getHorarioFases()) || detalle.getInventario() == null
+                || detalle.getInventario().size() != 1 || detalle.getConceptos().isEmpty()) {
+            return false;
+        }
+
+        List<String> anterior = obtenerFirmaDetalle(detalle.getInventario().get(0), detalle.getConceptos());
+        List<String> actual = obtenerFirmaDetalle(inventario, conceptos);
+        return anterior.equals(actual);
+    }
+
     public DTOCotizacion calcularCotizacion(int idPropuesta) {
         DTOPropuesta propuesta = consultarPropuestaParaCotizar(idPropuesta);
         DTOInventario inventario = propuesta.getInventario();
 
-        double importe = calcularImporteInventario(inventario);
+        if (inventario.getServicios() == null || inventario.getEquipos() == null || inventario.getPersonal() == null) {
+            throw new IllegalStateException("El inventario de la propuesta está incompleto.");
+        }
 
-        if (importe <= 0 || importe > Float.MAX_VALUE) {
-            throw new IllegalStateException("La propuesta no tiene un importe válido.");
+        List<String> sinTarifa = consultarRecursosSinTarifa(inventario);
+        if (!sinTarifa.isEmpty()) {
+            throw new IllegalStateException("No se puede cotizar. Revisa las tarifas de:\n- " + String.join("\n- ", sinTarifa));
         }
 
         String horarioMontaje = propuesta.getHorarioMontaje();
-
         if (horarioMontaje == null || horarioMontaje.trim().isEmpty()) {
             throw new IllegalStateException("La propuesta no tiene horario de montaje.");
         }
 
         LocalTime horario;
-
         try {
             horario = LocalTime.parse(horarioMontaje.trim());
         } catch (java.time.format.DateTimeParseException ex) {
             throw new IllegalStateException("El horario de montaje no tiene un formato válido.", ex);
         }
 
+        List<DTOConceptoCotizacion> conceptos = generarDesgloseInventario(inventario);
+        double importe = calcularImporteInventario(inventario);
+        if (conceptos.isEmpty() || importe <= 0 || importe > Float.MAX_VALUE) {
+            throw new IllegalStateException("La propuesta no tiene un importe válido.");
+        }
+
         DTOCotizacion cotizacion = consultarCotizacionPorPropuesta(idPropuesta);
+        DTOVersionCotizacion ultimaVersion = null;
 
-        if (cotizacion != null) {
-            DTOVersionCotizacion ultimaVersion = consultarUltimaVersion(cotizacion.getID());
-
+        if (cotizacion == null) {
+            cotizacion = obtenerOCrearCotizacion(propuesta);
+        } else {
+            ultimaVersion = consultarUltimaVersion(cotizacion.getID());
             if (ultimaVersion != null) {
                 if (!hayDetalles(ultimaVersion.getID())) {
                     throw new IllegalStateException("La última versión no tiene detalles registrados.");
                 }
-
-                return cotizacion;
+                if (coincideConUltimaVersion(ultimaVersion, horario, inventario, conceptos)) {
+                    return cotizacion;
+                }
             }
-        } else {
-            cotizacion = obtenerOCrearCotizacion(propuesta);
         }
 
-        DTOVersionCotizacion version = crearNuevaVersion(cotizacion.getID());
-        registrarDetalleInventario(version.getID(), horario, inventario);
-
+        DTOVersionCotizacion nuevaVersion = crearNuevaVersion(cotizacion.getID());
+        if (ultimaVersion != null) {
+            nuevaVersion.setDescuento(ultimaVersion.getDescuento());
+        }
+        registrarDetalleInventario(nuevaVersion.getID(), horario, inventario);
         return cotizacion;
+    }
+
+    private void validarVersionEditable(DTOVersionCotizacion version) {
+        if (version == null) {
+            throw new IllegalArgumentException("La versión indicada no existe.");
+        }
+
+        DTOCotizacion cotizacion = consultarCotizacion(version.getIdCotizacion());
+        if (cotizacion == null) {
+            throw new IllegalStateException("La cotización de esta versión no existe.");
+        }
+
+        String estado = version.getEstado();
+        if (!"Pendiente".equalsIgnoreCase(estado) && !"Vigente".equalsIgnoreCase(estado)) {
+            throw new IllegalStateException("No se puede modificar una versión con estado: " + estado);
+        }
+
+        if (!"Pendiente".equalsIgnoreCase(cotizacion.getEstadoGeneral())) {
+            throw new IllegalStateException("La cotización ya tiene una decisión registrada y no puede modificarse.");
+        }
+
+        DTOVersionCotizacion ultima = consultarUltimaVersion(cotizacion.getID());
+        if (ultima == null || ultima.getID() != version.getID()) {
+            throw new IllegalStateException("Solo se puede modificar la versión más reciente.");
+        }
     }
 
     public DTOCotizacion guardarCotizacion(DTOCotizacion cotizacion) {
@@ -323,34 +419,32 @@ public class GestorCotizacion {
         if (!validarInventario(inventario)) {
             throw new IllegalArgumentException("El inventario no contiene recursos válidos.");
         }
-
         if (inventario.getServicios() == null || inventario.getEquipos() == null
                 || inventario.getPersonal() == null) {
             throw new IllegalArgumentException("Las listas del inventario no pueden ser nulas.");
         }
 
         validarPaqueteAudio(inventario);
-
         List<DTOConceptoCotizacion> conceptos = new ArrayList<>();
 
         for (DTOServicio servicio : inventario.getServicios()) {
-            if (servicio == null) {
-                throw new IllegalArgumentException("Existe un servicio nulo.");
+            if (servicio == null || servicio.getIdServicio() <= 0) {
+                throw new IllegalArgumentException("Existe un servicio con datos inválidos.");
             }
-
             if (!servicio.isSeleccionado()) {
                 continue;
             }
 
-            float tarifa = consultarTarifaRecurso(servicio.getNombre());
-            conceptos.add(new DTOConceptoCotizacion("Servicio", servicio.getNombre(), 1, tarifa));
+            float tarifa = consultarTarifaServicio(servicio.getNombre(), inventario);
+            if (tarifa > 0) {
+                conceptos.add(new DTOConceptoCotizacion("Servicio", servicio.getNombre(), 1, tarifa));
+            }
         }
 
         for (DTOEquipo equipo : inventario.getEquipos()) {
             if (equipo == null) {
                 throw new IllegalArgumentException("Existe un equipo nulo.");
             }
-
             if (equipo.getCantidadSeleccionada() == 0) {
                 continue;
             }
@@ -364,26 +458,20 @@ public class GestorCotizacion {
             if (personal == null) {
                 throw new IllegalArgumentException("Existe personal nulo.");
             }
-
             int horas = calcularHorasPersonal(personal);
-
             if (horas == 0) {
                 continue;
             }
 
             float tarifa = consultarTarifaRecurso(personal.getEspecialidad());
-            conceptos.add(new DTOConceptoCotizacion("Personal", personal.getEspecialidad(),
-                    horas, tarifa));
+            conceptos.add(new DTOConceptoCotizacion("Personal", personal.getEspecialidad(), horas, tarifa));
         }
 
         double subtotal = 0;
-
         for (DTOConceptoCotizacion concepto : conceptos) {
             subtotal += concepto.getImporte();
         }
-
         double importeInventario = calcularImporteInventario(inventario);
-
         if (Math.abs(subtotal - importeInventario) > 0.01) {
             throw new IllegalStateException("El desglose no coincide con el importe del inventario.");
         }
@@ -457,49 +545,49 @@ public class GestorCotizacion {
         return consultarVersion(nuevaVersion.getID());
     }
 
+    private boolean tieneEquiposAudioSeleccionados(DTOInventario inventario) {
+        if (inventario == null || inventario.getEquipos() == null) {
+            throw new IllegalArgumentException("El inventario de equipos no es válido.");
+        }
+
+        for (DTOEquipo equipo : inventario.getEquipos()) {
+            if (equipo == null || equipo.getNombre() == null || equipo.getCantidadSeleccionada() <= 0) {
+                continue;
+            }
+
+            String nombre = equipo.getNombre().trim();
+            if ("Bocina amplificada".equalsIgnoreCase(nombre) || "Bocina".equalsIgnoreCase(nombre)
+                    || "Consola de audio".equalsIgnoreCase(nombre) || "Micrófono inalámbrico".equalsIgnoreCase(nombre)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void validarPaqueteAudio(DTOInventario inventario) {
         boolean paqueteAudio = false;
-        boolean equiposAudio = false;
 
         for (DTOServicio servicio : inventario.getServicios()) {
             if (servicio != null && servicio.isSeleccionado()
                     && "Sistema de audio completo".equalsIgnoreCase(servicio.getNombre())) {
                 paqueteAudio = true;
+                break;
             }
         }
 
-        for (DTOEquipo equipo : inventario.getEquipos()) {
-            if (equipo == null || equipo.getCantidadSeleccionada() <= 0) {
-                continue;
-            }
-
-            String nombre = equipo.getNombre();
-
-            if (nombre != null && ("Consola de audio".equalsIgnoreCase(nombre)
-                    || "Micrófono inalámbrico".equalsIgnoreCase(nombre)
-                    || "Bocina".equalsIgnoreCase(nombre)
-                    || "Bocina amplificada".equalsIgnoreCase(nombre))) {
-                equiposAudio = true;
-            }
-        }
-
-        if (paqueteAudio && equiposAudio) {
-            throw new IllegalStateException(
-                    "El paquete de audio completo no puede cobrarse junto con sus equipos incluidos.");
+        if (paqueteAudio && tieneEquiposAudioSeleccionados(inventario)) {
+            throw new IllegalStateException("El paquete de audio completo no puede cobrarse junto con sus equipos incluidos.");
         }
     }
 
     public DTOVersionCotizacion actualizarDescuentoVersion(int idVersion, float porcentaje) {
         DTOVersionCotizacion version = cotizacionBO.consultarVersion(idVersion);
-
-        if (version == null) {
-            throw new IllegalArgumentException("La versión indicada no existe.");
-        }
+        validarVersionEditable(version);
 
         if (!Float.isFinite(porcentaje) || porcentaje < 0 || porcentaje > 10) {
             throw new IllegalArgumentException("El descuento debe estar entre 0 y 10%.");
         }
-
         if (!hayDetalles(idVersion)) {
             throw new IllegalStateException("No hay detalles para calcular esta versión.");
         }
@@ -536,13 +624,19 @@ public class GestorCotizacion {
 
     public DTOVersionCotizacion crearNuevaVersion(int idCotizacion) {
         DTOCotizacion cotizacion = cotizacionBO.consultar(idCotizacion);
-
         if (cotizacion == null) {
             throw new IllegalArgumentException("No existe la cotización indicada.");
         }
+        if (!"Pendiente".equalsIgnoreCase(cotizacion.getEstadoGeneral())) {
+            throw new IllegalStateException("No se puede crear una versión de una cotización cerrada.");
+        }
+
+        DTOVersionCotizacion anterior = consultarUltimaVersion(idCotizacion);
+        if (anterior != null) {
+            validarVersionEditable(anterior);
+        }
 
         int ultimoNumero = 0;
-
         for (DTOVersionCotizacion version : almacen.getVersionesCotizacion()) {
             if (version.getIdCotizacion() == idCotizacion) {
                 ultimoNumero = Math.max(ultimoNumero, version.getNumero());
@@ -550,7 +644,6 @@ public class GestorCotizacion {
         }
 
         int nuevoID = 1;
-
         for (DTOVersionCotizacion version : almacen.getVersionesCotizacion()) {
             nuevoID = Math.max(nuevoID, version.getID() + 1);
         }
@@ -560,7 +653,6 @@ public class GestorCotizacion {
 
         nuevaVersion.setIdCotizacion(idCotizacion);
         versionActual = cotizacionBO.guardarVersion(nuevaVersion);
-
         return versionActual;
     }
 
@@ -744,18 +836,21 @@ public class GestorCotizacion {
         }
 
         List<String> sinTarifa = new ArrayList<>();
-
         if (inventario.getServicios() != null) {
             for (DTOServicio servicio : inventario.getServicios()) {
-                if (servicio.isSeleccionado() && !existeTarifaRecurso(servicio.getNombre())) {
-                    sinTarifa.add("Servicio: " + servicio.getNombre());
+                if (servicio != null && servicio.isSeleccionado()) {
+                    try {
+                        consultarTarifaServicio(servicio.getNombre(), inventario);
+                    } catch (IllegalArgumentException | IllegalStateException ex) {
+                        sinTarifa.add("Servicio: " + servicio.getNombre());
+                    }
                 }
             }
         }
 
         if (inventario.getEquipos() != null) {
             for (DTOEquipo equipo : inventario.getEquipos()) {
-                if (equipo.getCantidadSeleccionada() > 0 && !existeTarifaRecurso(equipo.getNombre())) {
+                if (equipo != null && equipo.getCantidadSeleccionada() > 0 && !existeTarifaRecurso(equipo.getNombre())) {
                     sinTarifa.add("Equipo: " + equipo.getNombre());
                 }
             }
@@ -763,7 +858,7 @@ public class GestorCotizacion {
 
         if (inventario.getPersonal() != null) {
             for (DTOPersonal personal : inventario.getPersonal()) {
-                if (personal.getCantidad() > 0 && !existeTarifaRecurso(personal.getEspecialidad())) {
+                if (personal != null && personal.getCantidad() > 0 && !existeTarifaRecurso(personal.getEspecialidad())) {
                     sinTarifa.add("Personal: " + personal.getEspecialidad());
                 }
             }
@@ -811,41 +906,54 @@ public class GestorCotizacion {
     }
 
     public double calcularImporteServicios(DTOInventario inventario) {
-    if (inventario == null || inventario.getServicios() == null) {
-        throw new IllegalArgumentException("El inventario de servicios no es válido.");
+        if (inventario == null || inventario.getServicios() == null || inventario.getEquipos() == null) {
+            throw new IllegalArgumentException("El inventario de servicios no es válido.");
+        }
+
+        double total = 0;
+        for (DTOServicio servicio : inventario.getServicios()) {
+            if (servicio == null || servicio.getIdServicio() <= 0) {
+                throw new IllegalArgumentException("Existe un servicio con datos inválidos.");
+            }
+            if (!servicio.isSeleccionado()) {
+                continue;
+            }
+
+            total += consultarTarifaServicio(servicio.getNombre(), inventario);
+            if (!Double.isFinite(total) || total > Float.MAX_VALUE) {
+                throw new IllegalStateException("El importe de servicios excede el rango permitido.");
+            }
+        }
+
+        return total;
     }
 
-    double total = 0;
-
-    for (DTOServicio servicio : inventario.getServicios()) {
-        if (servicio == null || servicio.getIdServicio() <= 0) {
-            throw new IllegalArgumentException("Existe un servicio con datos inválidos.");
+    private float consultarTarifaServicio(String nombre, DTOInventario inventario) {
+        if (nombre == null || nombre.isBlank() || inventario == null || inventario.getEquipos() == null) {
+            throw new IllegalArgumentException("No se puede consultar la tarifa del servicio.");
         }
 
-        if (!servicio.isSeleccionado()) {
-            continue;
+        String nombreTarifa = nombre.trim();
+
+        if ("Audio".equalsIgnoreCase(nombreTarifa)) {
+            if (tieneEquiposAudioSeleccionados(inventario)) {
+                return 0f;
+            }
+            nombreTarifa = "Sistema de audio completo";
         }
 
-        DTORecurso recursoEncontrado = buscarRecursoPorNombre(servicio.getNombre());
+        DTORecurso recurso = buscarRecursoPorNombre(nombreTarifa);
 
-        if (recursoEncontrado == null) {
-            throw new IllegalStateException("No hay tarifa para el servicio: " + servicio.getNombre());
+        if (recurso == null) {
+            throw new IllegalStateException("No hay tarifa para el servicio: " + nombre);
         }
 
-        if (!"servicio".equalsIgnoreCase(recursoEncontrado.getUnidadMedida())) {
-            throw new IllegalStateException("La tarifa no corresponde a un servicio: " + servicio.getNombre());
+        if (!"servicio".equalsIgnoreCase(recurso.getUnidadMedida())) {
+            throw new IllegalStateException("La tarifa no corresponde a un servicio: " + nombre);
         }
 
-        float tarifa = consultarTarifaRecurso(servicio.getNombre());
-        total += tarifa;
-
-        if (!Double.isFinite(total)) {
-            throw new IllegalStateException("El importe de servicios excede el rango permitido.");
-        }
+        return consultarTarifaRecurso(nombreTarifa);
     }
-
-    return total;
-}
 
     private boolean existeTarifaRecurso(String nombre) {
         try {

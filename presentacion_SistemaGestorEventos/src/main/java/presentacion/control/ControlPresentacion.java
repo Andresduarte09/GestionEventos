@@ -507,6 +507,7 @@ public class ControlPresentacion {
         if (resumenCotizacion == null) {
             return;
         }
+
         if (cotizacion != null) {
             resumenCotizacion.setIDCotizacion(String.valueOf(cotizacion.getID()));
         }
@@ -514,17 +515,31 @@ public class ControlPresentacion {
             resumenCotizacion.setVersion(String.valueOf(versionCotizacion.getNumero()));
             resumenCotizacion.setEstado(versionCotizacion.getEstado());
         }
-
         if (evento != null) {
             resumenCotizacion.setEvento(evento.getTipoEvento());
             resumenCotizacion.setOperacion(formatearHorario(evento.getHoraInicio(), evento.getHoraFin()));
         }
 
-        resumenCotizacion.setHorariosPropuesta(
-                horarioMontajePropuesta == null ? "Por definir" : horarioMontajePropuesta.toString(),
+        DTOInventario inventario = null;
+        LocalTime montaje = horarioMontajePropuesta;
+
+        if (versionCotizacion != null) {
+            List<DTODetalleCotizacion> detalles = subsistemaCotizacion.consultarDetallesVersion(versionCotizacion.getID());
+
+            for (DTODetalleCotizacion detalle : detalles) {
+                if (detalle == null || detalle.getInventario() == null || detalle.getInventario().isEmpty()) {
+                    continue;
+                }
+
+                inventario = detalle.getInventario().get(0);
+                montaje = detalle.getHorarioFases();
+                break;
+            }
+        }
+
+        resumenCotizacion.setHorariosPropuesta(montaje == null ? "Por definir" : montaje.toString(),
                 horarioDesmontajePropuesta == null ? "Por definir" : horarioDesmontajePropuesta.toString());
 
-        DTOInventario inventario = obtenerInventarioPropuestaActual();
         if (inventario != null) {
             resumenCotizacion.setServicios(serviciosDeInventario(inventario));
             resumenCotizacion.setEquipos(equiposDeInventario(inventario));
@@ -655,6 +670,7 @@ public class ControlPresentacion {
         return serviciosSeleccionados();
     }
 //------------------------------- SUBSISTEMA ORDEN --------------------------
+
     public void establecerContextoOrdenActual() {
         int idEvento = (evento != null) ? evento.getIdEvento() : -1;
         int idCotizacion = (cotizacion != null) ? cotizacion.getID() : -1;
