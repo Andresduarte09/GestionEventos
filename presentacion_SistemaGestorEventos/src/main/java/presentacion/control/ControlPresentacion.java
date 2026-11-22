@@ -654,108 +654,84 @@ public class ControlPresentacion {
     public List<String> obtenerServiciosCotizadosConPrecio() {
         return serviciosSeleccionados();
     }
+//------------------------------- SUBSISTEMA ORDEN --------------------------
+    public void establecerContextoOrdenActual() {
+        int idEvento = (evento != null) ? evento.getIdEvento() : -1;
+        int idCotizacion = (cotizacion != null) ? cotizacion.getID() : -1;
+        subsistemaOrden.establecerContextoOrden(idEvento, idCotizacion);
+    }
+
+    public List<String> obtenerServiciosCotizados() {
+        if (subsistemaOrden == null) {
+            return new ArrayList<>();
+        }
+        List<String> servicios = subsistemaOrden.obtenerServiciosCotizados();
+        return servicios != null ? servicios : new ArrayList<>();
+    }
 
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
-        if (decision == null || decision.equals("Selecciona una decisión")) {
+        if (decision == null || decision.isBlank() || "Selecciona una decisión".equals(decision)) {
             JOptionPane.showMessageDialog(null, "Selecciona el tipo de decisión del cliente.");
             return false;
         }
 
-        serviciosAceptados.clear();
-        if (decision.equals("Aceptación total")) {
-            for (DTOServicio servicio : consultarServiciosDisponibles()) {
-                if (servicio.isSeleccionado()) {
-                    serviciosAceptados.add(servicio);
-                }
-            }
+        if ("Aceptación parcial".equals(decision) && (serviciosSeleccionados == null || serviciosSeleccionados.isEmpty())) {
+            JOptionPane.showMessageDialog(null, "Selecciona los servicios que el cliente acepta.");
+            return false;
+        }
 
-            if (serviciosAceptados.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No hay servicios cotizados para aceptar.");
-                return false;
-            }
+        establecerContextoOrdenActual();
 
-            cotizacion.setEstadoGeneral("Aceptada");
-            versionCotizacion.setEstado("Aceptada");
-        } else if (decision.equals("Aceptación parcial")) {
-            if (serviciosSeleccionados == null || serviciosSeleccionados.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Selecciona los servicios que el cliente acepta.");
-                return false;
-            }
+        boolean procesada = subsistemaOrden.registrarDecisionCotizacion(decision, serviciosSeleccionados);
+        if (!procesada) {
+            JOptionPane.showMessageDialog(null, "No se pudo registrar la decisión de la cotización.");
+            return false;
+        }
 
-            for (String nombreServicio : serviciosSeleccionados) {
-                for (DTOServicio servicio : consultarServiciosDisponibles()) {
-                    if (servicio.isSeleccionado() && servicio.getNombre().equals(nombreServicio)) {
-                        serviciosAceptados.add(servicio);
-                        break;
-                    }
-                }
-            }
-
-            if (serviciosAceptados.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "No se encontraron servicios aceptados.");
-                return false;
-            }
-
-            cotizacion.setEstadoGeneral("Aceptada parcialmente");
-            versionCotizacion.setEstado("Aceptada parcialmente");
-        } else if (decision.equals("Solicitud de modificación")) {
-            JOptionPane.showMessageDialog(null, "El cliente solicita modificaciones. " + "Regresando a la configuración de la propuesta.");
+        if ("Solicitud de modificación".equals(decision) || "Solicitud de modificacion".equals(decision)) {
+            JOptionPane.showMessageDialog(null, "El cliente solicita modificaciones. Regresando a la configuración de la propuesta.");
             iniciarConfigurarPropuesta();
             return true;
-        } else if (decision.equals("Negación total")) {
-            cotizacion.setEstadoGeneral("Rechazada");
-            versionCotizacion.setEstado("Rechazada");
+        }
+
+        if ("Negación total".equals(decision)) {
+            if (cotizacion != null) {
+                cotizacion.setEstadoGeneral("Rechazada");
+            }
+            if (versionCotizacion != null) {
+                versionCotizacion.setEstado("Rechazada");
+            }
             if (evento != null) {
                 evento.setEstadoAtencion("Cancelado");
             }
 
-            guardarDecisionCliente(decision, "El cliente rechazó todos los servicios.");
-            registrarCotizacionEnAlmacen();
-            JOptionPane.showMessageDialog(null, "La cotización fue rechazada. " + "El evento ha sido cancelado.");
+            JOptionPane.showMessageDialog(null, "La cotización fue rechazada. El evento ha sido cancelado.");
             cliente = null;
             evento = null;
             cotizacion = null;
             versionCotizacion = null;
-            serviciosAceptados.clear();
             iniciarSesion();
             return true;
         }
 
-        guardarDecisionCliente(decision, decision.equals("Aceptación parcial") ? "Servicios aceptados: " + obtenerNombresServiciosAceptados() : "El cliente aceptó todos los servicios cotizados.");
-        registrarCotizacionEnAlmacen();
-        iniciarGenerarOrden();
-        return true;
-    }
-
-    private String obtenerNombresServiciosAceptados() {
-        List<String> nombres = new ArrayList<>();
-        for (DTOServicio servicio : serviciosAceptados) {
-            nombres.add(servicio.getNombre());
-        }
-
-        return String.join(", ", nombres);
-    }
-
-    private void guardarDecisionCliente(String decision, String observaciones) {
-        int nuevoID = 1;
-        for (DTODecisionCliente d : almacen.getDecisionesCliente()) {
-            if (d.getIdDecision() >= nuevoID) {
-                nuevoID = d.getIdDecision() + 1;
+        if ("Aceptación total".equals(decision)) {
+            if (cotizacion != null) {
+                cotizacion.setEstadoGeneral("Aceptada");
+            }
+            if (versionCotizacion != null) {
+                versionCotizacion.setEstado("Aceptada");
+            }
+        } else if ("Aceptación parcial".equals(decision)) {
+            if (cotizacion != null) {
+                cotizacion.setEstadoGeneral("Aceptada parcialmente");
+            }
+            if (versionCotizacion != null) {
+                versionCotizacion.setEstado("Aceptada parcialmente");
             }
         }
 
-        DTODecisionCliente nuevaDecision = new DTODecisionCliente(nuevoID, LocalDate.now(), decision, observaciones);
-        almacen.registrarDecisionCliente(nuevaDecision);
-    }
-
-    private void registrarCotizacionEnAlmacen() {
-        if (cotizacion != null && !almacen.getCotizaciones().contains(cotizacion)) {
-            almacen.registrarCotizacion(cotizacion);
-        }
-
-        if (versionCotizacion != null && !almacen.getVersionesCotizacion().contains(versionCotizacion)) {
-            almacen.registrarVersionCotizacion(versionCotizacion);
-        }
+        iniciarGenerarOrden();
+        return true;
     }
 
     public List<DTOServicio> getServiciosAceptados() {

@@ -35,7 +35,7 @@ public class GestorOrden {
     }
 
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
-        if (decision == null || decision.isBlank()) {
+        if (decision == null || decision.isBlank() || "Selecciona una decisión".equals(decision)) {
             return false;
         }
 
