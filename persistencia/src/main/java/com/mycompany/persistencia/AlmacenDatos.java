@@ -265,7 +265,7 @@ public class AlmacenDatos {
 
     //Equipos, personal y servicios
     private void cargarEquiposPersonalYServicios() {
-        equipos.add(new DTOEquipo(1, "Silla", 100, 50));
+        equipos.add(new DTOEquipo(1, "Silla", 100, 0));
         equipos.add(new DTOEquipo(2, "Mesa redonda", 30, 0));
         equipos.add(new DTOEquipo(3, "Bocina amplificada", 12, 0));
         equipos.add(new DTOEquipo(4, "Consola de audio", 3, 0));
