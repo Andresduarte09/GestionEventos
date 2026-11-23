@@ -33,4 +33,6 @@ public interface ICotizacionBO {
     List<DTODetalleCotizacion> consultarDetallesVersion(int idVersion);
     
     List<DTOVersionCotizacion> consultarVersionesCotizacion(int idCotizacion);
+    
+    void revertirCreacionVersion(int idCotizacion, int idVersion, boolean cotizacionNueva);
 }

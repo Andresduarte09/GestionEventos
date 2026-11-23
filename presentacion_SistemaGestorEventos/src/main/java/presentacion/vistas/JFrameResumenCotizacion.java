@@ -520,7 +520,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
         lblMostrarDescuento.setText(formatearMoneda(importeDescuento) + " (" + descuento + "%)");
         lblMostrarIVA.setText(formatearMoneda(importeIVA));
         lblMostrarTotal.setText(formatearMoneda(total));
-        spnDescuento.setValue((double) descuento);
+        spnDescuento.setValue(descuento);
     }
 
     private String formatearMoneda(float importe) {

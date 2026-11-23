@@ -137,6 +137,28 @@ public class GestorCotizacion {
         return anterior.equals(actual);
     }
 
+    private DTOVersionCotizacion crearVersionConDetalle(int idCotizacion, LocalTime horario, DTOInventario inventario, boolean cotizacionNueva) {
+        DTOVersionCotizacion nuevaVersion = null;
+
+        try {
+            nuevaVersion = crearNuevaVersion(idCotizacion);
+            registrarDetalleInventario(nuevaVersion.getID(), horario, inventario);
+            return nuevaVersion;
+        } catch (RuntimeException ex) {
+            try {
+                cotizacionBO.revertirCreacionVersion(idCotizacion, nuevaVersion == null ? 0 : nuevaVersion.getID(), cotizacionNueva);
+
+                if (nuevaVersion != null && versionActual == nuevaVersion) {
+                    versionActual = null;
+                }
+            } catch (RuntimeException errorReversion) {
+                ex.addSuppressed(errorReversion);
+            }
+
+            throw ex;
+        }
+    }
+
     public DTOCotizacion calcularCotizacion(int idPropuesta) {
         DTOPropuesta propuesta = consultarPropuestaParaCotizar(idPropuesta);
         DTOInventario inventario = propuesta.getInventario();
@@ -164,17 +186,19 @@ public class GestorCotizacion {
 
         List<DTOConceptoCotizacion> conceptos = generarDesgloseInventario(inventario);
         double importe = calcularImporteInventario(inventario);
+
         if (conceptos.isEmpty() || importe <= 0 || importe > Float.MAX_VALUE) {
             throw new IllegalStateException("La propuesta no tiene un importe válido.");
         }
 
         DTOCotizacion cotizacion = consultarCotizacionPorPropuesta(idPropuesta);
-        DTOVersionCotizacion ultimaVersion = null;
+        boolean cotizacionNueva = cotizacion == null;
 
-        if (cotizacion == null) {
+        if (cotizacionNueva) {
             cotizacion = obtenerOCrearCotizacion(propuesta);
         } else {
-            ultimaVersion = consultarUltimaVersion(cotizacion.getID());
+            DTOVersionCotizacion ultimaVersion = consultarUltimaVersion(cotizacion.getID());
+
             if (ultimaVersion != null) {
                 if (!hayDetalles(ultimaVersion.getID())) {
                     throw new IllegalStateException("La última versión no tiene detalles registrados.");
@@ -185,11 +209,7 @@ public class GestorCotizacion {
             }
         }
 
-        DTOVersionCotizacion nuevaVersion = crearNuevaVersion(cotizacion.getID());
-        if (ultimaVersion != null) {
-            nuevaVersion.setDescuento(ultimaVersion.getDescuento());
-        }
-        registrarDetalleInventario(nuevaVersion.getID(), horario, inventario);
+        crearVersionConDetalle(cotizacion.getID(), horario, inventario, cotizacionNueva);
         return cotizacion;
     }
 
@@ -512,26 +532,20 @@ public class GestorCotizacion {
         return detalle;
     }
 
-    public DTOVersionCotizacion generarVersionModificada(int idCotizacion,
-            LocalTime horario, DTOInventario inventario) {
-
+    public DTOVersionCotizacion generarVersionModificada(int idCotizacion, LocalTime horario, DTOInventario inventario) {
         DTOCotizacion cotizacion = consultarCotizacion(idCotizacion);
-
         if (cotizacion == null) {
             throw new IllegalArgumentException("La cotización indicada no existe.");
         }
 
         DTOVersionCotizacion anterior = consultarUltimaVersion(idCotizacion);
-
         if (anterior == null || !hayDetalles(anterior.getID())) {
             throw new IllegalStateException("La cotización no tiene una versión completa.");
         }
-
         if (horario == null) {
             throw new IllegalArgumentException("El horario es obligatorio.");
         }
 
-        // Validamos los recursos y sus precios antes de guardar otra versión.
         List<DTOConceptoCotizacion> conceptos = generarDesgloseInventario(inventario);
         double subtotal = calcularImporteInventario(inventario);
 
@@ -539,10 +553,7 @@ public class GestorCotizacion {
             throw new IllegalStateException("El nuevo inventario no tiene un importe válido.");
         }
 
-        DTOVersionCotizacion nuevaVersion = crearNuevaVersion(idCotizacion);
-        registrarDetalleInventario(nuevaVersion.getID(), horario, inventario);
-
-        return consultarVersion(nuevaVersion.getID());
+        return crearVersionConDetalle(idCotizacion, horario, inventario, false);
     }
 
     private boolean tieneEquiposAudioSeleccionados(DTOInventario inventario) {
@@ -632,24 +643,25 @@ public class GestorCotizacion {
         }
 
         DTOVersionCotizacion anterior = consultarUltimaVersion(idCotizacion);
+        float descuentoAnterior = 0f;
+
         if (anterior != null) {
             validarVersionEditable(anterior);
+            descuentoAnterior = anterior.getDescuento();
         }
 
         int ultimoNumero = 0;
+        int nuevoID = 1;
+
         for (DTOVersionCotizacion version : almacen.getVersionesCotizacion()) {
             if (version.getIdCotizacion() == idCotizacion) {
                 ultimoNumero = Math.max(ultimoNumero, version.getNumero());
             }
-        }
-
-        int nuevoID = 1;
-        for (DTOVersionCotizacion version : almacen.getVersionesCotizacion()) {
             nuevoID = Math.max(nuevoID, version.getID() + 1);
         }
 
         DTOVersionCotizacion nuevaVersion = new DTOVersionCotizacion(
-                nuevoID, ultimoNumero + 1, LocalDate.now(), "Pendiente", "Nueva versión", 0f, 0f, 0f);
+                nuevoID, ultimoNumero + 1, LocalDate.now(), "Pendiente", "Nueva versión", descuentoAnterior, 0f, 0f);
 
         nuevaVersion.setIdCotizacion(idCotizacion);
         versionActual = cotizacionBO.guardarVersion(nuevaVersion);

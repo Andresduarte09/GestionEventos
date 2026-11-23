@@ -13,6 +13,7 @@ import dto.DTOVersionCotizacion;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.ArrayList;
+
 /**
  *
  * @author lui
@@ -24,7 +25,7 @@ public class CotizacionBO implements ICotizacionBO {
     public CotizacionBO(AlmacenDatos almacen) {
         this.almacen = almacen;
     }
-    
+
     @Override
     public DTOCotizacion guardar(DTOCotizacion cotizacion) {
         if (cotizacion == null || cotizacion.getID() <= 0) {
@@ -57,7 +58,7 @@ public class CotizacionBO implements ICotizacionBO {
 
         return null;
     }
-    
+
     @Override
     public DTOCotizacion consultarPorPropuesta(int idPropuesta) {
         if (idPropuesta <= 0) {
@@ -72,7 +73,7 @@ public class CotizacionBO implements ICotizacionBO {
 
         return null;
     }
- 
+
     @Override
     public void actualizar(DTOCotizacion cotizacion) {
         if (cotizacion == null) {
@@ -180,6 +181,43 @@ public class CotizacionBO implements ICotizacionBO {
         }
 
         return detalles;
+    }
+
+    @Override
+    public void revertirCreacionVersion(int idCotizacion, int idVersion, boolean cotizacionNueva) {
+        DTOCotizacion cotizacion = consultar(idCotizacion);
+        if (cotizacion == null || !"Pendiente".equalsIgnoreCase(cotizacion.getEstadoGeneral())) {
+            throw new IllegalStateException("No se puede revertir una cotización cerrada o inexistente.");
+        }
+
+        if (idVersion > 0) {
+            DTOVersionCotizacion version = consultarVersion(idVersion);
+
+            if (version != null) {
+                if (version.getIdCotizacion() != idCotizacion || !"Pendiente".equalsIgnoreCase(version.getEstado())) {
+                    throw new IllegalStateException("La versión no se puede revertir.");
+                }
+
+                for (DTOVersionCotizacion registrada : almacen.getVersionesCotizacion()) {
+                    if (registrada.getIdCotizacion() == idCotizacion && registrada.getNumero() > version.getNumero()) {
+                        throw new IllegalStateException("Solo se puede revertir la última versión.");
+                    }
+                }
+
+                almacen.getDetallesCotizacion().removeIf(detalle -> detalle.getIdVersion() == idVersion);
+                almacen.getVersionesCotizacion().remove(version);
+            }
+        }
+
+        if (cotizacionNueva) {
+            for (DTOVersionCotizacion registrada : almacen.getVersionesCotizacion()) {
+                if (registrada.getIdCotizacion() == idCotizacion) {
+                    throw new IllegalStateException("La cotización todavía tiene versiones registradas.");
+                }
+            }
+
+            almacen.getCotizaciones().remove(cotizacion);
+        }
     }
 
     @Override
