@@ -34,10 +34,20 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         txtFecha.setEditable(false);
         txtHora.setEditable(false);
 
-        lblImagenUbicacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblEjemploInfo.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        lblimagenUbicacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        //configuracion de las opciones de ubicacion del comboBox
+        //configuracion de la informacion del local
+        
+        txtEjemploInfo.setEditable(false);
+        txtEjemploInfo.setLineWrap(true);
+        txtEjemploInfo.setWrapStyleWord(true);
+        txtEjemploInfo.setFont(lblUbicacionInfo.getFont());
+        txtEjemploInfo.setOpaque(false);
+        txtEjemploInfo.setBorder(null);
+        jScrollPane2.setOpaque(false);
+        jScrollPane2.getViewport().setOpaque(false);
+        jScrollPane2.setBorder(null);
+        
         
         locales = control.consultarLocalesDisponibles();
         lblUbicacionInfo.removeAllItems();
@@ -62,19 +72,19 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     private void actualizarUbicacion() {
         int i = lblUbicacionInfo.getSelectedIndex();
         if (i < 0 || i >= locales.size()) {
-            lblEjemploInfo.setText("<html>No hay locales disponibles para este evento.</html>");
+            txtEjemploInfo.setText("No hay locales disponibles para este evento.");
             mostrarImagen(null);
             return;
         }
         dto.DTOLocalEvento l = locales.get(i);
-        lblEjemploInfo.setText("<html>"
-                + "<b>Tipo:</b> " + l.getTipoLocal() + "<br>"
-                + "<b>Capacidad:</b> " + l.getCapacidad() + " personas<br>"
-                + "<b>Dimensiones:</b> " + l.getDimensionesLugar() + "<br>"
-                + "<b>Espacios:</b> " + l.getDimensionesEspacios() + "<br>"
-                + "<b>Acceso:</b> " + l.getCondicionesAcceso() + "<br>"
-                + "<b>Restricciones:</b> " + l.getRestriccionesLocal()
-                + "</html>");
+        txtEjemploInfo.setText(
+                "Tipo: " + l.getTipoLocal() + "\n"
+                + "Capacidad: " + l.getCapacidad() + " personas\n"
+                + "Dimensiones: " + l.getDimensionesLugar() + "\n"
+                + "Espacios: " + l.getDistribucionEspacios() + "\n"
+                + "Acceso: " + l.getCondicionesAcceso() + "\n"
+                + "Restricciones: " + l.getRestriccionesLocal() + "\n"
+                + "Precio: " + l.getPrecioLocal()+ "\n");
         mostrarImagen(rutaImagen(l.getNombreLocal()));
     }
 
@@ -98,8 +108,8 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     private void mostrarImagen(String ruta) {
         java.net.URL url = (ruta == null) ? null : getClass().getResource(ruta);
         if (url == null) {
-            lblImagenUbicacion1.setIcon(null);
-            lblImagenUbicacion1.setText("Sin imagen disponible");
+            lblimagenUbicacion.setIcon(null);
+            lblimagenUbicacion.setText("Sin imagen disponible");
             return;
         }
         javax.swing.ImageIcon original = new javax.swing.ImageIcon(url);
@@ -108,8 +118,8 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         double escala = Math.min(1.0, Math.min((double) ANCHO_IMAGEN / ancho, (double) ALTO_IMAGEN / alto));
         java.awt.Image reducida = original.getImage().getScaledInstance(
                 Math.max(1, (int) (ancho * escala)), Math.max(1, (int) (alto * escala)), java.awt.Image.SCALE_SMOOTH);
-        lblImagenUbicacion1.setText(null);
-        lblImagenUbicacion1.setIcon(new javax.swing.ImageIcon(reducida));
+        lblimagenUbicacion.setText(null);
+        lblimagenUbicacion.setIcon(new javax.swing.ImageIcon(reducida));
     }
 
     /**
@@ -130,22 +140,22 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         txtNumAsistentes = new javax.swing.JTextField();
         txtFecha = new javax.swing.JTextField();
         lblTipoEvento4 = new javax.swing.JLabel();
-        lblEjemploInfo = new javax.swing.JLabel();
         btnConfirmar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         lblTituloAnalisisEvaluacion = new javax.swing.JLabel();
         lblUbicacionInfo = new javax.swing.JComboBox<>();
         lblImagenUbicacion = new javax.swing.JLabel();
-        lblImagenUbicacion1 = new javax.swing.JLabel();
+        lblimagenUbicacion = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtHora = new javax.swing.JTextPane();
         lblHora = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtEjemploInfo = new javax.swing.JTextArea();
 
         jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 204));
-        setPreferredSize(new java.awt.Dimension(680, 620));
         setResizable(false);
 
         lblTipoEvento.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -165,8 +175,6 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         lblTipoEvento4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblTipoEvento4.setText("Información");
 
-        lblEjemploInfo.setText("Información");
-
         btnConfirmar.setBackground(new java.awt.Color(101, 255, 101));
         btnConfirmar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnConfirmar.setText("Confirmar");
@@ -184,12 +192,16 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
         lblUbicacionInfo.setBorder(null);
         lblUbicacionInfo.addActionListener(this::lblUbicacionInfoActionPerformed);
 
-        lblImagenUbicacion1.setText("jLabel1");
+        lblimagenUbicacion.setText("jLabel1");
 
         jScrollPane1.setViewportView(txtHora);
 
         lblHora.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lblHora.setText("Hora");
+
+        txtEjemploInfo.setColumns(20);
+        txtEjemploInfo.setRows(5);
+        jScrollPane2.setViewportView(txtEjemploInfo);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -215,12 +227,14 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
                         .addComponent(lblImagenUbicacion)
                         .addGap(128, 128, 128))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblTipoEvento4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblImagenUbicacion1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnConfirmar, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblEjemploInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE))
-                        .addGap(60, 60, 60))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblTipoEvento4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblimagenUbicacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnConfirmar))
+                        .addGap(60, 60, 60))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -238,12 +252,12 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
                         .addGap(25, 25, 25)
                         .addComponent(lblTituloAnalisisEvaluacion, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(43, 43, 43)
-                        .addComponent(lblImagenUbicacion1, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblimagenUbicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblTipoEvento4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(lblEjemploInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblImagenUbicacion))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(133, 133, 133)
@@ -266,8 +280,8 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
                         .addComponent(lblHora)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                        .addGap(0, 36, Short.MAX_VALUE)))
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelar)
                     .addComponent(btnConfirmar))
@@ -302,10 +316,9 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     private javax.swing.JButton btnConfirmar;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblEjemploInfo;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblHora;
     private javax.swing.JLabel lblImagenUbicacion;
-    private javax.swing.JLabel lblImagenUbicacion1;
     private javax.swing.JLabel lblTipoEvento;
     private javax.swing.JLabel lblTipoEvento1;
     private javax.swing.JLabel lblTipoEvento2;
@@ -313,6 +326,8 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     private javax.swing.JLabel lblTipoEvento4;
     private javax.swing.JLabel lblTituloAnalisisEvaluacion;
     private javax.swing.JComboBox<String> lblUbicacionInfo;
+    private javax.swing.JLabel lblimagenUbicacion;
+    private javax.swing.JTextArea txtEjemploInfo;
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextPane txtHora;
     private javax.swing.JTextField txtNumAsistentes;

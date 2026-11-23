@@ -13,29 +13,30 @@ public class DTOLocalEvento {
     String nombreLocal;
     String tipoLocal;
     String dimensionesLugar;
-    String dimensionesEspacios;
+    String distribucionEspacios;
     String condicionesAcceso;
     String restriccionesLocal;
     String necesidadesDetectadas;
     int capacidad;
-    int duracionHoras;
+    float precioLocal;
+    String imagen;
 
     public DTOLocalEvento(){
     }
 
     public DTOLocalEvento(int idLocalEvento, String nombreLocal, String tipoLocal, String dimensionesLugar, 
             String dimensionesEspacios, String condicionesAcceso, String restriccionesLocal,
-            String necesidadesDetectadas, int capacidad, int duracionHoras) {
+            String necesidadesDetectadas, int capacidad, float precioLocal) {
         this.idLocalEvento = idLocalEvento;
         this.nombreLocal = nombreLocal;
         this.tipoLocal = tipoLocal;
         this.dimensionesLugar = dimensionesLugar;
-        this.dimensionesEspacios = dimensionesEspacios;
+        this.distribucionEspacios = dimensionesEspacios;
         this.condicionesAcceso = condicionesAcceso;
         this.restriccionesLocal = restriccionesLocal;
         this.necesidadesDetectadas = necesidadesDetectadas;
         this.capacidad = capacidad;
-        this.duracionHoras = duracionHoras;
+        this.precioLocal = precioLocal;
     }
 
     public String getNombreLocal() {
@@ -70,12 +71,12 @@ public class DTOLocalEvento {
         this.dimensionesLugar = dimensionesLugar;
     }
 
-    public String getDimensionesEspacios() {
-        return dimensionesEspacios;
+    public String getDistribucionEspacios() {
+        return distribucionEspacios;
     }
 
-    public void setDimensionesEspacios(String dimencionesEspacios) {
-        this.dimensionesEspacios = dimencionesEspacios;
+    public void setDistribucionEspacios(String dimencionesEspacios) {
+        this.distribucionEspacios = dimencionesEspacios;
     }
 
     public String getCondicionesAcceso() {
@@ -110,12 +111,21 @@ public class DTOLocalEvento {
         this.capacidad = capacidad;
     }
 
-    public int getDuracionHoras() {
-        return duracionHoras;
+    public float getPrecioLocal() {
+        return precioLocal;
     }
 
-    public void setDuracionHoras(int duracionHoras) {
-        this.duracionHoras = duracionHoras;
+    public void setPrecioLocal(float precioLocal) {
+        this.precioLocal = precioLocal;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
     
+  
 }
