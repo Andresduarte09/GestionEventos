@@ -138,11 +138,17 @@ public class GestorCotizacion {
     }
 
     private DTOVersionCotizacion crearVersionConDetalle(int idCotizacion, LocalTime horario, DTOInventario inventario, boolean cotizacionNueva) {
+        DTOVersionCotizacion anterior = consultarUltimaVersion(idCotizacion);
         DTOVersionCotizacion nuevaVersion = null;
 
         try {
             nuevaVersion = crearNuevaVersion(idCotizacion);
             registrarDetalleInventario(nuevaVersion.getID(), horario, inventario);
+
+            if (anterior != null) {
+                anterior.setEstado("Reemplazada");
+            }
+
             return nuevaVersion;
         } catch (RuntimeException ex) {
             try {
@@ -499,37 +505,19 @@ public class GestorCotizacion {
         return conceptos;
     }
 
-    public DTODetalleCotizacion registrarDetalleInventario(int idVersion, LocalTime horario,
-            DTOInventario inventario) {
-
-        if (consultarVersion(idVersion) == null) {
-            throw new IllegalArgumentException("La versión indicada no existe.");
-        }
-
-        if (horario == null) {
-            throw new IllegalArgumentException("El horario del detalle es obligatorio.");
-        }
-
-        if (hayDetalles(idVersion)) {
-            throw new IllegalStateException("La versión ya contiene detalles registrados.");
+    public DTODetalleCotizacion registrarDetalleInventario(int idVersion, LocalTime horario, DTOInventario inventario) {
+        if (inventario == null) {
+            throw new IllegalArgumentException("El inventario del detalle es obligatorio.");
         }
 
         double importe = calcularImporteInventario(inventario);
-
-        if (importe <= 0 || importe > Float.MAX_VALUE) {
+        if (!Double.isFinite(importe) || importe <= 0 || importe > Float.MAX_VALUE) {
             throw new IllegalStateException("El importe del inventario no es válido.");
         }
 
-        List<DTOConceptoCotizacion> conceptos = generarDesgloseInventario(inventario);
-
         List<DTOInventario> inventarios = new ArrayList<>();
         inventarios.add(inventario);
-
-        DTODetalleCotizacion detalle = crearDetalleCotizacion(
-                idVersion, horario, inventarios, (float) importe);
-
-        detalle.setConceptos(conceptos);
-        return detalle;
+        return crearDetalleCotizacion(idVersion, horario, inventarios, (float) importe);
     }
 
     public DTOVersionCotizacion generarVersionModificada(int idCotizacion, LocalTime horario, DTOInventario inventario) {
@@ -669,22 +657,43 @@ public class GestorCotizacion {
     }
 
     public DTODetalleCotizacion crearDetalleCotizacion(int idVersion, LocalTime horario,
-            List<DTOInventario> inventario, float importe) {
+            List<DTOInventario> inventarios, float importe) {
 
-        if (cotizacionBO.consultarVersion(idVersion) == null) {
-            throw new IllegalArgumentException("La version indicada no existe.");
+        DTOVersionCotizacion version = cotizacionBO.consultarVersion(idVersion);
+        if (version == null) {
+            throw new IllegalArgumentException("La versión indicada no existe.");
         }
-
-        if (horario == null || inventario == null || inventario.isEmpty()) {
+        if (horario == null || inventarios == null || inventarios.isEmpty()) {
             throw new IllegalArgumentException("Faltan datos para crear el detalle.");
         }
+        if (!Float.isFinite(importe) || importe <= 0) {
+            throw new IllegalArgumentException("El importe del detalle no es válido.");
+        }
+        if (hayDetalles(idVersion)) {
+            throw new IllegalStateException("La versión ya contiene detalles registrados.");
+        }
+        if (!Float.isFinite(version.getDescuento()) || version.getDescuento() < 0 || version.getDescuento() > 10) {
+            throw new IllegalStateException("El descuento de la versión no es válido.");
+        }
 
-        if (!Float.isFinite(importe) || importe < 0) {
-            throw new IllegalArgumentException("El importe no es valido.");
+        List<DTOConceptoCotizacion> conceptos = new ArrayList<>();
+        double totalCalculado = 0;
+
+        for (DTOInventario inventario : inventarios) {
+            if (inventario == null) {
+                throw new IllegalArgumentException("Existe un inventario nulo.");
+            }
+
+            conceptos.addAll(generarDesgloseInventario(inventario));
+            totalCalculado += calcularImporteInventario(inventario);
+        }
+
+        if (conceptos.isEmpty() || !Double.isFinite(totalCalculado) || totalCalculado > Float.MAX_VALUE
+                || Math.abs(totalCalculado - importe) > 0.01) {
+            throw new IllegalStateException("El desglose no coincide con el importe del detalle.");
         }
 
         int nuevoID = 1;
-
         for (DTODetalleCotizacion existente : almacen.getDetallesCotizacion()) {
             nuevoID = Math.max(nuevoID, existente.getID() + 1);
         }
@@ -693,12 +702,12 @@ public class GestorCotizacion {
         detalle.setID(nuevoID);
         detalle.setIdVersion(idVersion);
         detalle.setHorarioFases(horario);
-        detalle.setInventario(inventario);
+        detalle.setInventario(new ArrayList<>(inventarios));
         detalle.setImporte(importe);
+        detalle.setConceptos(conceptos);
 
         DTODetalleCotizacion guardado = cotizacionBO.guardarDetalle(detalle);
         calcularImportesVersion(idVersion);
-
         return guardado;
     }
 
@@ -848,6 +857,7 @@ public class GestorCotizacion {
         }
 
         List<String> sinTarifa = new ArrayList<>();
+
         if (inventario.getServicios() != null) {
             for (DTOServicio servicio : inventario.getServicios()) {
                 if (servicio != null && servicio.isSeleccionado()) {
@@ -862,7 +872,8 @@ public class GestorCotizacion {
 
         if (inventario.getEquipos() != null) {
             for (DTOEquipo equipo : inventario.getEquipos()) {
-                if (equipo != null && equipo.getCantidadSeleccionada() > 0 && !existeTarifaRecurso(equipo.getNombre())) {
+                if (equipo != null && equipo.getCantidadSeleccionada() > 0
+                        && !existeTarifaRecurso(equipo.getNombre(), "pieza")) {
                     sinTarifa.add("Equipo: " + equipo.getNombre());
                 }
             }
@@ -870,7 +881,8 @@ public class GestorCotizacion {
 
         if (inventario.getPersonal() != null) {
             for (DTOPersonal personal : inventario.getPersonal()) {
-                if (personal != null && personal.getCantidad() > 0 && !existeTarifaRecurso(personal.getEspecialidad())) {
+                if (personal != null && personal.getCantidad() > 0
+                        && !existeTarifaRecurso(personal.getEspecialidad(), "hora")) {
                     sinTarifa.add("Personal: " + personal.getEspecialidad());
                 }
             }
@@ -967,8 +979,14 @@ public class GestorCotizacion {
         return consultarTarifaRecurso(nombreTarifa);
     }
 
-    private boolean existeTarifaRecurso(String nombre) {
+    private boolean existeTarifaRecurso(String nombre, String unidadEsperada) {
         try {
+            DTORecurso recurso = buscarRecursoPorNombre(nombre);
+
+            if (recurso == null || !unidadEsperada.equalsIgnoreCase(recurso.getUnidadMedida())) {
+                return false;
+            }
+
             consultarTarifaRecurso(nombre);
             return true;
         } catch (IllegalArgumentException | IllegalStateException ex) {

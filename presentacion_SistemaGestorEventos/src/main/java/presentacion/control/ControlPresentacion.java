@@ -678,11 +678,36 @@ public class ControlPresentacion {
     }
 
     public List<String> obtenerServiciosCotizados() {
-        if (subsistemaOrden == null) {
-            return new ArrayList<>();
+        List<String> servicios = new ArrayList<>();
+
+        if (versionCotizacion == null) {
+            return servicios;
         }
-        List<String> servicios = subsistemaOrden.obtenerServiciosCotizados();
-        return servicios != null ? servicios : new ArrayList<>();
+
+        List<DTODetalleCotizacion> detalles = subsistemaCotizacion.consultarDetallesVersion(versionCotizacion.getID());
+        if (detalles == null) {
+            return servicios;
+        }
+
+        for (DTODetalleCotizacion detalle : detalles) {
+            if (detalle == null || detalle.getInventario() == null) {
+                continue;
+            }
+
+            for (DTOInventario inventario : detalle.getInventario()) {
+                if (inventario == null) {
+                    continue;
+                }
+
+                for (String nombre : serviciosDeInventario(inventario)) {
+                    if (nombre != null && !servicios.contains(nombre)) {
+                        servicios.add(nombre);
+                    }
+                }
+            }
+        }
+
+        return servicios;
     }
 
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
