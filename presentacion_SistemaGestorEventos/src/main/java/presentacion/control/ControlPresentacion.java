@@ -58,7 +58,7 @@ public class ControlPresentacion {
         this.subsistemaEvento = new FachadaEvento();
         this.subsistemaPropuesta = java.util.Objects.requireNonNull(subsistemaPropuesta);
         this.subsistemaCotizacion = new FachadaCotizacion(this.subsistemaPropuesta);
-        this.subsistemaOrden = new FachadaOrden(almacen);
+        this.subsistemaOrden = new FachadaOrden();
     }
 
     public DTOCliente getCliente() {
@@ -678,36 +678,8 @@ public class ControlPresentacion {
     }
 
     public List<String> obtenerServiciosCotizados() {
-        List<String> servicios = new ArrayList<>();
-
-        if (versionCotizacion == null) {
-            return servicios;
-        }
-
-        List<DTODetalleCotizacion> detalles = subsistemaCotizacion.consultarDetallesVersion(versionCotizacion.getID());
-        if (detalles == null) {
-            return servicios;
-        }
-
-        for (DTODetalleCotizacion detalle : detalles) {
-            if (detalle == null || detalle.getInventario() == null) {
-                continue;
-            }
-
-            for (DTOInventario inventario : detalle.getInventario()) {
-                if (inventario == null) {
-                    continue;
-                }
-
-                for (String nombre : serviciosDeInventario(inventario)) {
-                    if (nombre != null && !servicios.contains(nombre)) {
-                        servicios.add(nombre);
-                    }
-                }
-            }
-        }
-
-        return servicios;
+        establecerContextoOrdenActual();
+        return subsistemaOrden.obtenerServiciosCotizados();
     }
 
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {

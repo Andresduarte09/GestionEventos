@@ -23,18 +23,6 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
         this.control = control;
 
         initComponents();
-        
-        listServicios.setSelectionMode(
-                javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION
-        );
-
-        cargarServiciosCotizados();
-
-        if (control.getCliente() != null) {
-            lblClienteInfo.setText(control.getCliente().getNombre());
-        }
-
-        this.setLocationRelativeTo(null);
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(
                 new String[]{
@@ -49,12 +37,12 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
                 javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION
         );
 
-        cargarServiciosCotizados();
-
-        if (control.getCliente() != null) {
-            lblClienteInfo.setText(control.getCliente().getNombre());
+        if (this.control != null) {
+            this.control.establecerContextoOrdenActual();
         }
 
+        cargarServiciosCotizados();
+        mostrarDatos();
         this.setLocationRelativeTo(null);
     }
 
@@ -219,15 +207,21 @@ public class JFrameRegistrarCotizacion extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void btnRegistrarCotizaciónActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarCotizaciónActionPerformed
-        String decision = (String) jComboBox1.getSelectedItem();
+        if (this.control != null) {
+            this.control.establecerContextoOrdenActual();
+        }
 
-        java.util.List<String> serviciosSeleccionados =
-                listServicios.getSelectedValuesList();
+        String decision = jComboBox1.getSelectedItem() == null
+                ? ""
+                : String.valueOf(jComboBox1.getSelectedItem());
 
-        boolean registrado = control.registrarDecisionCotizacion(
-                decision,
-                serviciosSeleccionados
-        );
+        java.util.List<String> serviciosSeleccionados = listServicios.getSelectedValuesList();
+
+        boolean registrado = this.control != null
+                && this.control.registrarDecisionCotizacion(
+                        decision,
+                        serviciosSeleccionados
+                );
 
         if (registrado) {
             this.dispose();

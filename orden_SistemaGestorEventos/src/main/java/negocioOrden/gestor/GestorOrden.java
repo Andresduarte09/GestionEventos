@@ -4,69 +4,94 @@
  */
 package negocioOrden.gestor;
 
-/**
- *
- * @author Andres
- */
+import com.mycompany.persistencia.AlmacenDatos;
+import dto.DTOOrdenServicio;
 import java.util.List;
-import negocioOrden.interfaces.IDecisionClienteBO;
+import negocioOrden.BO.DecisionClienteBO;
+import negocioOrden.BO.OrdenServicioBO;
 import negocioOrden.interfaces.IOrdenServicioBO;
 
 public class GestorOrden {
 
-    private final IOrdenServicioBO ordenBO;
-    private final IDecisionClienteBO decisionBO;
+    private final AlmacenDatos almacen;
+    private final IOrdenServicioBO ordenServicioBO;
+    private final DecisionClienteBO decisionClienteBO;
+    private int idEventoContexto;
+    private int idCotizacionContexto;
 
-    private int idEventoActual = -1;
-    private int idCotizacionActual = -1;
-
-    public GestorOrden(IOrdenServicioBO ordenBO, IDecisionClienteBO decisionBO) {
-        this.ordenBO = ordenBO;
-        this.decisionBO = decisionBO;
+    public GestorOrden() {
+        this.almacen = AlmacenDatos.getInstance();
+        this.ordenServicioBO = new OrdenServicioBO(this.almacen);
+        this.decisionClienteBO = new DecisionClienteBO(this.almacen);
     }
 
     public void establecerContextoOrden(int idEvento, int idCotizacion) {
-        this.idEventoActual = idEvento;
-        this.idCotizacionActual = idCotizacion;
+        this.idEventoContexto = idEvento;
+        this.idCotizacionContexto = idCotizacion;
     }
 
     public List<String> obtenerServiciosCotizados() {
-        return ordenBO.obtenerServiciosCotizados();
+        int idCotizacion = idCotizacionContexto > 0 ? idCotizacionContexto : resolverIdCotizacionActual();
+        return ordenServicioBO.obtenerRecursosCotizados(idCotizacion);
+    }
+
+    public List<String> obtenerRecursosCotizados(int idCotizacion) {
+        return ordenServicioBO.obtenerRecursosCotizados(idCotizacion);
     }
 
     public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
-        if (decision == null || decision.isBlank() || "Selecciona una decisión".equals(decision)) {
-            return false;
+        int idCotizacion = idCotizacionContexto > 0 ? idCotizacionContexto : resolverIdCotizacionActual();
+        int idEvento = idEventoContexto > 0 ? idEventoContexto : resolverIdEventoActual(idCotizacion);
+        DTOOrdenServicio orden = procesarDecisionYOrden(idEvento, idCotizacion, decision, "", serviciosSeleccionados);
+        return orden != null
+                || "Negación total".equalsIgnoreCase(decision)
+                || "Solicitud de modificacion".equalsIgnoreCase(decision);
+    }
+
+    public DTOOrdenServicio procesarDecisionYOrden(
+            int idEvento,
+            int idCotizacion,
+            String tipoDecision,
+            String observaciones,
+            List<String> elementosSeleccionados) {
+
+        decisionClienteBO.registrarDecision(String.valueOf(idCotizacion), tipoDecision, observaciones);
+
+        boolean generaOrden = "Aceptación total".equalsIgnoreCase(tipoDecision)
+                || "Aceptación parcial".equalsIgnoreCase(tipoDecision)
+                || "Aceptada".equalsIgnoreCase(tipoDecision);
+
+        if (!generaOrden) {
+            return null;
         }
 
-        if ("Aceptación total".equals(decision)) {
-            decisionBO.registrarDecision(decision, "El cliente aceptó todos los servicios cotizados.");
-            ordenBO.registrarCotizacionEnAlmacen();
-            ordenBO.generarOrdenServicio(idEventoActual, idCotizacionActual, null);
-            return true;
-        }
+        return ordenServicioBO.generarOrdenServicio(idEvento, idCotizacion, elementosSeleccionados);
+    }
 
-        if ("Aceptación parcial".equals(decision)) {
-            if (serviciosSeleccionados == null || serviciosSeleccionados.isEmpty()) {
-                return false;
+    public DTOOrdenServicio consultarOrdenPorId(int idOrden) {
+        return ordenServicioBO.consultarOrdenPorId(idOrden);
+    }
+
+    public List<DTOOrdenServicio> consultarTodasOrdenes() {
+        return ordenServicioBO.consultarTodasOrdenes();
+    }
+
+    private int resolverIdCotizacionActual() {
+        if (almacen.getCotizaciones() == null || almacen.getCotizaciones().isEmpty()) {
+            return 0;
+        }
+        return almacen.getCotizaciones().get(almacen.getCotizaciones().size() - 1).getID();
+    }
+
+    private int resolverIdEventoActual(int idCotizacion) {
+        if (almacen.getEventos() == null || almacen.getEventos().isEmpty()) {
+            return 0;
+        }
+        for (int i = almacen.getEventos().size() - 1; i >= 0; i--) {
+            if (almacen.getEventos().get(i) != null && almacen.getEventos().get(i).getIdEvento() > 0) {
+                return almacen.getEventos().get(i).getIdEvento();
             }
-            String observaciones = "Servicios aceptados: " + String.join(", ", serviciosSeleccionados);
-            decisionBO.registrarDecision(decision, observaciones);
-            ordenBO.registrarCotizacionEnAlmacen();
-            ordenBO.generarOrdenServicio(idEventoActual, idCotizacionActual, serviciosSeleccionados);
-            return true;
         }
-
-        if ("Solicitud de modificación".equals(decision) || "Solicitud de modificacion".equals(decision)) {
-            return true;
-        }
-
-        if ("Negación total".equals(decision)) {
-            decisionBO.registrarDecision(decision, "El cliente rechazó todos los servicios.");
-            ordenBO.registrarCotizacionEnAlmacen();
-            return true;
-        }
-
-        return false;
+        return 0;
     }
 }

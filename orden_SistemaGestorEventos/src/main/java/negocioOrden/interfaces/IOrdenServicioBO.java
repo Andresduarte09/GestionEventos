@@ -11,14 +11,19 @@ import java.time.LocalDate;
  * @author Andres
  */
 import dto.DTOOrdenServicio;
+import dto.DTOServicio;
 import java.util.List;
 
 public interface IOrdenServicioBO {
-    void generarOrdenServicio();
-    void generarOrdenServicio(int idEvento, int idCotizacion, List<String> nombresServiciosAceptados);
-    void registrarCotizacionEnAlmacen();
+
+    DTOOrdenServicio generarOrdenServicio(int idEvento, int idCotizacion, List<String> elementosAceptados);
+
     DTOOrdenServicio consultarOrdenPorId(int idOrden);
+
     List<DTOOrdenServicio> consultarTodasOrdenes();
-    List<String> obtenerServiciosCotizados();
+
+    List<DTOServicio> obtenerServiciosPorCotizacion(int idCotizacion);
+
+    List<String> obtenerRecursosCotizados(int idCotizacion);
 }
 

@@ -4,40 +4,62 @@
  */
 package negocioOrden.fachada;
 
-/**
- *
- * @author Andres
- */
-import com.mycompany.persistencia.AlmacenDatos;
+import dto.DTOOrdenServicio;
 import java.util.List;
-import negocioOrden.BO.DecisionClienteBO;
-import negocioOrden.BO.OrdenServicioBO;
 import negocioOrden.gestor.GestorOrden;
 import negocioOrden.interfaces.ISubsistemaOrden;
 
 public class FachadaOrden implements ISubsistemaOrden {
 
-    private final GestorOrden gestor;
+    private final GestorOrden gestorOrden;
 
-    public FachadaOrden(AlmacenDatos almacen) {
-        this.gestor = new GestorOrden(
-                new OrdenServicioBO(almacen),
-                new DecisionClienteBO(almacen)
-        );
+    public FachadaOrden() {
+        this.gestorOrden = new GestorOrden();
     }
 
     @Override
     public void establecerContextoOrden(int idEvento, int idCotizacion) {
-        gestor.establecerContextoOrden(idEvento, idCotizacion);
-    }
-
-    @Override
-    public boolean registrarDecisionCotizacion(String decision, List<String> serviciosSeleccionados) {
-        return gestor.registrarDecisionCotizacion(decision, serviciosSeleccionados);
+        gestorOrden.establecerContextoOrden(idEvento, idCotizacion);
     }
 
     @Override
     public List<String> obtenerServiciosCotizados() {
-        return gestor.obtenerServiciosCotizados();
+        return gestorOrden.obtenerServiciosCotizados();
+    }
+
+    @Override
+    public List<String> obtenerRecursosCotizados(int idCotizacion) {
+        return gestorOrden.obtenerRecursosCotizados(idCotizacion);
+    }
+
+    @Override
+    public boolean registrarDecisionCotizacion(String tipoDecision, List<String> elementosSeleccionados) {
+        return gestorOrden.registrarDecisionCotizacion(tipoDecision, elementosSeleccionados);
+    }
+
+    @Override
+    public DTOOrdenServicio procesarDecisionYOrden(
+            int idEvento,
+            int idCotizacion,
+            String tipoDecision,
+            String observaciones,
+            List<String> elementosSeleccionados) {
+        return gestorOrden.procesarDecisionYOrden(
+                idEvento,
+                idCotizacion,
+                tipoDecision,
+                observaciones,
+                elementosSeleccionados
+        );
+    }
+
+    @Override
+    public DTOOrdenServicio consultarOrdenPorId(int idOrden) {
+        return gestorOrden.consultarOrdenPorId(idOrden);
+    }
+
+    @Override
+    public List<DTOOrdenServicio> consultarTodasOrdenes() {
+        return gestorOrden.consultarTodasOrdenes();
     }
 }
