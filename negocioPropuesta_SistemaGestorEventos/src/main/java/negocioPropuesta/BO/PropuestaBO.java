@@ -5,30 +5,23 @@
 package negocioPropuesta.BO;
 
 import com.mycompany.persistencia.AlmacenDatos;
-import dto.DTOEquipo;
-import dto.DTOInventario;
-import dto.DTOPersonal;
-import dto.DTOPropuesta;
-import dto.DTOServicio;
 import infraestructura.ProveedorExterno;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import negocioPropuesta.interfaces.IPropuestaBO;
+import dto.*;
+import java.util.ArrayList;
+import java.util.List;
 
+/**
+ *
+ * @author Andre
+ */
 public class PropuestaBO implements IPropuestaBO {
+
+    private static PropuestaBO instancia;
 
     private final AlmacenDatos almacen;
     private final ProveedorExterno proveedorExterno;
-
-    private final List<DTOPropuesta> propuestas =
-            new ArrayList<>();
-
-    private final Map<Integer, DTOInventario> seleccionesPorEvento =
-            new HashMap<>();
-
-    private static PropuestaBO instancia;
+    private final List<DTOPropuesta> propuestas;
 
     private PropuestaBO(
             AlmacenDatos almacen,
@@ -36,6 +29,7 @@ public class PropuestaBO implements IPropuestaBO {
 
         this.almacen = almacen;
         this.proveedorExterno = proveedorExterno;
+        this.propuestas = new ArrayList<>();
     }
 
     public static synchronized PropuestaBO getInstance(
@@ -44,55 +38,10 @@ public class PropuestaBO implements IPropuestaBO {
 
         if (instancia == null) {
             instancia = new PropuestaBO(
-                    almacen,
-                    proveedorExterno
-            );
+                    almacen, proveedorExterno);
         }
 
         return instancia;
-    }
-
-    private boolean existeEvento(int idEvento) {
-
-        for (var evento : almacen.getEventos()) {
-            if (evento.getIdEvento() == idEvento) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public synchronized void registrarSeleccionEvento(
-            int idEvento,
-            DTOInventario seleccion) {
-
-        if (idEvento <= 0 || !existeEvento(idEvento)) {
-            throw new IllegalArgumentException(
-                    "El evento no existe: " + idEvento
-            );
-        }
-
-        if (seleccion == null) {
-            throw new IllegalArgumentException(
-                    "La seleccion no puede ser null."
-            );
-        }
-
-        seleccionesPorEvento.put(
-                idEvento,
-                copiarInventario(seleccion)
-        );
-    }
-
-    @Override
-    public synchronized DTOInventario consultarSeleccion(
-            int idEvento) {
-
-        return copiarInventario(
-                seleccionesPorEvento.get(idEvento)
-        );
     }
 
     @Override
@@ -105,35 +54,37 @@ public class PropuestaBO implements IPropuestaBO {
 
         if (!existeEvento(propuesta.getIdEvento())) {
             throw new IllegalArgumentException(
-                    "La propuesta debe tener un evento registrado."
-            );
+                    "El evento no existe.");
         }
 
         if (propuesta.getInventario() == null) {
             throw new IllegalArgumentException(
-                    "La propuesta debe incluir su inventario."
-            );
+                    "La propuesta no tiene inventario.");
         }
 
         if (propuesta.getIdPropuesta() <= 0) {
 
-            int nuevoId = 1;
+            int id = 1;
 
             for (DTOPropuesta p : propuestas) {
-                if (p.getIdPropuesta() >= nuevoId) {
-                    nuevoId = p.getIdPropuesta() + 1;
+
+                if (p.getIdPropuesta() >= id) {
+                    id = p.getIdPropuesta() + 1;
                 }
             }
 
-            propuesta.setIdPropuesta(nuevoId);
-
-        } else {
-
-            propuestas.removeIf(
-                    p -> p.getIdPropuesta()
-                    == propuesta.getIdPropuesta()
-            );
+            propuesta.setIdPropuesta(id);
         }
+
+        if (propuesta.getFolio() == null
+                || propuesta.getFolio().isBlank()) {
+
+            propuesta.setFolio(
+                    "PROP-" + propuesta.getIdPropuesta());
+        }
+
+        propuestas.removeIf(p ->
+                p.getIdPropuesta() == propuesta.getIdPropuesta());
 
         propuestas.add(copiarPropuesta(propuesta));
 
@@ -143,10 +94,11 @@ public class PropuestaBO implements IPropuestaBO {
     @Override
     public synchronized DTOPropuesta consultar(int idPropuesta) {
 
-        for (DTOPropuesta p : propuestas) {
+        for (DTOPropuesta propuesta : propuestas) {
 
-            if (p.getIdPropuesta() == idPropuesta) {
-                return copiarPropuesta(p);
+            if (propuesta.getIdPropuesta() == idPropuesta) {
+
+                return copiarPropuesta(propuesta);
             }
         }
 
@@ -154,14 +106,124 @@ public class PropuestaBO implements IPropuestaBO {
     }
 
     @Override
-    public synchronized DTOInventario consultarRecursosPropuesta(
-            int idPropuesta) {
+    public DTOInventario consultarSeleccion(int idEvento) {
 
-        DTOPropuesta propuesta = consultar(idPropuesta);
+        if (!existeEvento(idEvento)) {
 
-        return propuesta == null
-                ? null
-                : propuesta.getInventario();
+            throw new IllegalArgumentException(
+                    "El evento no existe.");
+        }
+
+        DTOInventario seleccion = new DTOInventario();
+
+        for (DTOServicio servicio : almacen.getServicios()) {
+
+            if (servicio.isSeleccionado()) {
+                seleccion.getServicios().add(servicio);
+            }
+        }
+
+        for (DTOEquipo equipo : consultarTodosLosEquipos()) {
+
+            if (equipo.getCantidadSeleccionada() > 0) {
+                seleccion.getEquipos().add(equipo);
+            }
+        }
+
+        for (DTOPersonal personal : almacen.getPersonal()) {
+
+            if (personal.getCantidad() > 0) {
+                seleccion.getPersonal().add(personal);
+            }
+        }
+
+        return copiarInventario(seleccion);
+    }
+
+    @Override
+    public void actualizarSeleccion(DTOInventario cambios) {
+
+        if (cambios == null) {
+            return;
+        }
+
+        if (cambios.getServicios() != null) {
+
+            for (DTOServicio cambio : cambios.getServicios()) {
+
+                for (DTOServicio servicio : almacen.getServicios()) {
+
+                    if (servicio.getIdServicio()
+                            == cambio.getIdServicio()) {
+
+                        servicio.setSeleccionado(
+                                cambio.isSeleccionado());
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (cambios.getEquipos() != null) {
+
+            for (DTOEquipo cambio : cambios.getEquipos()) {
+
+                for (DTOEquipo equipo : consultarTodosLosEquipos()) {
+
+                    if (equipo.getIdEquipo()
+                            == cambio.getIdEquipo()) {
+
+                        equipo.setCantidadSeleccionada(
+                                cambio.getCantidadSeleccionada());
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (cambios.getPersonal() != null) {
+
+            for (DTOPersonal cambio : cambios.getPersonal()) {
+
+                for (DTOPersonal personal : almacen.getPersonal()) {
+
+                    if (personal.getIdEspecialidad()
+                            == cambio.getIdEspecialidad()) {
+
+                        personal.setCantidad(
+                                cambio.getCantidad());
+
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    // Métodos privados auxiliares.
+
+    private boolean existeEvento(int idEvento) {
+
+        for (DTOEvento evento : almacen.getEventos()) {
+
+            if (evento.getIdEvento() == idEvento) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private List<DTOEquipo> consultarTodosLosEquipos() {
+
+        List<DTOEquipo> equipos =
+                new ArrayList<>(almacen.getEquipos());
+
+        equipos.addAll(proveedorExterno.getEquipos());
+
+        return equipos;
     }
 
     private DTOPropuesta copiarPropuesta(DTOPropuesta origen) {
@@ -177,8 +239,7 @@ public class PropuestaBO implements IPropuestaBO {
         copia.setEstadoFolio(origen.getEstadoFolio());
 
         copia.setInventario(
-                copiarInventario(origen.getInventario())
-        );
+                copiarInventario(origen.getInventario()));
 
         return copia;
     }
@@ -195,120 +256,47 @@ public class PropuestaBO implements IPropuestaBO {
 
         if (origen.getServicios() != null) {
 
-            for (DTOServicio s : origen.getServicios()) {
+            for (DTOServicio servicio : origen.getServicios()) {
 
-                copia.getServicios().add(
-                        new DTOServicio(
-                                s.getIdServicio(),
-                                s.getNombre(),
-                                s.getDescripcion(),
-                                s.isSeleccionado(),
-                                s.isEsAdicional(),
-                                s.getObservaciones()
-                        )
-                );
+                copia.getServicios().add(new DTOServicio(
+                        servicio.getIdServicio(),
+                        servicio.getNombre(),
+                        servicio.getDescripcion(),
+                        servicio.isSeleccionado(),
+                        servicio.isEsAdicional(),
+                        servicio.getObservaciones()
+                ));
             }
         }
 
         if (origen.getEquipos() != null) {
 
-            for (DTOEquipo e : origen.getEquipos()) {
+            for (DTOEquipo equipo : origen.getEquipos()) {
 
-                copia.getEquipos().add(
-                        new DTOEquipo(
-                                e.getIdEquipo(),
-                                e.getNombre(),
-                                e.getDisponibilidad(),
-                                e.getCantidadSeleccionada()
-                        )
-                );
+                copia.getEquipos().add(new DTOEquipo(
+                        equipo.getIdEquipo(),
+                        equipo.getNombre(),
+                        equipo.getDisponibilidad(),
+                        equipo.getCantidadSeleccionada()
+                ));
             }
         }
 
         if (origen.getPersonal() != null) {
 
-            for (DTOPersonal p : origen.getPersonal()) {
+            for (DTOPersonal personal : origen.getPersonal()) {
 
-                copia.getPersonal().add(
-                        new DTOPersonal(
-                                p.getIdEspecialidad(),
-                                p.getEspecialidad(),
-                                p.getCantidad(),
-                                p.getHorasMontaje(),
-                                p.getHorasOperacion(),
-                                p.getHorasDesmontaje()
-                        )
-                );
+                copia.getPersonal().add(new DTOPersonal(
+                        personal.getIdEspecialidad(),
+                        personal.getEspecialidad(),
+                        personal.getCantidad(),
+                        personal.getHorasMontaje(),
+                        personal.getHorasOperacion(),
+                        personal.getHorasDesmontaje()
+                ));
             }
         }
 
         return copia;
-    }
-
-    @Override
-    public void actualizarSeleccion(DTOInventario cambios) {
-
-        if (cambios == null) {
-            return;
-        }
-
-        if (cambios.getServicios() != null) {
-
-            for (DTOServicio cambio : cambios.getServicios()) {
-
-                for (DTOServicio s : almacen.getServicios()) {
-
-                    if (s.getIdServicio() == cambio.getIdServicio()) {
-
-                        s.setSeleccionado(cambio.isSeleccionado());
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (cambios.getEquipos() != null) {
-
-            for (DTOEquipo cambio : cambios.getEquipos()) {
-
-                for (DTOEquipo e : todosLosEquipos()) {
-
-                    if (e.getIdEquipo() == cambio.getIdEquipo()) {
-
-                        e.setCantidadSeleccionada(
-                                cambio.getCantidadSeleccionada()
-                        );
-
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (cambios.getPersonal() != null) {
-
-            for (DTOPersonal cambio : cambios.getPersonal()) {
-
-                for (DTOPersonal p : almacen.getPersonal()) {
-
-                    if (p.getIdEspecialidad()
-                            == cambio.getIdEspecialidad()) {
-
-                        p.setCantidad(cambio.getCantidad());
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    private List<DTOEquipo> todosLosEquipos() {
-
-        List<DTOEquipo> todos =
-                new ArrayList<>(almacen.getEquipos());
-
-        todos.addAll(proveedorExterno.getEquipos());
-
-        return todos;
     }
 }

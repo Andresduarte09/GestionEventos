@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import presentacion.validaciones.Validaciones;
 import java.time.LocalTime;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 import negocioEvento.fachada.FachadaEvento;
 import negocioEvento.interfaces.ISubsistemaEvento;
@@ -26,24 +27,18 @@ import negocioOrden.interfaces.ISubsistemaOrden;
  */
 public class ControlPresentacion {
 
-    //quitAR ALMACEN CUANDO LO LIMPIEN DE TODOS LOS METODOS
-    //TAMBIEN FALTA VER SI SE PUEDEN MOVER VALIDACIONES O ASI DEJARLAS
     private ISubsistemaEvento subsistemaEvento;
     private ISubsistemaPropuesta subsistemaPropuesta;
     private ISubsistemaCotizacion subsistemaCotizacion;
     private ISubsistemaOrden subsistemaOrden;
     private AlmacenDatos almacen;
-    private ProveedorExterno proveedorExterno;
     private JFrameRecursosEvento recursosFrmEvento;
     private JFrameConfigurarPropuesta configurarPropuesta;
     private JFrameResumenCotizacion resumenCotizacion;
     private DTOCotizacion cotizacion;
     private DTOPropuesta propuestaActual;
     private DTOVersionCotizacion versionCotizacion;
-
-    //ARREGLEN EL METODO DONDE SE MANDA A LLAMAR Y LUEGO QUITENLO
     private List<DTOServicio> serviciosAceptados = new ArrayList<>();
-
     private LocalTime horarioMontajePropuesta;
     private LocalTime horarioDesmontajePropuesta;
     private String comentariosPropuesta = "";
@@ -54,7 +49,6 @@ public class ControlPresentacion {
 
     public ControlPresentacion(ISubsistemaPropuesta subsistemaPropuesta, AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
         this.almacen = almacen;
-        this.proveedorExterno = proveedorExterno;
         this.subsistemaEvento = new FachadaEvento();
         this.subsistemaPropuesta = java.util.Objects.requireNonNull(subsistemaPropuesta);
         this.subsistemaCotizacion = new FachadaCotizacion(this.subsistemaPropuesta);
@@ -76,7 +70,8 @@ public class ControlPresentacion {
         return subsistemaEvento.obtenerLocalesDisponibles(evento, evento.getUbicacion());
     }
 
-    //--------------------------INICIO DE SESION Y REGISTRO DE CLIENTE----------------------------F1
+    //---------------- INICIO DE SESION Y REGISTRO DE CLIENTE - F1 ----------------
+
     public void iniciarSesion() {
         JFrameInicioSesion inicioSesion = new JFrameInicioSesion(this);
         inicioSesion.setVisible(true);
@@ -87,7 +82,6 @@ public class ControlPresentacion {
             JOptionPane.showMessageDialog(null, "Ingresa un teléfono válido de 10 dígitos numéricos.", "Teléfono inválido", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-
         DTOCliente existente = subsistemaEvento.ingresarTelefono(telefono);
         if (existente != null) {
             iniciarRegistrarEvento(existente);
@@ -96,7 +90,6 @@ public class ControlPresentacion {
             nuevo.setTelefono(telefono);
             mostrarFormularioCliente(nuevo);
         }
-
         return true;
     }
 
@@ -111,24 +104,20 @@ public class ControlPresentacion {
         if (!Validaciones.textoValido(nombre)) {
             errores.append("El nombre no puede estar vacío.\n");
         }
-
         if (!Validaciones.telefonoValido(telefono)) {
             errores.append("El teléfono debe tener 10 dígitos numéricos.\n");
         }
-
         if (!Validaciones.correoValido(correo)) {
             errores.append("El correo electrónico no tiene un formato válido.\n");
         }
-
-        if (errores.length() > 0) {
-            JOptionPane.showMessageDialog(null, errores.toString(), "Datos invalidos", JOptionPane.WARNING_MESSAGE);
-            return false;
-        }
-
         if (telefonoAlt != null && !telefonoAlt.trim().isEmpty()) {
             if (!Validaciones.telefonoValido(telefonoAlt)) {
                 errores.append("El teléfono alterno debe tener 10 dígitos numéricos.\n");
             }
+        }
+        if (errores.length() > 0) {
+            JOptionPane.showMessageDialog(null, errores.toString(), "Datos invalidos", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
         this.cliente.setNombre(nombre);
         this.cliente.setCorreo(correo);
@@ -139,8 +128,8 @@ public class ControlPresentacion {
         return true;
     }
 
-    //--------------------METODOS PARA REGISTRAR EVENTOS-----------------------
-    //Inicia el registro de datos del evento
+    //---------------- REGISTRO DE EVENTOS ----------------
+
     public void iniciarRegistrarEvento(DTOCliente cliente) {
         this.cliente = cliente;
         if (registrarEvento != null && registrarEvento.isDisplayable()) {
@@ -157,34 +146,27 @@ public class ControlPresentacion {
         iniciarRecursosEvento();
     }
 
-    //creo q hay que solo mandar llamar las validaciones aqui
-    public boolean procesarDatosEvento(String tipoEvento, String ubicacion, java.time.LocalDate fecha, java.time.LocalTime hora, String asistentesTexto) {
+    public boolean procesarDatosEvento(String tipoEvento, String ubicacion, LocalDate fecha, LocalTime hora, String asistentesTexto) {
         StringBuilder errores = new StringBuilder();
         if (!Validaciones.textoValido(tipoEvento)) {
             errores.append("Selecciona un tipo de evento.\n");
         }
-
         if (!Validaciones.textoValido(ubicacion)) {
             errores.append("Selecciona una ubicación.\n");
         }
-
         if (!Validaciones.fechaValida(fecha)) {
             errores.append("Selecciona una fecha.\n");
         }
-
         if (!Validaciones.horaValida(hora)) {
             errores.append("Selecciona un horario.\n");
         }
-
         if (!Validaciones.esEnteroPositivo(asistentesTexto)) {
             errores.append("El número de asistentes debe ser un entero positivo.\n");
         }
-
         if (errores.length() > 0) {
             JOptionPane.showMessageDialog(null, errores.toString(), "Datos invalidos", JOptionPane.WARNING_MESSAGE);
             return false;
         }
-
         DTOEvento evento = new DTOEvento();
         evento.setTipoEvento(tipoEvento);
         evento.setUbicacion(ubicacion);
@@ -202,7 +184,8 @@ public class ControlPresentacion {
         iniciarSesion();
     }
 
-    //--------------RECURSOS DEL EVENTO------------------------
+    //---------------- RECURSOS DEL EVENTO ----------------
+
     public void iniciarRecursosEvento() {
         if (recursosFrmEvento != null && recursosFrmEvento.isDisplayable()) {
             recursosFrmEvento.setVisible(true);
@@ -238,79 +221,6 @@ public class ControlPresentacion {
         iniciarAnalisisEvaluacion();
     }
 
-    //--------------------ANALISIS Y EVALUACION------------- F2
-    public void iniciarAnalisisEvaluacion() {
-        if (analisisEvaluacion != null && analisisEvaluacion.isDisplayable()) {
-            analisisEvaluacion.setVisible(true);
-        } else {
-            analisisEvaluacion = new JFrameAnalisisEvaluacion(this);
-            analisisEvaluacion.setVisible(true);
-        }
-    }
-
-    public void cancelarAnalisisEvaluacion() {
-        iniciarRecursosEvento();
-    }
-
-    public void iniciarRevisarAnalisisEvaluacion() {
-        JFrameRevisarAnalisisEvaluacion revisar = new JFrameRevisarAnalisisEvaluacion(this);
-        revisar.setVisible(true);
-    }
-
-    public void cancelarRevisarAnalisisEvaluacion() {
-        iniciarAnalisisEvaluacion();
-    }
-
-    //------------------CONFIGURACION DE PROPUESTAS-------------------F3
-    // CONSULTAS DE F3
-    // Los catalogos se consultan en los almacenes existentes.
-    // La seleccion y el guardado siguen delegandose al subsistemaPropuesta.
-    //ALMACNE QITENLO
-    //   
-    public List<DTOServicio> consultarServiciosDisponibles() {
-        return new ArrayList<>(almacen.getServicios());
-    }
-
-    public List<DTOEquipo> obtenerEquiposDisponibles() {
-        return new ArrayList<>(almacen.getEquipos());
-    }
-
-    public List<DTOInventario> obtenerInventarioDisponible() {
-        return new ArrayList<>(almacen.getInventario());
-    }
-
-    public List<DTOPersonal> obtenerPersonalDisponible() {
-        return new ArrayList<>(almacen.getPersonal());
-    }
-
-    public List<DTOEquipo> consultarEquiposExternos() {
-        return new ArrayList<>(proveedorExterno.getEquipos());
-    }
-
-    private List<DTOEquipo> consultarTodosLosEquipos() {
-        List<DTOEquipo> equipos = obtenerEquiposDisponibles();
-        equipos.addAll(consultarEquiposExternos());
-        return equipos;
-    }
-
-    public void iniciarConfigurarPropuesta() {
-        if (evento == null || evento.getIdEvento() <= 0) {
-            JOptionPane.showMessageDialog(null, "Debes registrar un evento antes de configurar la propuesta.");
-            return;
-        }
-
-        subsistemaPropuesta.establecerEventoActual(evento.getIdEvento());
-        if (configurarPropuesta != null && configurarPropuesta.isDisplayable()) {
-            configurarPropuesta.setVisible(true);
-            solicitarFolio();
-            return;
-        }
-
-        configurarPropuesta = new JFrameConfigurarPropuesta(this);
-        solicitarFolio();
-        configurarPropuesta.setVisible(true);
-    }
-
     public void mostrarMenuRecursos() {
         mostrarPanelRecursos(JFrameRecursosEvento.PANEL_MENU);
     }
@@ -335,6 +245,73 @@ public class ControlPresentacion {
         mostrarPanelRecursos(JFrameRecursosEvento.PANEL_PANTALLAS);
     }
 
+    //---------------- ANALISIS Y EVALUACION - F2 ----------------
+
+    public void iniciarAnalisisEvaluacion() {
+        if (analisisEvaluacion != null && analisisEvaluacion.isDisplayable()) {
+            analisisEvaluacion.setVisible(true);
+        } else {
+            analisisEvaluacion = new JFrameAnalisisEvaluacion(this);
+            analisisEvaluacion.setVisible(true);
+        }
+    }
+
+    public void cancelarAnalisisEvaluacion() {
+        iniciarRecursosEvento();
+    }
+
+    public void iniciarRevisarAnalisisEvaluacion() {
+        JFrameRevisarAnalisisEvaluacion revisar = new JFrameRevisarAnalisisEvaluacion(this);
+        revisar.setVisible(true);
+    }
+
+    public void cancelarRevisarAnalisisEvaluacion() {
+        iniciarAnalisisEvaluacion();
+    }
+
+    //---------------- CONFIGURACION DE PROPUESTAS - F3 ----------------
+
+    public List<DTOServicio> consultarServiciosDisponibles() {
+        return subsistemaPropuesta.consultarServiciosDisponibles();
+    }
+
+    public List<DTOEquipo> obtenerEquiposDisponibles() {
+        return subsistemaPropuesta.consultarEquiposPropios();
+    }
+
+    public List<DTOInventario> obtenerInventarioDisponible() {
+        return subsistemaPropuesta.consultarInventariosDisponibles();
+    }
+
+    public List<DTOPersonal> obtenerPersonalDisponible() {
+        return subsistemaPropuesta.obtenerPersonalDisponible();
+    }
+
+    public List<DTOEquipo> consultarEquiposExternos() {
+        return subsistemaPropuesta.consultarEquiposExternos();
+    }
+
+    private List<DTOEquipo> consultarTodosLosEquipos() {
+        return subsistemaPropuesta.obtenerEquiposDisponibles();
+    }
+
+    public void iniciarConfigurarPropuesta() {
+        if (evento == null || evento.getIdEvento() <= 0) {
+            JOptionPane.showMessageDialog(null, "Debes registrar un evento antes de configurar la propuesta.");
+            return;
+        }
+        try {
+            subsistemaPropuesta.obtenerResumenSeleccion(evento.getIdEvento());
+            if (configurarPropuesta == null || !configurarPropuesta.isDisplayable()) {
+                configurarPropuesta = new JFrameConfigurarPropuesta(this);
+            }
+            solicitarFolio();
+            configurarPropuesta.setVisible(true);
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
+
     private void mostrarPanel(String panel) {
         if (configurarPropuesta != null) {
             configurarPropuesta.navegarA(panel);
@@ -345,7 +322,6 @@ public class ControlPresentacion {
         if (configurarPropuesta != null) {
             configurarPropuesta.solicitarFolio(cliente, evento);
         }
-
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_FOLIO);
     }
 
@@ -353,7 +329,6 @@ public class ControlPresentacion {
         if (configurarPropuesta != null) {
             configurarPropuesta.solicitarServicios(consultarServiciosDisponibles());
         }
-
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_SERVICIOS);
     }
 
@@ -361,15 +336,71 @@ public class ControlPresentacion {
         if (configurarPropuesta != null) {
             configurarPropuesta.solicitarEquipos(consultarTodosLosEquipos());
         }
-
         mostrarPanel(JFrameConfigurarPropuesta.PANEL_EQUIPO);
+    }
+
+    public void solicitarInventario() {
+        if (configurarPropuesta != null) {
+            configurarPropuesta.solicitarInventario(obtenerInventarioDisponible());
+        }
+        mostrarPanel(JFrameConfigurarPropuesta.PANEL_INVENTARIO);
+    }
+
+    public void solicitarEquiposExternos() {
+        if (configurarPropuesta != null) {
+            configurarPropuesta.solicitarEquiposExternos(consultarEquiposExternos());
+        }
+        mostrarPanel(JFrameConfigurarPropuesta.PANEL_PROVEEDOR);
+    }
+
+    public void solicitarPersonal() {
+        if (configurarPropuesta != null) {
+            configurarPropuesta.solicitarPersonal(obtenerPersonalDisponible());
+        }
+        mostrarPanel(JFrameConfigurarPropuesta.PANEL_PERSONAL);
+    }
+
+    public void obtenerResumen() {
+        if (configurarPropuesta == null || evento == null) {
+            return;
+        }
+        try {
+            DTOInventario resumen = subsistemaPropuesta.obtenerResumenSeleccion(evento.getIdEvento());
+            configurarPropuesta.solicitarResumen(cliente, evento, resumen.getServicios(), resumen.getEquipos(), resumen.getPersonal());
+            mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+    }
+
+    //---------------- SELECCION DE SERVICIOS - F3 ----------------
+
+    public void seleccionarServicios(int idServicio, boolean seleccionado) {
+        subsistemaPropuesta.seleccionarServicios(idServicio, seleccionado);
+    }
+
+    public boolean verificarSeleccionServicios() {
+        return subsistemaPropuesta.verificarSeleccionServicios();
+    }
+
+    //---------------- SELECCION DE EQUIPOS - F3 ----------------
+
+    public void seleccionarEquipos(int idEquipo, int cantidad) {
+        subsistemaPropuesta.seleccionarEquipos(idEquipo, cantidad);
+    }
+
+    public boolean verificarSeleccionEquipos() {
+        return subsistemaPropuesta.verificarSeleccionEquipo();
+    }
+
+    public void eliminarEquipoSeleccionado(int idEquipo) {
+        seleccionarEquipos(idEquipo, 0);
     }
 
     public boolean procesarSeleccionCantidadEquipo(int idEquipo, String texto) {
         if (!Validaciones.esEnteroPositivo(texto)) {
             return false;
         }
-
         try {
             int cantidad = Integer.parseInt(texto.trim());
             return subsistemaPropuesta.seleccionarEquipos(idEquipo, cantidad);
@@ -378,35 +409,45 @@ public class ControlPresentacion {
         }
     }
 
-    public void solicitarInventario() {
-        if (configurarPropuesta != null) {
-            configurarPropuesta.solicitarInventario(obtenerInventarioDisponible());
+    public boolean esCantidadEquipoValida(int idEquipo, String texto) {
+        if (!Validaciones.esEnteroPositivo(texto)) {
+            return false;
         }
-
-        mostrarPanel(JFrameConfigurarPropuesta.PANEL_INVENTARIO);
+        try {
+            return subsistemaPropuesta.validarCantidadEquipo(idEquipo, Integer.parseInt(texto.trim()));
+        } catch (NumberFormatException ex) {
+            return false;
+        }
     }
 
-    public void solicitarEquiposExternos() {
-        if (configurarPropuesta != null) {
-            configurarPropuesta.solicitarEquiposExternos(consultarEquiposExternos());
-        }
+    //---------------- EQUIPOS EXTERNOS - F3 ----------------
 
-        mostrarPanel(JFrameConfigurarPropuesta.PANEL_PROVEEDOR);
+    public List<DTOEquipo> buscarEquiposExternos(String texto) {
+        return subsistemaPropuesta.buscarEquiposExternos(texto);
     }
 
-    public void solicitarPersonal() {
-        if (configurarPropuesta != null) {
-            configurarPropuesta.solicitarPersonal(obtenerPersonalDisponible());
-        }
+    public boolean busquedaValida(javax.swing.JTextField txt) {
+        return Validaciones.soloLetras(txt);
+    }
 
-        mostrarPanel(JFrameConfigurarPropuesta.PANEL_PERSONAL);
+    //---------------- SELECCION DE PERSONAL - F3 ----------------
+
+    public void seleccionarPersonal(int idPersonal, int cantidad) {
+        subsistemaPropuesta.seleccionarPersonal(idPersonal, cantidad);
+    }
+
+    public boolean verificarSeleccionPersonal() {
+        return subsistemaPropuesta.verificarSeleccionPersonal();
+    }
+
+    public boolean esCantidadPersonalValida(String texto) {
+        return Validaciones.noEsNegativo(texto);
     }
 
     public boolean actualizarCantidadPersonal(int idEspecialidad, String texto) {
         if (!Validaciones.noEsNegativo(texto)) {
             return false;
         }
-
         try {
             int cantidad = Integer.parseInt(texto.trim());
             return subsistemaPropuesta.seleccionarPersonal(idEspecialidad, cantidad);
@@ -415,21 +456,50 @@ public class ControlPresentacion {
         }
     }
 
-    public void obtenerResumen() {
-        if (configurarPropuesta == null || evento == null) {
-            return;
-        }
+    //---------------- ENVIO HACIA COTIZACION - F3 ----------------
 
+    public boolean enviarPropuestaHaciaCotizacion(String horarioMontaje, String horarioDesmontaje, String comentarios) {
         try {
-            DTOInventario resumen = subsistemaPropuesta.obtenerResumenSeleccion(evento.getIdEvento());
-            configurarPropuesta.solicitarResumen(cliente, evento, resumen.getServicios(), resumen.getEquipos(), resumen.getPersonal());
-            mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
-        } catch (IllegalArgumentException ex) {
+            DTOPropuesta guardada = subsistemaPropuesta.enviarPropuestaHaciaCotizacion(horarioMontaje, horarioDesmontaje, comentarios);
+            if (guardada == null || guardada.getIdPropuesta() <= 0) {
+                JOptionPane.showMessageDialog(null, "No se pudo guardar la propuesta.");
+                return false;
+            }
+            propuestaActual = guardada;
+            cotizacion = null;
+            versionCotizacion = null;
+            horarioMontajePropuesta = convertirHorario(guardada.getHorarioMontaje());
+            horarioDesmontajePropuesta = convertirHorario(guardada.getHorarioDesmontaje());
+            comentariosPropuesta = guardada.getComentarios();
+            iniciarResumenCotizacion();
+            return cotizacion != null && versionCotizacion != null;
+        } catch (IllegalArgumentException | IllegalStateException | DateTimeParseException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
+            return false;
         }
     }
 
-    // -----------------COTIZACION---------------------- F4
+    private LocalTime convertirHorario(String horario) {
+        if (horario == null || horario.isBlank()) {
+            return null;
+        }
+        return LocalTime.parse(horario.trim());
+    }
+
+    public LocalTime getHorarioMontajePropuesta() {
+        return horarioMontajePropuesta;
+    }
+
+    public LocalTime getHorarioDesmontajePropuesta() {
+        return horarioDesmontajePropuesta;
+    }
+
+    public String getComentariosPropuesta() {
+        return comentariosPropuesta;
+    }
+
+    //---------------- COTIZACION - F4 ----------------
+
     public DTOCotizacion getCotizacion() {
         return cotizacion;
     }
@@ -446,7 +516,6 @@ public class ControlPresentacion {
         if ((cotizacion == null || versionCotizacion == null) && !generarCotizacion()) {
             return;
         }
-
         JFrameRegistrarCotizacion registrarCotizacion = new JFrameRegistrarCotizacion(this);
         registrarCotizacion.setVisible(true);
     }
@@ -455,51 +524,41 @@ public class ControlPresentacion {
         if (!generarCotizacion()) {
             return;
         }
-
         if (resumenCotizacion != null && resumenCotizacion.isDisplayable()) {
             mostrarResumenCotizacion();
             resumenCotizacion.setVisible(true);
             resumenCotizacion.toFront();
             return;
         }
-
         resumenCotizacion = new JFrameResumenCotizacion(this);
         mostrarResumenCotizacion();
         if (configurarPropuesta != null) {
             configurarPropuesta.dispose();
         }
-
         resumenCotizacion.setVisible(true);
     }
 
     private Object[][] obtenerFilasConceptosCotizacion() {
         List<Object[]> filas = new ArrayList<>();
-
         if (versionCotizacion == null) {
             return new Object[0][4];
         }
-
         List<DTODetalleCotizacion> detalles = subsistemaCotizacion.consultarDetallesVersion(versionCotizacion.getID());
-
         if (detalles == null) {
             return new Object[0][4];
         }
-
         for (DTODetalleCotizacion detalle : detalles) {
-            if (detalle == null || detalle.getConceptos() == null) {
-                continue;
-            }
-
-            for (DTOConceptoCotizacion concepto : detalle.getConceptos()) {
-                filas.add(new Object[]{
-                    concepto.getNombre(),
-                    concepto.getCantidad(),
-                    String.format(java.util.Locale.US, "$%,.2f", concepto.getPrecioUnitario()),
-                    String.format(java.util.Locale.US, "$%,.2f", concepto.getImporte())
-                });
+            if (detalle != null && detalle.getConceptos() != null) {
+                for (DTOConceptoCotizacion concepto : detalle.getConceptos()) {
+                    filas.add(new Object[]{
+                        concepto.getNombre(),
+                        concepto.getCantidad(),
+                        String.format(java.util.Locale.US, "$%,.2f", concepto.getPrecioUnitario()),
+                        String.format(java.util.Locale.US, "$%,.2f", concepto.getImporte())
+                    });
+                }
             }
         }
-
         return filas.toArray(new Object[0][]);
     }
 
@@ -507,7 +566,6 @@ public class ControlPresentacion {
         if (resumenCotizacion == null) {
             return;
         }
-
         if (cotizacion != null) {
             resumenCotizacion.setIDCotizacion(String.valueOf(cotizacion.getID()));
         }
@@ -519,27 +577,21 @@ public class ControlPresentacion {
             resumenCotizacion.setEvento(evento.getTipoEvento());
             resumenCotizacion.setOperacion(formatearHorario(evento.getHoraInicio(), evento.getHoraFin()));
         }
-
         DTOInventario inventario = null;
         LocalTime montaje = horarioMontajePropuesta;
-
         if (versionCotizacion != null) {
             List<DTODetalleCotizacion> detalles = subsistemaCotizacion.consultarDetallesVersion(versionCotizacion.getID());
-
-            for (DTODetalleCotizacion detalle : detalles) {
-                if (detalle == null || detalle.getInventario() == null || detalle.getInventario().isEmpty()) {
-                    continue;
+            if (detalles != null) {
+                for (DTODetalleCotizacion detalle : detalles) {
+                    if (detalle != null && detalle.getInventario() != null && !detalle.getInventario().isEmpty()) {
+                        inventario = detalle.getInventario().get(0);
+                        montaje = detalle.getHorarioFases();
+                        break;
+                    }
                 }
-
-                inventario = detalle.getInventario().get(0);
-                montaje = detalle.getHorarioFases();
-                break;
             }
         }
-
-        resumenCotizacion.setHorariosPropuesta(montaje == null ? "Por definir" : montaje.toString(),
-                horarioDesmontajePropuesta == null ? "Por definir" : horarioDesmontajePropuesta.toString());
-
+        resumenCotizacion.setHorariosPropuesta(montaje == null ? "Por definir" : montaje.toString(), horarioDesmontajePropuesta == null ? "Por definir" : horarioDesmontajePropuesta.toString());
         if (inventario != null) {
             resumenCotizacion.setServicios(serviciosDeInventario(inventario));
             resumenCotizacion.setEquipos(equiposDeInventario(inventario));
@@ -549,12 +601,9 @@ public class ControlPresentacion {
             resumenCotizacion.setEquipos(new ArrayList<>());
             resumenCotizacion.setPersonalOperativo(new ArrayList<>());
         }
-
         if (versionCotizacion != null) {
-            resumenCotizacion.setImportes(versionCotizacion.getSubtotal(), versionCotizacion.getDescuento(),
-                    versionCotizacion.getImporteDescuento(), versionCotizacion.getImporteIVA(), versionCotizacion.getTotal());
+            resumenCotizacion.setImportes(versionCotizacion.getSubtotal(), versionCotizacion.getDescuento(), versionCotizacion.getImporteDescuento(), versionCotizacion.getImporteIVA(), versionCotizacion.getTotal());
         }
-
         resumenCotizacion.setConceptosCotizacion(obtenerFilasConceptosCotizacion());
         resumenCotizacion.ajustarTamano();
     }
@@ -564,14 +613,11 @@ public class ControlPresentacion {
             JOptionPane.showMessageDialog(null, "No hay una versión de cotización disponible.");
             return;
         }
-
         try {
-            versionCotizacion = subsistemaCotizacion.actualizarDescuentoVersion(
-                    versionCotizacion.getID(), porcentaje);
+            versionCotizacion = subsistemaCotizacion.actualizarDescuentoVersion(versionCotizacion.getID(), porcentaje);
             mostrarResumenCotizacion();
         } catch (IllegalArgumentException | IllegalStateException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage(),
-                    "Error al actualizar descuento", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al actualizar descuento", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -625,11 +671,9 @@ public class ControlPresentacion {
         if (inicio == null) {
             return "";
         }
-
         if (fin == null) {
             return inicio.toString();
         }
-
         return inicio + " - " + fin;
     }
 
@@ -638,17 +682,14 @@ public class ControlPresentacion {
             if (propuestaActual == null || propuestaActual.getIdPropuesta() <= 0) {
                 throw new IllegalStateException("Primero debes guardar una propuesta válida.");
             }
-
             cotizacion = subsistemaCotizacion.calcularCotizacion(propuestaActual.getIdPropuesta());
             if (cotizacion == null) {
                 throw new IllegalStateException("No se pudo generar la cotización.");
             }
-
             versionCotizacion = subsistemaCotizacion.consultarUltimaVersion(cotizacion.getID());
             if (versionCotizacion == null) {
                 throw new IllegalStateException("La cotización no tiene una versión registrada.");
             }
-
             return true;
         } catch (IllegalArgumentException | IllegalStateException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error al generar cotización", JOptionPane.ERROR_MESSAGE);
@@ -669,11 +710,12 @@ public class ControlPresentacion {
     public List<String> obtenerServiciosCotizadosConPrecio() {
         return serviciosSeleccionados();
     }
-//------------------------------- SUBSISTEMA ORDEN --------------------------
+
+    //---------------- SUBSISTEMA ORDEN - F5 ----------------
 
     public void establecerContextoOrdenActual() {
-        int idEvento = (evento != null) ? evento.getIdEvento() : -1;
-        int idCotizacion = (cotizacion != null) ? cotizacion.getID() : -1;
+        int idEvento = evento != null ? evento.getIdEvento() : -1;
+        int idCotizacion = cotizacion != null ? cotizacion.getID() : -1;
         subsistemaOrden.establecerContextoOrden(idEvento, idCotizacion);
     }
 
@@ -687,26 +729,21 @@ public class ControlPresentacion {
             JOptionPane.showMessageDialog(null, "Selecciona el tipo de decisión del cliente.");
             return false;
         }
-
         if ("Aceptación parcial".equals(decision) && (serviciosSeleccionados == null || serviciosSeleccionados.isEmpty())) {
             JOptionPane.showMessageDialog(null, "Selecciona los servicios que el cliente acepta.");
             return false;
         }
-
         establecerContextoOrdenActual();
-
         boolean procesada = subsistemaOrden.registrarDecisionCotizacion(decision, serviciosSeleccionados);
         if (!procesada) {
             JOptionPane.showMessageDialog(null, "No se pudo registrar la decisión de la cotización.");
             return false;
         }
-
         if ("Solicitud de modificación".equals(decision) || "Solicitud de modificacion".equals(decision)) {
             JOptionPane.showMessageDialog(null, "El cliente solicita modificaciones. Regresando a la configuración de la propuesta.");
             iniciarConfigurarPropuesta();
             return true;
         }
-
         if ("Negación total".equals(decision)) {
             if (cotizacion != null) {
                 cotizacion.setEstadoGeneral("Rechazada");
@@ -717,7 +754,6 @@ public class ControlPresentacion {
             if (evento != null) {
                 evento.setEstadoAtencion("Cancelado");
             }
-
             JOptionPane.showMessageDialog(null, "La cotización fue rechazada. El evento ha sido cancelado.");
             cliente = null;
             evento = null;
@@ -726,7 +762,6 @@ public class ControlPresentacion {
             iniciarSesion();
             return true;
         }
-
         if ("Aceptación total".equals(decision)) {
             if (cotizacion != null) {
                 cotizacion.setEstadoGeneral("Aceptada");
@@ -742,7 +777,6 @@ public class ControlPresentacion {
                 versionCotizacion.setEstado("Aceptada parcialmente");
             }
         }
-
         iniciarGenerarOrden();
         return true;
     }
@@ -751,119 +785,24 @@ public class ControlPresentacion {
         return new ArrayList<>(serviciosAceptados);
     }
 
-    // DELEGACION DE OPERACIONES DE F3
-    public boolean verificarSeleccionServicios() {
-        return subsistemaPropuesta.verificarSeleccionServicios();
-    }
-
-    public boolean verificarSeleccionEquipos() {
-        return subsistemaPropuesta.verificarSeleccionEquipo();
-    }
-
-    public void seleccionarEquipos(int idEquipo, int cantidad) {
-        subsistemaPropuesta.seleccionarEquipos(idEquipo, cantidad);
-    }
-
-    public boolean verificarSeleccionPersonal() {
-        return subsistemaPropuesta.verificarSeleccionPersonal();
-    }
-
-    public boolean enviarPropuestaHaciaCotizacion(String horarioMontaje, String horarioDesmontaje, String comentarios) {
-        try {
-            DTOPropuesta guardada = subsistemaPropuesta.enviarPropuestaHaciaCotizacion(horarioMontaje, horarioDesmontaje, comentarios);
-            if (guardada == null || guardada.getIdPropuesta() <= 0) {
-                JOptionPane.showMessageDialog(null, "No se pudo guardar la propuesta.");
-                return false;
-            }
-
-            propuestaActual = guardada;
-            if (cotizacion != null && cotizacion.getIdPropuesta() != guardada.getIdPropuesta()) {
-                cotizacion = null;
-                versionCotizacion = null;
-            }
-
-            horarioMontajePropuesta = (horarioMontaje == null || horarioMontaje.isBlank()) ? null : LocalTime.parse(horarioMontaje.trim());
-            horarioDesmontajePropuesta = (horarioDesmontaje == null || horarioDesmontaje.isBlank()) ? null : LocalTime.parse(horarioDesmontaje.trim());
-            comentariosPropuesta = comentarios == null ? "" : comentarios.trim();
-            iniciarResumenCotizacion();
-            return true;
-        } catch (IllegalArgumentException | IllegalStateException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
-            return false;
-        }
-    }
-
-    public LocalTime getHorarioMontajePropuesta() {
-        return horarioMontajePropuesta;
-    }
-
-    public LocalTime getHorarioDesmontajePropuesta() {
-        return horarioDesmontajePropuesta;
-    }
-
-    public String getComentariosPropuesta() {
-        return comentariosPropuesta;
-    }
-
-    public void eliminarEquipoSeleccionado(int idEquipo) {
-        seleccionarEquipos(idEquipo, 0);
-    }
-
-    public boolean busquedaValida(javax.swing.JTextField txt) {
-        return Validaciones.soloLetras(txt);
-    }
-
-    public boolean esCantidadPersonalValida(String texto) {
-        return Validaciones.noEsNegativo(texto);
-    }
-
-    public boolean esCantidadEquipoValida(int idEquipo, String texto) {
-        if (!Validaciones.esEnteroPositivo(texto)) {
-            return false;
-        }
-
-        try {
-            return subsistemaPropuesta.validarCantidadEquipo(idEquipo, Integer.parseInt(texto.trim()));
-        } catch (NumberFormatException ex) {
-            return false;
-        }
-    }
-
-    public List<DTOEquipo> buscarEquiposExternos(String texto) {
-        List<DTOEquipo> resultado = new ArrayList<>();
-        String filtro = texto == null ? "" : texto.trim().toLowerCase();
-        for (DTOEquipo equipo : consultarEquiposExternos()) {
-            if (equipo.getNombre() != null && equipo.getNombre().toLowerCase().contains(filtro)) {
-                resultado.add(equipo);
-            }
-        }
-
-        return resultado;
-    }
-
-    public void seleccionarPersonal(int idPersonal, int cantidad) {
-        subsistemaPropuesta.seleccionarPersonal(idPersonal, cantidad);
-    }
-
-    public void seleccionarServicios(int idServicio, boolean seleccionado) {
-        subsistemaPropuesta.seleccionarServicios(idServicio, seleccionado);
-    }
+    //---------------- CANCELACION DEL EVENTO ----------------
 
     public void cancelarEventoGuardandoRegistro() {
         if (evento != null) {
             evento.setEstadoAtencion("Cancelado");
             subsistemaEvento.registrarDatosEvento(evento);
         }
-
         if (cliente != null && subsistemaEvento.ingresarTelefono(cliente.getTelefono()) == null) {
             subsistemaEvento.registrarCliente(cliente);
         }
-
         this.cliente = null;
         this.evento = null;
         iniciarSesion();
     }
 
+    //---------------- GENERACION DE ORDEN - F5 ----------------
+
+    // Pendiente de trasladar al subsistemaOrden.
     public void generarOrdenServicio() {
         int nuevoId = almacen.getOrdenes().size() + 1;
         DTOOrdenServicio orden = new DTOOrdenServicio(nuevoId, evento.getIdEvento(), cotizacion.getID(), LocalDate.now(), serviciosAceptados);

@@ -4,18 +4,27 @@
  */
 package negocioPropuesta.interfaces;
 
+import dto.DTOEquipo;
 import dto.DTOInventario;
+import dto.DTOPersonal;
 import dto.DTOPropuesta;
+import dto.DTOServicio;
+import java.util.List;
 
+/**
+ *
+ * @author Andre
+ */
 public interface ISubsistemaPropuesta {
 
-    void establecerEventoActual(int idEvento);
+    void seleccionarServicios(
+            int idServicio, boolean seleccionado);
 
-    void seleccionarServicios(int idServicio, boolean seleccionado);
+    boolean seleccionarEquipos(
+            int idEquipo, int cantidad);
 
-    boolean seleccionarEquipos(int idEquipo, int cantidad);
-
-    boolean seleccionarPersonal(int idPersonal, int cantidad);
+    boolean seleccionarPersonal(
+            int idPersonal, int cantidad);
 
     boolean verificarSeleccionServicios();
 
@@ -23,17 +32,35 @@ public interface ISubsistemaPropuesta {
 
     boolean verificarSeleccionPersonal();
 
-    boolean validarCantidadEquipo(int idEquipo, int cantidad);
-    
-    DTOPropuesta consultarPropuesta(int idPropuesta);
-
-    DTOInventario consultarRecursosPropuesta(int idPropuesta);
-
-    DTOInventario obtenerResumenSeleccion(int idEvento);
+    boolean validarCantidadEquipo(
+            int idEquipo, int cantidad);
 
     DTOPropuesta enviarPropuestaHaciaCotizacion(
             String horarioMontaje,
             String horarioDesmontaje,
-            String comentarios
-    );
+            String comentarios);
+
+    // Operaciones de integración con presentación y F4.
+
+    List<DTOServicio> consultarServiciosDisponibles();
+
+    List<DTOEquipo> obtenerEquiposDisponibles();
+
+    List<DTOPersonal> obtenerPersonalDisponible();
+
+    List<DTOEquipo> consultarEquiposPropios();
+
+    List<DTOEquipo> consultarEquiposExternos();
+
+    List<DTOInventario> consultarInventariosDisponibles();
+
+    List<DTOEquipo> buscarEquiposExternos(String texto);
+
+    DTOInventario obtenerResumenSeleccion(int idEvento);
+
+    DTOPropuesta consultarPropuesta(int idPropuesta);
+
+    DTOInventario consultarRecursosPropuesta(int idPropuesta);
+
+    DTOPropuesta actualizarPropuesta(DTOInventario cambios);
 }

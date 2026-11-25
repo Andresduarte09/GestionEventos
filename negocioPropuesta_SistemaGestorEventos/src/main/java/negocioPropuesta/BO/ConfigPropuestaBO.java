@@ -5,25 +5,27 @@
 package negocioPropuesta.BO;
 
 import com.mycompany.persistencia.AlmacenDatos;
-import dto.DTODetalleSolicitud;
-import dto.DTOEquipo;
-import dto.DTOEvento;
-import dto.DTOInventario;
-import dto.DTOPersonal;
-import dto.DTOServicio;
 import infraestructura.ProveedorExterno;
+import negocioPropuesta.interfaces.IConfigPropuestaBO;
+import dto.*;
 import java.util.ArrayList;
 import java.util.List;
-import negocioPropuesta.interfaces.IConfigPropuestaBO;
+import java.util.Objects;
 
+/**
+ *
+ * @author Andre
+ */
 public class ConfigPropuestaBO implements IConfigPropuestaBO {
+
+    private static ConfigPropuestaBO instancia;
 
     private final AlmacenDatos almacen;
     private final ProveedorExterno proveedorExterno;
 
-    private static ConfigPropuestaBO instancia;
-
-    private ConfigPropuestaBO(AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
+    private ConfigPropuestaBO(
+            AlmacenDatos almacen,
+            ProveedorExterno proveedorExterno) {
 
         this.almacen = almacen;
         this.proveedorExterno = proveedorExterno;
@@ -34,10 +36,9 @@ public class ConfigPropuestaBO implements IConfigPropuestaBO {
             ProveedorExterno proveedorExterno) {
 
         if (instancia == null) {
+
             instancia = new ConfigPropuestaBO(
-                    almacen,
-                    proveedorExterno
-            );
+                    almacen, proveedorExterno);
         }
 
         return instancia;
@@ -60,16 +61,16 @@ public class ConfigPropuestaBO implements IConfigPropuestaBO {
     public List<DTODetalleSolicitud> consultarDetallesPorEvento(
             int idEvento) {
 
-        for (DTOEvento e : almacen.getEventos()) {
+        for (DTOEvento evento : almacen.getEventos()) {
 
-            if (e.getIdEvento() == idEvento) {
+            if (evento.getIdEvento() == idEvento) {
 
-                List<DTODetalleSolicitud> detalles =
-                        e.getDetallesSolicitud();
+                if (evento.getDetallesSolicitud() == null) {
+                    return new ArrayList<>();
+                }
 
-                return detalles == null
-                        ? new ArrayList<>()
-                        : new ArrayList<>(detalles);
+                return new ArrayList<>(
+                        evento.getDetallesSolicitud());
             }
         }
 
@@ -78,38 +79,25 @@ public class ConfigPropuestaBO implements IConfigPropuestaBO {
 
     @Override
     public List<DTOServicio> consultarServicios() {
+
         return new ArrayList<>(almacen.getServicios());
     }
 
     @Override
     public List<DTOEquipo> consultarEquipos() {
 
-        List<DTOEquipo> todos =
+        List<DTOEquipo> equipos =
                 new ArrayList<>(almacen.getEquipos());
 
-        todos.addAll(proveedorExterno.getEquipos());
+        equipos.addAll(proveedorExterno.getEquipos());
 
-        return todos;
+        return equipos;
     }
 
     @Override
     public List<DTOPersonal> consultarPersonal() {
+
         return new ArrayList<>(almacen.getPersonal());
-    }
-
-    @Override
-    public List<DTOEquipo> consultarEquiposPropios() {
-        return new ArrayList<>(almacen.getEquipos());
-    }
-
-    @Override
-    public List<DTOEquipo> consultarEquiposExternos() {
-        return new ArrayList<>(proveedorExterno.getEquipos());
-    }
-
-    @Override
-    public List<DTOInventario> consultarInventariosDisponibles() {
-        return new ArrayList<>(almacen.getInventario());
     }
 
     @Override
@@ -120,29 +108,100 @@ public class ConfigPropuestaBO implements IConfigPropuestaBO {
             return false;
         }
 
-        List<DTOEquipo> existentes = consultarEquipos();
+        List<DTOEquipo> equipos = consultarEquipos();
 
-        for (DTOEquipo pedido : seleccion.getEquipos()) {
+        for (DTOEquipo solicitado : seleccion.getEquipos()) {
 
-            boolean encontrado = false;
+            boolean disponible = false;
 
-            for (DTOEquipo e : existentes) {
+            for (DTOEquipo equipo : equipos) {
 
-                if (e.getIdEquipo() == pedido.getIdEquipo()) {
+                if (equipo.getIdEquipo()
+                        == solicitado.getIdEquipo()) {
 
-                    encontrado = true;
-
-                    if (pedido.getCantidadSeleccionada()
-                            > e.getDisponibilidad()) {
-                        return false;
-                    }
+                    disponible =
+                            solicitado.getCantidadSeleccionada() >= 0
+                            && solicitado.getCantidadSeleccionada()
+                            <= equipo.getDisponibilidad();
 
                     break;
                 }
             }
 
-            if (!encontrado) {
+            if (!disponible) {
                 return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Operaciones de integración requeridas por el gestor.
+
+    @Override
+    public List<DTOEquipo> consultarEquiposPropios() {
+
+        return new ArrayList<>(almacen.getEquipos());
+    }
+
+    @Override
+    public List<DTOEquipo> consultarEquiposExternos() {
+
+        return new ArrayList<>(proveedorExterno.getEquipos());
+    }
+
+    @Override
+    public List<DTOInventario> consultarInventariosDisponibles() {
+
+        return new ArrayList<>(almacen.getInventario());
+    }
+
+    @Override
+    public boolean verificarDisponibilidadLocal(
+            int idEventoActual) {
+
+        DTOEvento actual = null;
+
+        for (DTOEvento evento : almacen.getEventos()) {
+
+            if (evento.getIdEvento() == idEventoActual) {
+
+                actual = evento;
+                break;
+            }
+        }
+
+        if (actual == null
+                || actual.getUbicacion() == null
+                || actual.getUbicacion().isBlank()
+                || actual.getFechaEvento() == null) {
+
+            return false;
+        }
+
+        for (DTOEvento evento : almacen.getEventos()) {
+
+            if (evento.getIdEvento() != idEventoActual) {
+
+                boolean mismaFecha = Objects.equals(
+                        actual.getFechaEvento(),
+                        evento.getFechaEvento());
+
+                boolean mismaUbicacion =
+                        actual.getUbicacion().equalsIgnoreCase(
+                                evento.getUbicacion());
+
+                boolean cancelado = "Cancelado".equalsIgnoreCase(
+                        evento.getEstadoAtencion());
+
+                boolean rechazado = "Rechazada".equalsIgnoreCase(
+                        evento.getEstadoAtencion());
+
+                if (mismaFecha && mismaUbicacion
+                        && !cancelado && !rechazado) {
+
+                    return false;
+                }
             }
         }
 

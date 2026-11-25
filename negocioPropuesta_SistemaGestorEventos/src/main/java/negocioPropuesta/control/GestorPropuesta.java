@@ -1,15 +1,17 @@
 package negocioPropuesta.control;
 
-import dto.DTOEquipo;
-import dto.DTOInventario;
-import dto.DTOPersonal;
-import dto.DTOPropuesta;
-import dto.DTOServicio;
+import dto.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import negocioPropuesta.interfaces.IConfigPropuestaBO;
 import negocioPropuesta.interfaces.IPropuestaBO;
 
+/**
+ *
+ * @author Andre
+ */
 public class GestorPropuesta {
 
     private DTOInventario seleccionActual;
@@ -26,81 +28,184 @@ public class GestorPropuesta {
         this.propuestaBO = propuestaBO;
     }
 
-    public void establecerEventoActual(int idEvento) {
-
-        if (idEvento <= 0) {
-            throw new IllegalArgumentException(
-                    "El ID del evento debe ser positivo."
-            );
-        }
-
-        this.idEventoActual = idEvento;
-    }
-
     public List<DTOServicio> solicitarServicios() {
+
         return configPropuestaBO.consultarServicios();
     }
 
     public List<DTOEquipo> solicitarEquipos() {
+
         return configPropuestaBO.consultarEquipos();
     }
 
     public List<DTOPersonal> solicitarPersonal() {
+
         return configPropuestaBO.consultarPersonal();
     }
 
-    public boolean verificarSeleccion(
-            DTOInventario seleccion) {
+    public boolean verificarSeleccion(DTOInventario seleccion) {
 
         return configPropuestaBO.verificarDisponibilidad(
-                seleccion
-        );
+                seleccion);
     }
 
-    private DTOInventario capturarSeleccionActual() {
+    public DTOInventario obtenerResumen(int idEvento) {
+
+        if (idEvento <= 0) {
+
+            throw new IllegalArgumentException(
+                    "El identificador del evento debe ser positivo.");
+        }
+
+        seleccionActual =
+                propuestaBO.consultarSeleccion(idEvento);
+
+        idEventoActual = idEvento;
+
+        return seleccionActual;
+    }
+
+    public DTOPropuesta GuardarPropuestaActual(
+            String folio,
+            String horarioMontaje,
+            String horarioDesmontaje,
+            String comentarios) {
+
+        DTOPropuesta propuesta = crearPropuesta(
+                folio,
+                horarioMontaje,
+                horarioDesmontaje,
+                comentarios);
+
+        return propuestaBO.guardar(propuesta);
+    }
+
+    public DTOPropuesta actualizarPropuesta(
+            DTOInventario cambios) {
+
+        if (!verificarSeleccion(cambios)) {
+
+            throw new IllegalArgumentException(
+                    "Los recursos seleccionados no están disponibles.");
+        }
+
+        propuestaBO.actualizarSeleccion(cambios);
+
+        seleccionActual = cambios;
+
+        return crearPropuesta(
+                null,
+                null,
+                null,
+                "");
+    }
+
+    public List<DTOServicio> consultarServiciosDisponibles() {
+
+        return solicitarServicios();
+    }
+
+    public List<DTOEquipo> obtenerEquiposDisponibles() {
+
+        return solicitarEquipos();
+    }
+
+    public List<DTOPersonal> obtenerPersonalDisponible() {
+
+        return solicitarPersonal();
+    }
+
+    public DTOInventario capturarSeleccionActual() {
 
         DTOInventario seleccion = new DTOInventario();
 
-        for (DTOServicio s : solicitarServicios()) {
+        for (DTOServicio servicio : solicitarServicios()) {
 
-            if (s.isSeleccionado()) {
-                seleccion.getServicios().add(s);
+            if (servicio.isSeleccionado()) {
+
+                seleccion.getServicios().add(servicio);
             }
         }
 
-        for (DTOEquipo e : solicitarEquipos()) {
+        for (DTOEquipo equipo : solicitarEquipos()) {
 
-            if (e.getCantidadSeleccionada() > 0) {
-                seleccion.getEquipos().add(e);
+            if (equipo.getCantidadSeleccionada() > 0) {
+
+                seleccion.getEquipos().add(equipo);
             }
         }
 
-        for (DTOPersonal p : solicitarPersonal()) {
+        for (DTOPersonal personal : solicitarPersonal()) {
 
-            if (p.getCantidad() > 0) {
-                seleccion.getPersonal().add(p);
+            if (personal.getCantidad() > 0) {
+
+                seleccion.getPersonal().add(personal);
             }
         }
 
         return seleccion;
     }
 
-    public DTOInventario obtenerResumen(int idEvento) {
+    public DTOPropuesta consultarPropuesta(int idPropuesta) {
 
-        establecerEventoActual(idEvento);
-
-        propuestaBO.registrarSeleccionEvento(
-                idEvento,
-                capturarSeleccionActual()
-        );
-
-        seleccionActual =
-                propuestaBO.consultarSeleccion(idEvento);
-
-        return seleccionActual;
+        return propuestaBO.consultar(idPropuesta);
     }
 
-    public DTOPropuesta solicitarPropuesta(
+    public DTOInventario consultarRecursosPropuesta(
+            int idPropuesta) {
+
+        DTOPropuesta propuesta =
+                propuestaBO.consultar(idPropuesta);
+
+        if (propuesta == null) {
+            return null;
+        }
+
+        return propuesta.getInventario();
+    }
+
+    public List<DTOEquipo> consultarEquiposPropios() {
+
+        return configPropuestaBO.consultarEquiposPropios();
+    }
+
+    public List<DTOEquipo> consultarEquiposExternos() {
+
+        return configPropuestaBO.consultarEquiposExternos();
+    }
+
+    public DTOInventario obtenerResumenSeleccion(int idEvento) {
+
+        return obtenerResumen(idEvento);
+    }
+
+    public List<DTOInventario> consultarInventariosDisponibles() {
+
+        return configPropuestaBO.consultarInventariosDisponibles();
+    }
+
+    public List<DTOEquipo> buscarEquiposExternos(String texto) {
+
+        List<DTOEquipo> resultado = new ArrayList<>();
+
+        String filtro = texto == null
+                ? ""
+                : texto.trim().toLowerCase();
+
+        for (DTOEquipo equipo : consultarEquiposExternos()) {
+
+            if (equipo.getNombre() != null
+                    && equipo.getNombre().toLowerCase()
+                            .contains(filtro)) {
+
+                resultado.add(equipo);
+            }
+        }
+
+        return resultado;
+    }
+
+    public DTOPropuesta crearPropuesta(
             String folio,
             String horarioMontaje,
             String horarioDesmontaje,
@@ -109,115 +214,63 @@ public class GestorPropuesta {
         if (idEventoActual <= 0) {
 
             throw new IllegalStateException(
-                    "Primero debes establecer el evento actual."
-            );
+                    "No se ha establecido un evento.");
         }
 
-        propuestaBO.registrarSeleccionEvento(
-                idEventoActual,
-                capturarSeleccionActual()
-        );
+        seleccionActual = capturarSeleccionActual();
 
-        DTOInventario inventario =
-                propuestaBO.consultarSeleccion(idEventoActual);
+        if (!verificarSeleccion(seleccionActual)) {
+
+            throw new IllegalStateException(
+                    "Los recursos seleccionados no están disponibles.");
+        }
 
         DTOPropuesta propuesta = new DTOPropuesta();
 
         propuesta.setIdEvento(idEventoActual);
-        propuesta.setInventario(inventario);
         propuesta.setFolio(folio);
         propuesta.setHorarioMontaje(horarioMontaje);
         propuesta.setHorarioDesmontaje(horarioDesmontaje);
+
         propuesta.setComentarios(
-                comentarios == null ? "" : comentarios.trim()
-        );
+                comentarios == null ? "" : comentarios.trim());
 
-        DTOPropuesta guardada =
-                propuestaBO.guardar(propuesta);
+        propuesta.setInventario(seleccionActual);
 
-        if (guardada.getFolio() == null
-                || guardada.getFolio().trim().isEmpty()) {
-
-            guardada.setFolio(
-                    "PROP-" + guardada.getIdPropuesta()
-            );
-
-            guardada = propuestaBO.guardar(guardada);
-        }
-
-        return guardada;
+        return propuesta;
     }
 
-    public DTOPropuesta consultarPropuesta(int idPropuesta) {
-        return propuestaBO.consultar(idPropuesta);
+    public boolean verificarDisponibilidadLocal(
+            int idEventoActual) {
+
+        return configPropuestaBO.verificarDisponibilidadLocal(
+                idEventoActual);
     }
 
-    public DTOInventario consultarRecursosPropuesta(
-            int idPropuesta) {
+    // Operación del diagrama de secuencia.
 
-        return propuestaBO.consultarRecursosPropuesta(
-                idPropuesta
-        );
-    }
+    public void validarHorario(
+            String horarioMontaje,
+            String horarioDesmontaje) {
 
-    public void actualizarPropuesta(DTOInventario cambios) {
+        try {
 
-        propuestaBO.actualizarSeleccion(cambios);
+            if (horarioMontaje != null
+                    && !horarioMontaje.isBlank()) {
 
-        if (idEventoActual > 0) {
-
-            propuestaBO.registrarSeleccionEvento(
-                    idEventoActual,
-                    capturarSeleccionActual()
-            );
-
-            seleccionActual =
-                    propuestaBO.consultarSeleccion(idEventoActual);
-
-        } else {
-            seleccionActual = cambios;
-        }
-    }
-
-    public List<DTOServicio> consultarServiciosDisponibles() {
-        return configPropuestaBO.consultarServicios();
-    }
-
-    public List<DTOEquipo> obtenerEquiposDisponibles() {
-        return configPropuestaBO.consultarEquipos();
-    }
-
-    public List<DTOPersonal> obtenerPersonalDisponible() {
-        return configPropuestaBO.consultarPersonal();
-    }
-
-    public List<DTOEquipo> consultarEquiposPropios() {
-        return configPropuestaBO.consultarEquiposPropios();
-    }
-
-    public List<DTOEquipo> consultarEquiposExternos() {
-        return configPropuestaBO.consultarEquiposExternos();
-    }
-
-    public List<DTOInventario> consultarInventariosDisponibles() {
-        return configPropuestaBO.consultarInventariosDisponibles();
-    }
-
-    public List<DTOEquipo> buscarEquiposExternos(String texto) {
-
-        List<DTOEquipo> resultado = new ArrayList<>();
-
-        String filtro = texto == null ? "" : texto.trim().toLowerCase();
-
-        for (DTOEquipo equipo : consultarEquiposExternos()) {
-            if (equipo.getNombre() != null
-                    && equipo.getNombre()
-                            .toLowerCase()
-                            .contains(filtro)) {
-                resultado.add(equipo);
+                LocalTime.parse(horarioMontaje.trim());
             }
-        }
 
-        return resultado;
+            if (horarioDesmontaje != null
+                    && !horarioDesmontaje.isBlank()) {
+
+                LocalTime.parse(horarioDesmontaje.trim());
+            }
+
+        } catch (DateTimeParseException ex) {
+
+            throw new IllegalArgumentException(
+                    "Los horarios deben tener formato HH:mm.");
+        }
     }
 }

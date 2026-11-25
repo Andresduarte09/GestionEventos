@@ -1,42 +1,33 @@
 package negocioPropuesta.fachada;
 
 import com.mycompany.persistencia.AlmacenDatos;
-import dto.DTOEquipo;
-import dto.DTOInventario;
-import dto.DTOPersonal;
-import dto.DTOPropuesta;
-import dto.DTOServicio;
 import infraestructura.ProveedorExterno;
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 import negocioPropuesta.BO.ConfigPropuestaBO;
 import negocioPropuesta.BO.PropuestaBO;
 import negocioPropuesta.control.GestorPropuesta;
 import negocioPropuesta.interfaces.ISubsistemaPropuesta;
+import dto.*;
+import java.util.List;
 
+/**
+ *
+ * @author Andre
+ */
 public class FachadaPropuesta implements ISubsistemaPropuesta {
 
     private final GestorPropuesta gestor;
+    private int idEventoActual;
 
     public FachadaPropuesta(
             AlmacenDatos almacen,
             ProveedorExterno proveedorExterno) {
 
-        this.gestor = new GestorPropuesta(
+        gestor = new GestorPropuesta(
                 ConfigPropuestaBO.getInstance(
-                        almacen,
-                        proveedorExterno
-                ),
+                        almacen, proveedorExterno),
                 PropuestaBO.getInstance(
-                        almacen,
-                        proveedorExterno
-                )
+                        almacen, proveedorExterno)
         );
-    }
-
-    @Override
-    public void establecerEventoActual(int idEvento) {
-        gestor.establecerEventoActual(idEvento);
     }
 
     @Override
@@ -44,10 +35,12 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
             int idServicio,
             boolean seleccionado) {
 
-        for (DTOServicio s : gestor.solicitarServicios()) {
+        for (DTOServicio servicio : gestor.solicitarServicios()) {
 
-            if (s.getIdServicio() == idServicio) {
-                s.setSeleccionado(seleccionado);
+            if (servicio.getIdServicio() == idServicio) {
+
+                servicio.setSeleccionado(seleccionado);
+
                 return;
             }
         }
@@ -62,15 +55,16 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
             return false;
         }
 
-        for (DTOEquipo e : gestor.solicitarEquipos()) {
+        for (DTOEquipo equipo : gestor.solicitarEquipos()) {
 
-            if (e.getIdEquipo() == idEquipo) {
+            if (equipo.getIdEquipo() == idEquipo) {
 
-                if (cantidad > e.getDisponibilidad()) {
+                if (cantidad > equipo.getDisponibilidad()) {
                     return false;
                 }
 
-                e.setCantidadSeleccionada(cantidad);
+                equipo.setCantidadSeleccionada(cantidad);
+
                 return true;
             }
         }
@@ -87,11 +81,12 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
             return false;
         }
 
-        for (DTOPersonal p : gestor.solicitarPersonal()) {
+        for (DTOPersonal personal : gestor.solicitarPersonal()) {
 
-            if (p.getIdEspecialidad() == idPersonal) {
+            if (personal.getIdEspecialidad() == idPersonal) {
 
-                p.setCantidad(cantidad);
+                personal.setCantidad(cantidad);
+
                 return true;
             }
         }
@@ -100,16 +95,37 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
     }
 
     @Override
-    public DTOInventario obtenerResumenSeleccion(int idEvento) {
-        return gestor.obtenerResumen(idEvento);
+    public boolean verificarSeleccionServicios() {
+
+        for (DTOServicio servicio : gestor.solicitarServicios()) {
+
+            if (servicio.isSeleccionado()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
-    public boolean verificarSeleccionServicios() {
+    public boolean verificarSeleccionEquipo() {
 
-        for (DTOServicio s : gestor.solicitarServicios()) {
+        for (DTOEquipo equipo : gestor.solicitarEquipos()) {
 
-            if (s.isSeleccionado()) {
+            if (equipo.getCantidadSeleccionada() > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean verificarSeleccionPersonal() {
+
+        for (DTOPersonal personal : gestor.solicitarPersonal()) {
+
+            if (personal.getCantidad() > 0) {
                 return true;
             }
         }
@@ -126,36 +142,11 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
             return false;
         }
 
-        for (DTOEquipo e : gestor.solicitarEquipos()) {
+        for (DTOEquipo equipo : gestor.solicitarEquipos()) {
 
-            if (e.getIdEquipo() == idEquipo) {
-                return cantidad <= e.getDisponibilidad();
-            }
-        }
+            if (equipo.getIdEquipo() == idEquipo) {
 
-        return false;
-    }
-
-    @Override
-    public boolean verificarSeleccionEquipo() {
-
-        for (DTOEquipo e : gestor.solicitarEquipos()) {
-
-            if (e.getCantidadSeleccionada() > 0) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public boolean verificarSeleccionPersonal() {
-
-        for (DTOPersonal p : gestor.solicitarPersonal()) {
-
-            if (p.getCantidad() > 0) {
-                return true;
+                return cantidad <= equipo.getDisponibilidad();
             }
         }
 
@@ -168,44 +159,94 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
             String horarioDesmontaje,
             String comentarios) {
 
-        validarHorario(horarioMontaje);
-        validarHorario(horarioDesmontaje);
+        gestor.validarHorario(
+                horarioMontaje,
+                horarioDesmontaje);
 
-        return gestor.solicitarPropuesta(
+        if (!gestor.verificarDisponibilidadLocal(idEventoActual)) {
+
+            throw new IllegalStateException(
+                    "El local no está disponible.");
+        }
+
+        return gestor.GuardarPropuestaActual(
                 null,
                 horarioMontaje,
                 horarioDesmontaje,
-                comentarios
-        );
+                comentarios);
+    }
+
+    // Operaciones de integración con presentación y F4.
+
+    @Override
+    public List<DTOServicio> consultarServiciosDisponibles() {
+
+        return gestor.consultarServiciosDisponibles();
+    }
+
+    @Override
+    public List<DTOEquipo> obtenerEquiposDisponibles() {
+
+        return gestor.obtenerEquiposDisponibles();
+    }
+
+    @Override
+    public List<DTOPersonal> obtenerPersonalDisponible() {
+
+        return gestor.obtenerPersonalDisponible();
+    }
+
+    @Override
+    public List<DTOEquipo> consultarEquiposPropios() {
+
+        return gestor.consultarEquiposPropios();
+    }
+
+    @Override
+    public List<DTOEquipo> consultarEquiposExternos() {
+
+        return gestor.consultarEquiposExternos();
+    }
+
+    @Override
+    public List<DTOInventario> consultarInventariosDisponibles() {
+
+        return gestor.consultarInventariosDisponibles();
+    }
+
+    @Override
+    public List<DTOEquipo> buscarEquiposExternos(String texto) {
+
+        return gestor.buscarEquiposExternos(texto);
+    }
+
+    @Override
+    public DTOInventario obtenerResumenSeleccion(int idEvento) {
+
+        DTOInventario resumen =
+                gestor.obtenerResumenSeleccion(idEvento);
+
+        idEventoActual = idEvento;
+
+        return resumen;
     }
 
     @Override
     public DTOPropuesta consultarPropuesta(int idPropuesta) {
+
         return gestor.consultarPropuesta(idPropuesta);
     }
 
     @Override
-    public DTOInventario consultarRecursosPropuesta(int idPropuesta) {
+    public DTOInventario consultarRecursosPropuesta(
+            int idPropuesta) {
+
         return gestor.consultarRecursosPropuesta(idPropuesta);
     }
 
-    private void validarHorario(String texto) {
+    @Override
+    public DTOPropuesta actualizarPropuesta(DTOInventario cambios) {
 
-        if (texto == null || texto.trim().isEmpty()) {
-            return;
-        }
-
-        try {
-            LocalTime.parse(texto.trim());
-
-        } catch (DateTimeParseException ex) {
-
-            throw new IllegalArgumentException(
-                    "Los horarios deben tener el formato HH:mm, "
-                    + "por ejemplo 08:30.",
-                    ex
-            );
-        }
+        return gestor.actualizarPropuesta(cambios);
     }
-
 }

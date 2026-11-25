@@ -7,15 +7,15 @@ import dto.DTOPersonal;
 import dto.DTOServicio;
 import java.util.List;
 
+/**
+ *
+ * @author Andre
+ */
 public interface IConfigPropuestaBO {
 
-    DTODetalleSolicitud guardarDetalleSolicitud(
-            DTODetalleSolicitud detalle
-    );
+    DTODetalleSolicitud guardarDetalleSolicitud(DTODetalleSolicitud detalle);
 
-    List<DTODetalleSolicitud> consultarDetallesPorEvento(
-            int idEvento
-    );
+    List<DTODetalleSolicitud> consultarDetallesPorEvento(int idEvento);
 
     List<DTOServicio> consultarServicios();
 
@@ -23,11 +23,15 @@ public interface IConfigPropuestaBO {
 
     List<DTOPersonal> consultarPersonal();
 
+    boolean verificarDisponibilidad(DTOInventario seleccion);
+
+    // Operaciones de integración requeridas por el gestor.
+
     List<DTOEquipo> consultarEquiposPropios();
 
     List<DTOEquipo> consultarEquiposExternos();
 
     List<DTOInventario> consultarInventariosDisponibles();
 
-    boolean verificarDisponibilidad(DTOInventario seleccion);
+    boolean verificarDisponibilidadLocal(int idEventoActual);
 }

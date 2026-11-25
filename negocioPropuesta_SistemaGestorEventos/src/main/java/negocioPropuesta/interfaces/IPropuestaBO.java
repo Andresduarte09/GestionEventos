@@ -9,7 +9,7 @@ import dto.DTOPropuesta;
 
 /**
  *
- * @author Andres
+ * @author Andre
  */
 public interface IPropuestaBO {
 
@@ -17,11 +17,7 @@ public interface IPropuestaBO {
 
     DTOPropuesta consultar(int idPropuesta);
 
-    DTOInventario consultarRecursosPropuesta(int idPropuesta);
-
     DTOInventario consultarSeleccion(int idEvento);
-
-    void registrarSeleccionEvento(int idEvento, DTOInventario seleccion);
 
     void actualizarSeleccion(DTOInventario cambios);
 }
