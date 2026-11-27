@@ -5,7 +5,8 @@
 package presentacion.control;
 
 import com.mycompany.persistencia.AlmacenDatos;
-import infraestructura.ProveedorExterno;
+import subsistemaInfraestructura.fachada.FachadaInfraestructura;
+import subsistemaInfraestructura.interfaces.ISubsistemaInfraestructura;
 import negocioPropuesta.BO.ConfigPropuestaBO;
 import negocioPropuesta.BO.PropuestaBO;
 import negocioPropuesta.control.GestorPropuesta;
@@ -19,13 +20,13 @@ public class SistemaGestorEventos {
         java.awt.EventQueue.invokeLater(() -> {
             AlmacenDatos almacen = AlmacenDatos.getInstance();
 
-            ProveedorExterno proveedor = new ProveedorExterno();
+            ISubsistemaInfraestructura proveedor = FachadaInfraestructura.getInstance();
 
             GestorPropuesta gestorPropuesta = new GestorPropuesta(ConfigPropuestaBO.getInstance(almacen, proveedor),PropuestaBO.getInstance(almacen, proveedor),almacen, proveedor);
 
             ISubsistemaPropuesta propuesta = new FachadaPropuesta(gestorPropuesta);
 
-            ControlPresentacion control = new ControlPresentacion(propuesta, gestorPropuesta, almacen, proveedor);
+            ControlPresentacion control = new ControlPresentacion(propuesta, gestorPropuesta, almacen);
 
             control.iniciarSesion();
         });

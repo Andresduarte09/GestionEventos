@@ -3,7 +3,6 @@ package presentacion.control;
 import presentacion.vistas.*;
 import dto.*;
 import com.mycompany.persistencia.AlmacenDatos;
-import infraestructura.ProveedorExterno;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -49,14 +48,14 @@ public class ControlPresentacion {
     private DTOCliente cliente;
     private DTOEvento evento;
 
-    public ControlPresentacion(ISubsistemaPropuesta subsistemaPropuesta, GestorPropuesta gestorPropuesta, AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
+    public ControlPresentacion(ISubsistemaPropuesta subsistemaPropuesta, GestorPropuesta gestorPropuesta, AlmacenDatos almacen) {
         this.almacen = almacen;
         this.subsistemaEvento = new FachadaEvento();
         this.subsistemaPropuesta = java.util.Objects.requireNonNull(subsistemaPropuesta);
         this.gestorPropuesta = java.util.Objects.requireNonNull(gestorPropuesta);
         this.subsistemaCotizacion = new FachadaCotizacion(this.gestorPropuesta);
         this.subsistemaOrden = new FachadaOrden();
-    }
+}
 
     public DTOCliente getCliente() {
         return cliente;
@@ -336,10 +335,15 @@ public class ControlPresentacion {
     }
 
     public void solicitarEquipos() {
-        if (configurarPropuesta != null) {
-            configurarPropuesta.solicitarEquipos(consultarTodosLosEquipos());
+        try {
+            if (configurarPropuesta != null) {
+                configurarPropuesta.solicitarEquipos(
+                        consultarTodosLosEquipos());
+            }
+            mostrarPanel(JFrameConfigurarPropuesta.PANEL_EQUIPO);
+        } catch (IllegalStateException ex) {
+            JOptionPane.showMessageDialog(configurarPropuesta, ex.getMessage(), "Consulta de equipo", JOptionPane.ERROR_MESSAGE);
         }
-        mostrarPanel(JFrameConfigurarPropuesta.PANEL_EQUIPO);
     }
 
     public void solicitarInventario() {
@@ -350,12 +354,17 @@ public class ControlPresentacion {
     }
 
     public void solicitarEquiposExternos() {
-        if (configurarPropuesta != null) {
-            configurarPropuesta.solicitarEquiposExternos(consultarEquiposExternos());
-        }
-        mostrarPanel(JFrameConfigurarPropuesta.PANEL_PROVEEDOR);
-    }
+        try {
+            if (configurarPropuesta != null) {
+                configurarPropuesta.solicitarEquiposExternos(consultarEquiposExternos());
+            }
+            mostrarPanel(JFrameConfigurarPropuesta.PANEL_PROVEEDOR);
 
+        } catch (IllegalStateException ex) {
+
+            JOptionPane.showMessageDialog(configurarPropuesta, ex.getMessage(), "Consulta de equipo", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     public void solicitarPersonal() {
         if (configurarPropuesta != null) {
             configurarPropuesta.solicitarPersonal(obtenerPersonalDisponible());

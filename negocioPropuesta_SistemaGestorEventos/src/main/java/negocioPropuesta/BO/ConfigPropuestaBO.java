@@ -5,7 +5,7 @@
 package negocioPropuesta.BO;
 
 import com.mycompany.persistencia.AlmacenDatos;
-import infraestructura.ProveedorExterno;
+import subsistemaInfraestructura.interfaces.ISubsistemaInfraestructura;
 import negocioPropuesta.interfaces.IConfigPropuestaBO;
 import dto.*;
 import java.util.ArrayList;
@@ -20,11 +20,11 @@ public class ConfigPropuestaBO implements IConfigPropuestaBO {
     private static ConfigPropuestaBO instancia;
 
     private final AlmacenDatos almacen;
-    private final ProveedorExterno proveedorExterno;
+    private final ISubsistemaInfraestructura proveedorExterno;
 
     private ConfigPropuestaBO(
             AlmacenDatos almacen,
-            ProveedorExterno proveedorExterno) {
+            ISubsistemaInfraestructura proveedorExterno) {
 
         this.almacen = almacen;
         this.proveedorExterno = proveedorExterno;
@@ -32,7 +32,7 @@ public class ConfigPropuestaBO implements IConfigPropuestaBO {
 
     public static synchronized ConfigPropuestaBO getInstance(
             AlmacenDatos almacen,
-            ProveedorExterno proveedorExterno) {
+            ISubsistemaInfraestructura proveedorExterno) {
 
         if (instancia == null) {
 
@@ -88,7 +88,19 @@ public class ConfigPropuestaBO implements IConfigPropuestaBO {
         List<DTOEquipo> equipos =
                 new ArrayList<>(almacen.getEquipos());
 
-        equipos.addAll(proveedorExterno.getEquipos());
+        for (DTOEquipo externo : proveedorExterno.consultarEquipos()) {
+
+            if (equipos.stream().anyMatch(
+                    e -> e.getIdEquipo() == externo.getIdEquipo())) {
+
+                throw new IllegalStateException(
+                        "ID de equipo duplicado entre inventario "
+                        + "propio y proveedor: "
+                        + externo.getIdEquipo());
+            }
+
+            equipos.add(externo);
+        }
 
         return equipos;
     }
@@ -134,5 +146,4 @@ public class ConfigPropuestaBO implements IConfigPropuestaBO {
 
         return true;
     }
-
 }

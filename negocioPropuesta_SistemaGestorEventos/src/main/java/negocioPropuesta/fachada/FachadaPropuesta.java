@@ -18,6 +18,7 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
 
     @Override
     public void seleccionarServicios(int idServicio, boolean seleccionado) {
+
         for (DTOServicio servicio : gestor.solicitarServicios()) {
 
             if (servicio.getIdServicio() == idServicio) {
@@ -31,9 +32,11 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
 
     @Override
     public boolean seleccionarEquipos(int idEquipo, int cantidad) {
+
         if (cantidad < 0) {
             return false;
         }
+
         for (DTOEquipo equipo : gestor.solicitarEquipos()) {
 
             if (equipo.getIdEquipo() == idEquipo) {
@@ -53,13 +56,17 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
 
     @Override
     public boolean seleccionarPersonal(int idPersonal, int cantidad) {
+
         if (cantidad < 0) {
             return false;
         }
 
         for (DTOPersonal personal : gestor.solicitarPersonal()) {
+
             if (personal.getIdEspecialidad() == idPersonal) {
+
                 personal.setCantidad(cantidad);
+
                 return true;
             }
         }
@@ -69,6 +76,7 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
 
     @Override
     public boolean verificarSeleccionServicios() {
+
         for (DTOServicio servicio : gestor.solicitarServicios()) {
 
             if (servicio.isSeleccionado()) {
@@ -81,6 +89,7 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
 
     @Override
     public boolean verificarSeleccionEquipo() {
+
         for (DTOEquipo equipo : gestor.solicitarEquipos()) {
 
             if (equipo.getCantidadSeleccionada() > 0) {
@@ -93,6 +102,7 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
 
     @Override
     public boolean verificarSeleccionPersonal() {
+
         for (DTOPersonal personal : gestor.solicitarPersonal()) {
 
             if (personal.getCantidad() > 0) {
@@ -105,6 +115,7 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
 
     @Override
     public boolean validarCantidadEquipo(int idEquipo, int cantidad) {
+
         if (cantidad <= 0) {
             return false;
         }
@@ -121,14 +132,24 @@ public class FachadaPropuesta implements ISubsistemaPropuesta {
     }
 
     @Override
-    public DTOPropuesta enviarPropuestaHaciaCotizacion(String horarioMontaje, String horarioDesmontaje, String comentarios) {
+    public DTOPropuesta enviarPropuestaHaciaCotizacion(
+            String horarioMontaje,
+            String horarioDesmontaje,
+            String comentarios) {
+
         gestor.validarHorario(horarioMontaje, horarioDesmontaje);
 
         if (!gestor.verificarDisponibilidadLocal(
                 gestor.getIdEventoActual())) {
-            throw new IllegalStateException("El local no está disponible.");
+
+            throw new IllegalStateException(
+                    "El local no está disponible.");
         }
 
-        return gestor.guardarPropuestaActual(null, horarioMontaje, horarioDesmontaje, comentarios);
+        return gestor.guardarPropuestaActual(
+                null,
+                horarioMontaje,
+                horarioDesmontaje,
+                comentarios);
     }
 }

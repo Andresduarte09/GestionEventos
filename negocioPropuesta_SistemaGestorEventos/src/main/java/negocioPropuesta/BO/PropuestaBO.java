@@ -5,7 +5,7 @@
 package negocioPropuesta.BO;
 
 import com.mycompany.persistencia.AlmacenDatos;
-import infraestructura.ProveedorExterno;
+import subsistemaInfraestructura.interfaces.ISubsistemaInfraestructura;
 import negocioPropuesta.interfaces.IPropuestaBO;
 import dto.*;
 import java.util.ArrayList;
@@ -20,18 +20,25 @@ public class PropuestaBO implements IPropuestaBO {
     private static PropuestaBO instancia;
 
     private final AlmacenDatos almacen;
-    private final ProveedorExterno proveedorExterno;
+    private final ISubsistemaInfraestructura proveedorExterno;
+
     private final List<DTOPropuesta> propuestas;
 
-    private PropuestaBO(AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
+    private PropuestaBO(
+            AlmacenDatos almacen,
+            ISubsistemaInfraestructura proveedorExterno) {
 
         this.almacen = almacen;
         this.proveedorExterno = proveedorExterno;
         this.propuestas = new ArrayList<>();
     }
 
-    public static synchronized PropuestaBO getInstance(AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
+    public static synchronized PropuestaBO getInstance(
+            AlmacenDatos almacen,
+            ISubsistemaInfraestructura proveedorExterno) {
+
         if (instancia == null) {
+
             instancia = new PropuestaBO(almacen, proveedorExterno);
         }
 
@@ -40,16 +47,21 @@ public class PropuestaBO implements IPropuestaBO {
 
     @Override
     public synchronized DTOPropuesta guardar(DTOPropuesta propuesta) {
+
         if (propuesta == null) {
             return null;
         }
 
         if (!existeEvento(propuesta.getIdEvento())) {
-            throw new IllegalArgumentException("El evento no existe.");
+
+            throw new IllegalArgumentException(
+                    "El evento no existe.");
         }
 
         if (propuesta.getInventario() == null) {
-            throw new IllegalArgumentException("La propuesta no tiene inventario.");
+
+            throw new IllegalArgumentException(
+                    "La propuesta no tiene inventario.");
         }
 
         if (propuesta.getIdPropuesta() <= 0) {
@@ -59,6 +71,7 @@ public class PropuestaBO implements IPropuestaBO {
             for (DTOPropuesta p : propuestas) {
 
                 if (p.getIdPropuesta() >= id) {
+
                     id = p.getIdPropuesta() + 1;
                 }
             }
@@ -66,22 +79,32 @@ public class PropuestaBO implements IPropuestaBO {
             propuesta.setIdPropuesta(id);
         }
 
-        if (propuesta.getFolio() == null || propuesta.getFolio().isBlank()) {
-            propuesta.setFolio("Propuesta-" + propuesta.getIdPropuesta());
+        if (propuesta.getFolio() == null
+                || propuesta.getFolio().isBlank()) {
+
+            propuesta.setFolio(
+                    "Propuesta-" + propuesta.getIdPropuesta());
         }
 
-        propuestas.removeIf(p -> p.getIdPropuesta() == propuesta.getIdPropuesta());
+        propuestas.removeIf(
+                p -> p.getIdPropuesta() == propuesta.getIdPropuesta());
+
         propuestas.add(copiarPropuesta(propuesta));
+
         return copiarPropuesta(propuesta);
     }
 
     @Override
     public synchronized DTOPropuesta consultar(int idPropuesta) {
+
         for (DTOPropuesta propuesta : propuestas) {
+
             if (propuesta.getIdPropuesta() == idPropuesta) {
+
                 return copiarPropuesta(propuesta);
             }
         }
+
         return null;
     }
 
@@ -89,11 +112,17 @@ public class PropuestaBO implements IPropuestaBO {
     public DTOInventario consultarSeleccion(int idEvento) {
 
         if (!existeEvento(idEvento)) {
-            throw new IllegalArgumentException("El evento no existe.");
+
+            throw new IllegalArgumentException(
+                    "El evento no existe.");
         }
+
         DTOInventario seleccion = new DTOInventario();
+
         for (DTOServicio servicio : almacen.getServicios()) {
+
             if (servicio.isSeleccionado()) {
+
                 seleccion.getServicios().add(servicio);
             }
         }
@@ -101,6 +130,7 @@ public class PropuestaBO implements IPropuestaBO {
         for (DTOEquipo equipo : consultarTodosLosEquipos()) {
 
             if (equipo.getCantidadSeleccionada() > 0) {
+
                 seleccion.getEquipos().add(equipo);
             }
         }
@@ -108,6 +138,7 @@ public class PropuestaBO implements IPropuestaBO {
         for (DTOPersonal personal : almacen.getPersonal()) {
 
             if (personal.getCantidad() > 0) {
+
                 seleccion.getPersonal().add(personal);
             }
         }
@@ -184,6 +215,7 @@ public class PropuestaBO implements IPropuestaBO {
         for (DTOEvento evento : almacen.getEventos()) {
 
             if (evento.getIdEvento() == idEvento) {
+
                 return true;
             }
         }
@@ -193,9 +225,22 @@ public class PropuestaBO implements IPropuestaBO {
 
     private List<DTOEquipo> consultarTodosLosEquipos() {
 
-        List<DTOEquipo> equipos =new ArrayList<>(almacen.getEquipos());
+        List<DTOEquipo> equipos =
+                new ArrayList<>(almacen.getEquipos());
 
-        equipos.addAll(proveedorExterno.getEquipos());
+        for (DTOEquipo externo : proveedorExterno.consultarEquipos()) {
+
+            if (equipos.stream().anyMatch(
+                    e -> e.getIdEquipo() == externo.getIdEquipo())) {
+
+                throw new IllegalStateException(
+                        "ID de equipo duplicado entre inventario "
+                        + "propio y proveedor: "
+                        + externo.getIdEquipo());
+            }
+
+            equipos.add(externo);
+        }
 
         return equipos;
     }
@@ -212,7 +257,8 @@ public class PropuestaBO implements IPropuestaBO {
         copia.setComentarios(origen.getComentarios());
         copia.setEstadoFolio(origen.getEstadoFolio());
 
-        copia.setInventario(copiarInventario(origen.getInventario()));
+        copia.setInventario(
+                copiarInventario(origen.getInventario()));
 
         return copia;
     }

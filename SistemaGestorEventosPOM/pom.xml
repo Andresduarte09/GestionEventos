@@ -13,6 +13,7 @@
         <module>../negocioCotizacion_SistemaGestorEventos</module>
         <module>../negocioPropuesta_SistemaGestorEventos</module>
         <module>../orden_SistemaGestorEventos</module>
+        <module>../subsistemaInfraestructura</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
