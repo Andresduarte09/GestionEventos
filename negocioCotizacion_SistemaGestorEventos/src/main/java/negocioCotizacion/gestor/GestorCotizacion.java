@@ -19,7 +19,7 @@ import dto.DTOPropuesta;
 import dto.DTOEquipo;
 import dto.DTOPersonal;
 import dto.DTOServicio;
-import negocioPropuesta.interfaces.ISubsistemaPropuesta;
+import negocioPropuesta.control.GestorPropuesta;
 import dto.DTORecurso;
 import dto.DTOConceptoCotizacion;
 
@@ -32,19 +32,19 @@ public class GestorCotizacion {
     private final AlmacenDatos almacen;
     private final ICotizacionBO cotizacionBO;
     private DTOVersionCotizacion versionActual;
-    private ISubsistemaPropuesta subsistemaPropuesta;
+    private GestorPropuesta gestorPropuesta;
 
     public GestorCotizacion() {
         this.almacen = AlmacenDatos.getInstance();
         this.cotizacionBO = new CotizacionBO(this.almacen);
     }
 
-    public GestorCotizacion(ISubsistemaPropuesta subsistemaPropuesta) {
+    public GestorCotizacion(GestorPropuesta gestorPropuesta) {
         this();
-        if (subsistemaPropuesta == null) {
-            throw new IllegalArgumentException("El subsistema de propuesta no puede ser nulo.");
+        if (gestorPropuesta == null) {
+            throw new IllegalArgumentException("El gestor de propuesta no puede ser nulo.");
         }
-        this.subsistemaPropuesta = subsistemaPropuesta;
+        this.gestorPropuesta = gestorPropuesta;
     }
 
     public DTOPropuesta consultarPropuestaParaCotizar(int idPropuesta) {
@@ -52,11 +52,11 @@ public class GestorCotizacion {
             throw new IllegalArgumentException("El ID de la propuesta debe ser mayor que cero.");
         }
 
-        if (subsistemaPropuesta == null) {
-            throw new IllegalStateException("El subsistema de propuesta no está conectado.");
+        if (gestorPropuesta == null) {
+            throw new IllegalStateException("El gestor de propuesta no está conectado.");
         }
 
-        DTOPropuesta propuesta = subsistemaPropuesta.consultarPropuesta(idPropuesta);
+        DTOPropuesta propuesta = gestorPropuesta.consultarPropuesta(idPropuesta);
 
         if (propuesta == null) {
             throw new IllegalArgumentException("No existe una propuesta con ese ID.");
@@ -66,7 +66,7 @@ public class GestorCotizacion {
             throw new IllegalStateException("La propuesta no tiene un evento válido.");
         }
 
-        DTOInventario inventario = subsistemaPropuesta.consultarRecursosPropuesta(idPropuesta);
+        DTOInventario inventario = gestorPropuesta.consultarRecursosPropuesta(idPropuesta);
 
         if (!validarInventario(inventario)) {
             throw new IllegalStateException("La propuesta no tiene recursos válidos para cotizar.");
@@ -86,7 +86,7 @@ public class GestorCotizacion {
             for (DTOServicio servicio : inventario.getServicios()) {
                 if (servicio != null && servicio.isSeleccionado()) {
                     firma.add("S|" + servicio.getIdServicio() + "|" + servicio.getNombre() + "|" + servicio.getDescripcion()
-                            + "|" + servicio.isEsAdicional() + "|" + servicio.getObservaciones());
+                            + "|" + servicio.getObservaciones());
                 }
             }
         }

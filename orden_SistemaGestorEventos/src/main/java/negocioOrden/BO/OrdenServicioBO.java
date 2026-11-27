@@ -73,7 +73,6 @@ public class OrdenServicioBO implements IOrdenServicioBO {
                         equipo.getNombre(),
                         "Equipo cotizado (cantidad: " + cantidad + ")",
                         true,
-                        false,
                         "Versión #" + ultimaVersion.getNumero()
                 );
                 agregarServicioSinDuplicar(serviciosOrden, equipoAdaptado);
@@ -88,7 +87,6 @@ public class OrdenServicioBO implements IOrdenServicioBO {
                         personal.getEspecialidad(),
                         "Personal cotizado (cantidad: " + personal.getCantidad() + ")",
                         true,
-                        false,
                         "Versión #" + ultimaVersion.getNumero()
                 );
                 agregarServicioSinDuplicar(serviciosOrden, personalAdaptado);

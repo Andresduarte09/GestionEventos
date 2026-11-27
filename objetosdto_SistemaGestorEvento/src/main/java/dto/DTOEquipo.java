@@ -14,6 +14,7 @@ public class DTOEquipo {
     private String nombre;
     private int disponibilidad;
     private int cantidadSeleccionada;
+    private double precioReferencia;
 
     public DTOEquipo() {
     }
@@ -55,5 +56,13 @@ public class DTOEquipo {
 
     public void setCantidadSeleccionada(int cantidadSeleccionada) {
         this.cantidadSeleccionada = cantidadSeleccionada;
+    }
+
+    public double getPrecioReferencia() {
+        return precioReferencia;
+    }
+
+    public void setPrecioReferencia(double precioReferencia) {
+        this.precioReferencia = precioReferencia;
     }
 }

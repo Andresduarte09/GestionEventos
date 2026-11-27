@@ -14,19 +14,17 @@ public class DTOServicio {
     private String nombre;
     private String descripcion;
     private boolean seleccionado;
-    private boolean esAdicional;
     private String observaciones;
+    private double precioReferencia;
 
     public DTOServicio() {
     }
 
-    public DTOServicio(int idServicio, String nombre, String descripcion,
-            boolean seleccionado, boolean esAdicional, String observaciones) {
+    public DTOServicio(int idServicio, String nombre, String descripcion, boolean seleccionado, String observaciones) {
         this.idServicio = idServicio;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.seleccionado = seleccionado;
-        this.esAdicional = esAdicional;
         this.observaciones = observaciones;
     }
 
@@ -62,19 +60,19 @@ public class DTOServicio {
         this.seleccionado = seleccionado;
     }
 
-    public boolean isEsAdicional() {
-        return esAdicional;
-    }
-
-    public void setEsAdicional(boolean esAdicional) {
-        this.esAdicional = esAdicional;
-    }
-
     public String getObservaciones() {
         return observaciones;
     }
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public double getPrecioReferencia() {
+        return precioReferencia;
+    }
+
+    public void setPrecioReferencia(double precioReferencia) {
+        this.precioReferencia = precioReferencia;
     }
 }

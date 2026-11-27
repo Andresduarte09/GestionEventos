@@ -8,7 +8,7 @@ import dto.DTOCotizacion;
 import negocioCotizacion.gestor.GestorCotizacion;
 import negocioCotizacion.interfaces.ISubsistemaCotizacion;
 import dto.DTOVersionCotizacion;
-import negocioPropuesta.interfaces.ISubsistemaPropuesta;
+import negocioPropuesta.control.GestorPropuesta;
 import dto.DTODetalleCotizacion;
 import java.util.List;
 
@@ -24,8 +24,8 @@ public class FachadaCotizacion implements ISubsistemaCotizacion {
         this.gestor = new GestorCotizacion();
     }
 
-    public FachadaCotizacion(ISubsistemaPropuesta subsistemaPropuesta) {
-        this.gestor = new GestorCotizacion(subsistemaPropuesta);
+    public FachadaCotizacion(GestorPropuesta gestorPropuesta) {
+        this.gestor = new GestorCotizacion(gestorPropuesta);
     }
 
     @Override

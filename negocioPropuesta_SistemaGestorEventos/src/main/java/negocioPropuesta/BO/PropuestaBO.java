@@ -23,43 +23,33 @@ public class PropuestaBO implements IPropuestaBO {
     private final ProveedorExterno proveedorExterno;
     private final List<DTOPropuesta> propuestas;
 
-    private PropuestaBO(
-            AlmacenDatos almacen,
-            ProveedorExterno proveedorExterno) {
+    private PropuestaBO(AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
 
         this.almacen = almacen;
         this.proveedorExterno = proveedorExterno;
         this.propuestas = new ArrayList<>();
     }
 
-    public static synchronized PropuestaBO getInstance(
-            AlmacenDatos almacen,
-            ProveedorExterno proveedorExterno) {
-
+    public static synchronized PropuestaBO getInstance(AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
         if (instancia == null) {
-            instancia = new PropuestaBO(
-                    almacen, proveedorExterno);
+            instancia = new PropuestaBO(almacen, proveedorExterno);
         }
 
         return instancia;
     }
 
     @Override
-    public synchronized DTOPropuesta guardar(
-            DTOPropuesta propuesta) {
-
+    public synchronized DTOPropuesta guardar(DTOPropuesta propuesta) {
         if (propuesta == null) {
             return null;
         }
 
         if (!existeEvento(propuesta.getIdEvento())) {
-            throw new IllegalArgumentException(
-                    "El evento no existe.");
+            throw new IllegalArgumentException("El evento no existe.");
         }
 
         if (propuesta.getInventario() == null) {
-            throw new IllegalArgumentException(
-                    "La propuesta no tiene inventario.");
+            throw new IllegalArgumentException("La propuesta no tiene inventario.");
         }
 
         if (propuesta.getIdPropuesta() <= 0) {
@@ -76,32 +66,22 @@ public class PropuestaBO implements IPropuestaBO {
             propuesta.setIdPropuesta(id);
         }
 
-        if (propuesta.getFolio() == null
-                || propuesta.getFolio().isBlank()) {
-
-            propuesta.setFolio(
-                    "PROP-" + propuesta.getIdPropuesta());
+        if (propuesta.getFolio() == null || propuesta.getFolio().isBlank()) {
+            propuesta.setFolio("Propuesta-" + propuesta.getIdPropuesta());
         }
 
-        propuestas.removeIf(p ->
-                p.getIdPropuesta() == propuesta.getIdPropuesta());
-
+        propuestas.removeIf(p -> p.getIdPropuesta() == propuesta.getIdPropuesta());
         propuestas.add(copiarPropuesta(propuesta));
-
         return copiarPropuesta(propuesta);
     }
 
     @Override
     public synchronized DTOPropuesta consultar(int idPropuesta) {
-
         for (DTOPropuesta propuesta : propuestas) {
-
             if (propuesta.getIdPropuesta() == idPropuesta) {
-
                 return copiarPropuesta(propuesta);
             }
         }
-
         return null;
     }
 
@@ -109,15 +89,10 @@ public class PropuestaBO implements IPropuestaBO {
     public DTOInventario consultarSeleccion(int idEvento) {
 
         if (!existeEvento(idEvento)) {
-
-            throw new IllegalArgumentException(
-                    "El evento no existe.");
+            throw new IllegalArgumentException("El evento no existe.");
         }
-
         DTOInventario seleccion = new DTOInventario();
-
         for (DTOServicio servicio : almacen.getServicios()) {
-
             if (servicio.isSeleccionado()) {
                 seleccion.getServicios().add(servicio);
             }
@@ -218,8 +193,7 @@ public class PropuestaBO implements IPropuestaBO {
 
     private List<DTOEquipo> consultarTodosLosEquipos() {
 
-        List<DTOEquipo> equipos =
-                new ArrayList<>(almacen.getEquipos());
+        List<DTOEquipo> equipos =new ArrayList<>(almacen.getEquipos());
 
         equipos.addAll(proveedorExterno.getEquipos());
 
@@ -238,8 +212,7 @@ public class PropuestaBO implements IPropuestaBO {
         copia.setComentarios(origen.getComentarios());
         copia.setEstadoFolio(origen.getEstadoFolio());
 
-        copia.setInventario(
-                copiarInventario(origen.getInventario()));
+        copia.setInventario(copiarInventario(origen.getInventario()));
 
         return copia;
     }
@@ -263,7 +236,6 @@ public class PropuestaBO implements IPropuestaBO {
                         servicio.getNombre(),
                         servicio.getDescripcion(),
                         servicio.isSeleccionado(),
-                        servicio.isEsAdicional(),
                         servicio.getObservaciones()
                 ));
             }

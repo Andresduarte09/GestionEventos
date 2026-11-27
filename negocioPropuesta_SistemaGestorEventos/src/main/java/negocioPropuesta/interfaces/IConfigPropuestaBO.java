@@ -24,14 +24,4 @@ public interface IConfigPropuestaBO {
     List<DTOPersonal> consultarPersonal();
 
     boolean verificarDisponibilidad(DTOInventario seleccion);
-
-    // Operaciones de integración requeridas por el gestor.
-
-    List<DTOEquipo> consultarEquiposPropios();
-
-    List<DTOEquipo> consultarEquiposExternos();
-
-    List<DTOInventario> consultarInventariosDisponibles();
-
-    boolean verificarDisponibilidadLocal(int idEventoActual);
 }

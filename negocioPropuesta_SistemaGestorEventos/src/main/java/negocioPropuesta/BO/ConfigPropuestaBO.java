@@ -10,7 +10,6 @@ import negocioPropuesta.interfaces.IConfigPropuestaBO;
 import dto.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  *
@@ -136,75 +135,4 @@ public class ConfigPropuestaBO implements IConfigPropuestaBO {
         return true;
     }
 
-    // Operaciones de integración requeridas por el gestor.
-
-    @Override
-    public List<DTOEquipo> consultarEquiposPropios() {
-
-        return new ArrayList<>(almacen.getEquipos());
-    }
-
-    @Override
-    public List<DTOEquipo> consultarEquiposExternos() {
-
-        return new ArrayList<>(proveedorExterno.getEquipos());
-    }
-
-    @Override
-    public List<DTOInventario> consultarInventariosDisponibles() {
-
-        return new ArrayList<>(almacen.getInventario());
-    }
-
-    @Override
-    public boolean verificarDisponibilidadLocal(
-            int idEventoActual) {
-
-        DTOEvento actual = null;
-
-        for (DTOEvento evento : almacen.getEventos()) {
-
-            if (evento.getIdEvento() == idEventoActual) {
-
-                actual = evento;
-                break;
-            }
-        }
-
-        if (actual == null
-                || actual.getUbicacion() == null
-                || actual.getUbicacion().isBlank()
-                || actual.getFechaEvento() == null) {
-
-            return false;
-        }
-
-        for (DTOEvento evento : almacen.getEventos()) {
-
-            if (evento.getIdEvento() != idEventoActual) {
-
-                boolean mismaFecha = Objects.equals(
-                        actual.getFechaEvento(),
-                        evento.getFechaEvento());
-
-                boolean mismaUbicacion =
-                        actual.getUbicacion().equalsIgnoreCase(
-                                evento.getUbicacion());
-
-                boolean cancelado = "Cancelado".equalsIgnoreCase(
-                        evento.getEstadoAtencion());
-
-                boolean rechazado = "Rechazada".equalsIgnoreCase(
-                        evento.getEstadoAtencion());
-
-                if (mismaFecha && mismaUbicacion
-                        && !cancelado && !rechazado) {
-
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
 }

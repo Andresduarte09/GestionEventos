@@ -16,6 +16,7 @@ public class DTOPersonal {
     private int horasMontaje;
     private int horasOperacion;
     private int horasDesmontaje;
+    private double precioReferencia;
 
     public DTOPersonal() {
     }
@@ -76,5 +77,13 @@ public class DTOPersonal {
 
     public void setHorasDesmontaje(int horasDesmontaje) {
         this.horasDesmontaje = horasDesmontaje;
+    }
+
+    public double getPrecioReferencia() {
+        return precioReferencia;
+    }
+
+    public void setPrecioReferencia(double precioReferencia) {
+        this.precioReferencia = precioReferencia;
     }
 }

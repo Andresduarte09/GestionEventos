@@ -255,6 +255,49 @@ public class AlmacenDatos {
         agregarRecurso(36, "Coordinador de evento", "Coordinación y supervisión del evento",
                 1, 120f, "trabajador", "Personal", "hora", "Activo");
 
+        //Servicios
+        agregarRecurso(37, "Mobiliario", "Mesas, sillas y mantelería",
+                1, 3000f, "evento", "Servicios", "servicio", "Activo");
+        agregarRecurso(38, "Alimentos y bebidas", "Menú, servicio de meseros y cocina",
+                1, 5000f, "evento", "Servicios", "servicio", "Activo");
+        agregarRecurso(39, "Transporte y logística", "Traslado de equipo al lugar del evento",
+                1, 1500f, "evento", "Servicios", "servicio", "Activo");
+        agregarRecurso(40, "Personal de apoyo", "Personal adicional de montaje y operación",
+                1, 1200f, "evento", "Servicios", "servicio", "Activo");
+        agregarRecurso(41, "Fotografía y video", "Cobertura del evento en foto y video",
+                1, 4000f, "evento", "Servicios", "servicio", "Activo");
+        agregarRecurso(42, "Seguridad", "Control de acceso y vigilancia",
+                1, 2000f, "evento", "Servicios", "servicio", "Activo");
+        agregarRecurso(43, "Coordinación", "Planeación y logística general del evento",
+                1, 2500f, "evento", "Servicios", "servicio", "Activo");
+        agregarRecurso(44, "Pirotecnia", "Efectos especiales y fuegos artificiales",
+                1, 6000f, "evento", "Servicios", "servicio", "Activo");
+        agregarRecurso(45, "Souvenirs y recuerdos", "Artículos personalizados para invitados",
+                1, 1800f, "evento", "Servicios", "servicio", "Activo");
+
+        // Equipo propio - precios de EJEMPLO
+        agregarRecurso(46, "Silla", "Silla para evento",
+                1, 15f, "pieza", "Equipo", "pieza", "Activo");
+        agregarRecurso(47, "Chafing dish", "Calentador de alimentos",
+                1, 120f, "pieza", "Equipo", "pieza", "Activo");
+        agregarRecurso(48, "Cableado y soportes", "Cableado y soportes para equipo",
+                1, 100f, "pieza", "Equipo", "pieza", "Activo");
+
+        // Equipo del proveedor externo - precios de EJEMPLO
+        agregarRecurso(49, "Generador", "Generador de energía",
+                1, 2500f, "pieza", "Equipo", "pieza", "Activo");
+        agregarRecurso(50, "Escenario modular", "Escenario armable",
+                1, 3500f, "pieza", "Equipo", "pieza", "Activo");
+        agregarRecurso(51, "Carpa 10x10", "Carpa de 10 x 10 m",
+                1, 2000f, "pieza", "Equipo", "pieza", "Activo");
+        agregarRecurso(52, "Pista de baile LED", "Pista de baile iluminada",
+                1, 4500f, "pieza", "Equipo", "pieza", "Activo");
+        agregarRecurso(53, "Sistema de sonido line array", "Sonido de gran alcance",
+                1, 7000f, "pieza", "Equipo", "pieza", "Activo");
+        agregarRecurso(54, "Pantalla gigante", "Pantalla de gran formato",
+                1, 6500f, "pieza", "Equipo", "pieza", "Activo");
+        agregarRecurso(55, "Planta de luz", "Planta de energía eléctrica",
+                1, 2800f, "pieza", "Equipo", "pieza", "Activo");
     }
 
     private void agregarRecurso(int id, String nombre, String descripcion, int capacidad, float precioReferencia,
@@ -280,17 +323,16 @@ public class AlmacenDatos {
         personal.add(new DTOPersonal(6, "Mesero", 0, 0, 6, 0));
         personal.add(new DTOPersonal(7, "Coordinador de evento", 0, 1, 6, 1));
 
-        // Solo se mantienen servicios que no son de las categorías eliminadas
-        servicios.add(new DTOServicio(1, "Audio", "Servicio de audio para evento", false, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(5, "Mobiliario", "Mesas, sillas y mantelería", false, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(6, "Alimentos y bebidas", "Menú, servicio de meseros y cocina", false, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(8, "Transporte y logística", "Traslado de equipo al lugar del evento", false, false, "Se cobra según la distancia"));
-        servicios.add(new DTOServicio(9, "Personal de apoyo", "Personal adicional de montaje y operación", false, false, "Se cobra por hora"));
-        servicios.add(new DTOServicio(10, "Fotografía y video", "Cobertura completa del evento en foto y video", false, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(11, "Seguridad", "Personal de control de acceso y vigilancia", false, false, "Sin observaciones"));
-        servicios.add(new DTOServicio(12, "Coordinación", "Planeación y logística general durante el evento", false, false, "Incluye un coordinador principal"));
-        servicios.add(new DTOServicio(13, "Pirotecnia", "Efectos especiales y fuegos artificiales seguros", false, false, "Requiere permisos especiales del lugar"));
-        servicios.add(new DTOServicio(14, "Souvenirs y recuerdos", "Artículos personalizados para los invitados", false, false, "Sin observaciones"));
+        servicios.add(new DTOServicio(1, "Audio", "Servicio de audio para evento", false, "Sin observaciones"));
+        servicios.add(new DTOServicio(5, "Mobiliario", "Mesas, sillas y mantelería", false, "Sin observaciones"));
+        servicios.add(new DTOServicio(6, "Alimentos y bebidas", "Menú, servicio de meseros y cocina", false, "Sin observaciones"));
+        servicios.add(new DTOServicio(8, "Transporte y logística", "Traslado de equipo al lugar del evento", false, "Se cobra según la distancia"));
+        servicios.add(new DTOServicio(9, "Personal de apoyo", "Personal adicional de montaje y operación", false, "Se cobra por hora"));
+        servicios.add(new DTOServicio(10, "Fotografía y video", "Cobertura completa del evento en foto y video", false, "Sin observaciones"));
+        servicios.add(new DTOServicio(11, "Seguridad", "Personal de control de acceso y vigilancia", false, "Sin observaciones"));
+        servicios.add(new DTOServicio(12, "Coordinación", "Planeación y logística general durante el evento", false, "Incluye un coordinador principal"));
+        servicios.add(new DTOServicio(13, "Pirotecnia", "Efectos especiales y fuegos artificiales seguros", false, "Requiere permisos especiales del lugar"));
+        servicios.add(new DTOServicio(14, "Souvenirs y recuerdos", "Artículos personalizados para los invitados", false, "Sin observaciones"));
     }
 
     //Inventarios (solo los que quedan válidos)

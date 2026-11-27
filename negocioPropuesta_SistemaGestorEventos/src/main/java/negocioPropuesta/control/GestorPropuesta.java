@@ -1,8 +1,11 @@
 package negocioPropuesta.control;
 
+import com.mycompany.persistencia.AlmacenDatos;
+import infraestructura.ProveedorExterno;
 import dto.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import negocioPropuesta.interfaces.IConfigPropuestaBO;
@@ -20,84 +23,64 @@ public class GestorPropuesta {
     private final IConfigPropuestaBO configPropuestaBO;
     private final IPropuestaBO propuestaBO;
 
-    public GestorPropuesta(
-            IConfigPropuestaBO configPropuestaBO,
-            IPropuestaBO propuestaBO) {
+    private final AlmacenDatos almacen;
+    private final ProveedorExterno proveedorExterno;
 
+    public GestorPropuesta(IConfigPropuestaBO configPropuestaBO, IPropuestaBO propuestaBO, AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
+        this.almacen = almacen;
+        this.proveedorExterno = proveedorExterno;
         this.configPropuestaBO = configPropuestaBO;
         this.propuestaBO = propuestaBO;
     }
 
-    public List<DTOServicio> solicitarServicios() {
+    public int getIdEventoActual() {
+        return idEventoActual;
+    }
 
+    public List<DTOServicio> solicitarServicios() {
         return configPropuestaBO.consultarServicios();
     }
 
     public List<DTOEquipo> solicitarEquipos() {
-
         return configPropuestaBO.consultarEquipos();
     }
 
     public List<DTOPersonal> solicitarPersonal() {
-
         return configPropuestaBO.consultarPersonal();
     }
 
     public boolean verificarSeleccion(DTOInventario seleccion) {
-
-        return configPropuestaBO.verificarDisponibilidad(
-                seleccion);
+        return configPropuestaBO.verificarDisponibilidad(seleccion);
     }
 
     public DTOInventario obtenerResumen(int idEvento) {
-
         if (idEvento <= 0) {
 
-            throw new IllegalArgumentException(
-                    "El identificador del evento debe ser positivo.");
+            throw new IllegalArgumentException("El identificador del evento debe ser positivo.");
         }
 
-        seleccionActual =
-                propuestaBO.consultarSeleccion(idEvento);
-
+        seleccionActual = propuestaBO.consultarSeleccion(idEvento);
         idEventoActual = idEvento;
-
         return seleccionActual;
     }
 
-    public DTOPropuesta GuardarPropuestaActual(
-            String folio,
-            String horarioMontaje,
-            String horarioDesmontaje,
-            String comentarios) {
-
-        DTOPropuesta propuesta = crearPropuesta(
-                folio,
-                horarioMontaje,
-                horarioDesmontaje,
-                comentarios);
+    public DTOPropuesta guardarPropuestaActual(String folio, String horarioMontaje, String horarioDesmontaje, String comentarios) {
+        DTOPropuesta propuesta = crearPropuesta(folio, horarioMontaje, horarioDesmontaje, comentarios);
 
         return propuestaBO.guardar(propuesta);
     }
 
-    public DTOPropuesta actualizarPropuesta(
-            DTOInventario cambios) {
+    public DTOPropuesta actualizarPropuesta(DTOInventario cambios) {
 
         if (!verificarSeleccion(cambios)) {
-
-            throw new IllegalArgumentException(
-                    "Los recursos seleccionados no están disponibles.");
+            throw new IllegalArgumentException("Los recursos seleccionados no están disponibles.");
         }
 
         propuestaBO.actualizarSeleccion(cambios);
 
         seleccionActual = cambios;
 
-        return crearPropuesta(
-                null,
-                null,
-                null,
-                "");
+        return crearPropuesta(null,null,null,"");
     }
 
     public List<DTOServicio> consultarServiciosDisponibles() {
@@ -147,15 +130,11 @@ public class GestorPropuesta {
     }
 
     public DTOPropuesta consultarPropuesta(int idPropuesta) {
-
         return propuestaBO.consultar(idPropuesta);
     }
 
-    public DTOInventario consultarRecursosPropuesta(
-            int idPropuesta) {
-
-        DTOPropuesta propuesta =
-                propuestaBO.consultar(idPropuesta);
+    public DTOInventario consultarRecursosPropuesta(int idPropuesta) {
+        DTOPropuesta propuesta = propuestaBO.consultar(idPropuesta);
 
         if (propuesta == null) {
             return null;
@@ -165,32 +144,26 @@ public class GestorPropuesta {
     }
 
     public List<DTOEquipo> consultarEquiposPropios() {
-
-        return configPropuestaBO.consultarEquiposPropios();
+        return new ArrayList<>(almacen.getEquipos());
     }
 
     public List<DTOEquipo> consultarEquiposExternos() {
-
-        return configPropuestaBO.consultarEquiposExternos();
+        return new ArrayList<>(proveedorExterno.getEquipos());
     }
 
     public DTOInventario obtenerResumenSeleccion(int idEvento) {
-
         return obtenerResumen(idEvento);
     }
 
     public List<DTOInventario> consultarInventariosDisponibles() {
-
-        return configPropuestaBO.consultarInventariosDisponibles();
+        return new ArrayList<>(almacen.getInventario());
     }
 
     public List<DTOEquipo> buscarEquiposExternos(String texto) {
 
         List<DTOEquipo> resultado = new ArrayList<>();
 
-        String filtro = texto == null
-                ? ""
-                : texto.trim().toLowerCase();
+        String filtro = texto == null ? "" : texto.trim().toLowerCase();
 
         for (DTOEquipo equipo : consultarEquiposExternos()) {
 
@@ -205,24 +178,17 @@ public class GestorPropuesta {
         return resultado;
     }
 
-    public DTOPropuesta crearPropuesta(
-            String folio,
-            String horarioMontaje,
-            String horarioDesmontaje,
-            String comentarios) {
-
+    public DTOPropuesta crearPropuesta(String folio, String horarioMontaje, String horarioDesmontaje, String comentarios) {
         if (idEventoActual <= 0) {
 
-            throw new IllegalStateException(
-                    "No se ha establecido un evento.");
+            throw new IllegalStateException("No se ha establecido un evento.");
         }
 
         seleccionActual = capturarSeleccionActual();
 
         if (!verificarSeleccion(seleccionActual)) {
 
-            throw new IllegalStateException(
-                    "Los recursos seleccionados no están disponibles.");
+            throw new IllegalStateException("Los recursos seleccionados no están disponibles.");
         }
 
         DTOPropuesta propuesta = new DTOPropuesta();
@@ -232,45 +198,62 @@ public class GestorPropuesta {
         propuesta.setHorarioMontaje(horarioMontaje);
         propuesta.setHorarioDesmontaje(horarioDesmontaje);
 
-        propuesta.setComentarios(
-                comentarios == null ? "" : comentarios.trim());
+        propuesta.setComentarios(comentarios == null ? "" : comentarios.trim());
 
         propuesta.setInventario(seleccionActual);
 
         return propuesta;
     }
 
-    public boolean verificarDisponibilidadLocal(
-            int idEventoActual) {
+    public boolean verificarDisponibilidadLocal(int idEventoActual) {
+        DTOEvento actual = null;
+        for (DTOEvento evento : almacen.getEventos()) {
+            if (evento.getIdEvento() == idEventoActual) {
+                actual = evento;
+                break;
+            }
+        }
 
-        return configPropuestaBO.verificarDisponibilidadLocal(
-                idEventoActual);
+        if (actual == null || actual.getUbicacion() == null || actual.getUbicacion().isBlank() || actual.getFechaEvento() == null) {
+            return false;
+        }
+
+        for (DTOEvento evento : almacen.getEventos()) {
+
+            if (evento.getIdEvento() != idEventoActual) {
+
+                boolean mismaFecha = Objects.equals(actual.getFechaEvento(), evento.getFechaEvento());
+
+                boolean mismaUbicacion = actual.getUbicacion().equalsIgnoreCase(evento.getUbicacion());
+
+                boolean cancelado = "Cancelado".equalsIgnoreCase(evento.getEstadoAtencion());
+
+                boolean rechazado = "Rechazada".equalsIgnoreCase(evento.getEstadoAtencion());
+
+                if (mismaFecha && mismaUbicacion && !cancelado && !rechazado) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
-    // Operación del diagrama de secuencia.
-
-    public void validarHorario(
-            String horarioMontaje,
-            String horarioDesmontaje) {
+    public void validarHorario(String horarioMontaje, String horarioDesmontaje) {
 
         try {
 
-            if (horarioMontaje != null
-                    && !horarioMontaje.isBlank()) {
-
+            if (horarioMontaje != null && !horarioMontaje.isBlank()) {
                 LocalTime.parse(horarioMontaje.trim());
             }
 
-            if (horarioDesmontaje != null
-                    && !horarioDesmontaje.isBlank()) {
-
+            if (horarioDesmontaje != null && !horarioDesmontaje.isBlank()) {
                 LocalTime.parse(horarioDesmontaje.trim());
             }
 
         } catch (DateTimeParseException ex) {
 
-            throw new IllegalArgumentException(
-                    "Los horarios deben tener formato HH:mm.");
+            throw new IllegalArgumentException("Los horarios deben tener formato HH:mm.");
         }
     }
 }

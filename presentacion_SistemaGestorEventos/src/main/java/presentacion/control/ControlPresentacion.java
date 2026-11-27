@@ -15,6 +15,7 @@ import java.util.Map;
 import negocioEvento.fachada.FachadaEvento;
 import negocioEvento.interfaces.ISubsistemaEvento;
 import negocioPropuesta.interfaces.ISubsistemaPropuesta;
+import negocioPropuesta.control.GestorPropuesta;
 import negocioCotizacion.fachada.FachadaCotizacion;
 import negocioCotizacion.interfaces.ISubsistemaCotizacion;
 import negocioOrden.fachada.FachadaOrden;
@@ -29,6 +30,7 @@ public class ControlPresentacion {
 
     private ISubsistemaEvento subsistemaEvento;
     private ISubsistemaPropuesta subsistemaPropuesta;
+    private final GestorPropuesta gestorPropuesta;
     private ISubsistemaCotizacion subsistemaCotizacion;
     private ISubsistemaOrden subsistemaOrden;
     private AlmacenDatos almacen;
@@ -47,11 +49,12 @@ public class ControlPresentacion {
     private DTOCliente cliente;
     private DTOEvento evento;
 
-    public ControlPresentacion(ISubsistemaPropuesta subsistemaPropuesta, AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
+    public ControlPresentacion(ISubsistemaPropuesta subsistemaPropuesta, GestorPropuesta gestorPropuesta, AlmacenDatos almacen, ProveedorExterno proveedorExterno) {
         this.almacen = almacen;
         this.subsistemaEvento = new FachadaEvento();
         this.subsistemaPropuesta = java.util.Objects.requireNonNull(subsistemaPropuesta);
-        this.subsistemaCotizacion = new FachadaCotizacion(this.subsistemaPropuesta);
+        this.gestorPropuesta = java.util.Objects.requireNonNull(gestorPropuesta);
+        this.subsistemaCotizacion = new FachadaCotizacion(this.gestorPropuesta);
         this.subsistemaOrden = new FachadaOrden();
     }
 
@@ -272,27 +275,27 @@ public class ControlPresentacion {
     //---------------- CONFIGURACION DE PROPUESTAS - F3 ----------------
 
     public List<DTOServicio> consultarServiciosDisponibles() {
-        return subsistemaPropuesta.consultarServiciosDisponibles();
+        return gestorPropuesta.consultarServiciosDisponibles();
     }
 
     public List<DTOEquipo> obtenerEquiposDisponibles() {
-        return subsistemaPropuesta.consultarEquiposPropios();
+        return gestorPropuesta.consultarEquiposPropios();
     }
 
     public List<DTOInventario> obtenerInventarioDisponible() {
-        return subsistemaPropuesta.consultarInventariosDisponibles();
+        return gestorPropuesta.consultarInventariosDisponibles();
     }
 
     public List<DTOPersonal> obtenerPersonalDisponible() {
-        return subsistemaPropuesta.obtenerPersonalDisponible();
+        return gestorPropuesta.obtenerPersonalDisponible();
     }
 
     public List<DTOEquipo> consultarEquiposExternos() {
-        return subsistemaPropuesta.consultarEquiposExternos();
+        return gestorPropuesta.consultarEquiposExternos();
     }
 
     private List<DTOEquipo> consultarTodosLosEquipos() {
-        return subsistemaPropuesta.obtenerEquiposDisponibles();
+        return gestorPropuesta.obtenerEquiposDisponibles();
     }
 
     public void iniciarConfigurarPropuesta() {
@@ -301,7 +304,7 @@ public class ControlPresentacion {
             return;
         }
         try {
-            subsistemaPropuesta.obtenerResumenSeleccion(evento.getIdEvento());
+            gestorPropuesta.obtenerResumenSeleccion(evento.getIdEvento());
             if (configurarPropuesta == null || !configurarPropuesta.isDisplayable()) {
                 configurarPropuesta = new JFrameConfigurarPropuesta(this);
             }
@@ -365,7 +368,7 @@ public class ControlPresentacion {
             return;
         }
         try {
-            DTOInventario resumen = subsistemaPropuesta.obtenerResumenSeleccion(evento.getIdEvento());
+            DTOInventario resumen = gestorPropuesta.obtenerResumenSeleccion(evento.getIdEvento());
             configurarPropuesta.solicitarResumen(cliente, evento, resumen.getServicios(), resumen.getEquipos(), resumen.getPersonal());
             mostrarPanel(JFrameConfigurarPropuesta.PANEL_RESUMEN);
         } catch (IllegalArgumentException | IllegalStateException ex) {
@@ -423,7 +426,7 @@ public class ControlPresentacion {
     //---------------- EQUIPOS EXTERNOS - F3 ----------------
 
     public List<DTOEquipo> buscarEquiposExternos(String texto) {
-        return subsistemaPropuesta.buscarEquiposExternos(texto);
+        return gestorPropuesta.buscarEquiposExternos(texto);
     }
 
     public boolean busquedaValida(javax.swing.JTextField txt) {
@@ -625,7 +628,7 @@ public class ControlPresentacion {
         if (propuestaActual == null || propuestaActual.getIdPropuesta() <= 0) {
             return null;
         }
-        return subsistemaPropuesta.consultarRecursosPropuesta(propuestaActual.getIdPropuesta());
+        return gestorPropuesta.consultarRecursosPropuesta(propuestaActual.getIdPropuesta());
     }
 
     private List<String> serviciosDeInventario(DTOInventario inventario) {

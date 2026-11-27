@@ -6,6 +6,9 @@ package presentacion.control;
 
 import com.mycompany.persistencia.AlmacenDatos;
 import infraestructura.ProveedorExterno;
+import negocioPropuesta.BO.ConfigPropuestaBO;
+import negocioPropuesta.BO.PropuestaBO;
+import negocioPropuesta.control.GestorPropuesta;
 import negocioPropuesta.fachada.FachadaPropuesta;
 import negocioPropuesta.interfaces.ISubsistemaPropuesta;
 
@@ -18,9 +21,11 @@ public class SistemaGestorEventos {
 
             ProveedorExterno proveedor = new ProveedorExterno();
 
-            ISubsistemaPropuesta propuesta = new FachadaPropuesta(almacen,proveedor);
+            GestorPropuesta gestorPropuesta = new GestorPropuesta(ConfigPropuestaBO.getInstance(almacen, proveedor),PropuestaBO.getInstance(almacen, proveedor),almacen, proveedor);
 
-            ControlPresentacion control = new ControlPresentacion(propuesta, almacen, proveedor);
+            ISubsistemaPropuesta propuesta = new FachadaPropuesta(gestorPropuesta);
+
+            ControlPresentacion control = new ControlPresentacion(propuesta, gestorPropuesta, almacen, proveedor);
 
             control.iniciarSesion();
         });
