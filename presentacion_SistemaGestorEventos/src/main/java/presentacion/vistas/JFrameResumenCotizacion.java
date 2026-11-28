@@ -507,10 +507,20 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
     }
 
     public void setConceptosCotizacion(Object[][] filas) {
+
         DefaultTableModel modelo = (DefaultTableModel) tblConceptosCotizacion.getModel();
+
         modelo.setRowCount(0);
 
+        modelo.setColumnIdentifiers(new String[]{
+            "Concepto",
+            "Cantidad",
+            "Precio unitario",
+            "Importe"
+        });
+
         for (Object[] fila : filas) {
+
             modelo.addRow(fila);
         }
     }

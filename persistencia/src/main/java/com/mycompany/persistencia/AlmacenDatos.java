@@ -212,7 +212,7 @@ public class AlmacenDatos {
         agregarRecurso(7, "Pasta", "Plato fuerte: pasta con salsa a elegir", 1, 120f, "porción", "Comida", "porción", "Activo");
         agregarRecurso(8, "Pollo asado", "Plato fuerte: porción de pollo asado", 1, 150f, "porción", "Comida", "porción", "Activo");
         agregarRecurso(9, "Pastel", "Postre: pastel de chocolate", 1, 45f, "porción", "Comida", "porción", "Activo");
-        agregarRecurso(10, "Gelatina", "Postre: gelatina individual", 1, 25f, "porción", "Comida", "porción", "Inactivo");
+        agregarRecurso(10, "Gelatina", "Postre: gelatina individual", 1, 25f, "porción", "Comida", "porción", "Activo");
         agregarRecurso(11, "Agua de jamaica", "Bebida: agua fresca", 1, 20f, "porción", "Comida", "vaso", "Activo");
         agregarRecurso(12, "Refresco", "Bebida: refresco embotellado", 1, 25f, "porción", "Comida", "pieza", "Activo");
         

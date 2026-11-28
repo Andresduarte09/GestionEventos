@@ -12,12 +12,12 @@ import dto.DTORecurso;
 import java.util.List;
 import java.util.Map;
 
-
 /**
  *
  * @author Andres
  */
 public interface ISubsistemaEvento {
+
     public DTOCliente ingresarTelefono(String telefono);
     public DTOCliente registrarCliente(DTOCliente datos);
     public DTOEvento registrarDatosEvento(DTOEvento datos);
@@ -31,4 +31,5 @@ public interface ISubsistemaEvento {
     public List<DTOLocalEvento> obtenerLocalesDisponibles(DTOEvento evento, String tipoLocal);
     public void actualizarRecursos(String categoria, Map<Integer, Integer> cantidades);
     public Map<Integer, Integer> obtenerRecursosSeleccionados();
+    public DTOEvento seleccionarLocal(int idEvento, int idLocalEvento);
 }

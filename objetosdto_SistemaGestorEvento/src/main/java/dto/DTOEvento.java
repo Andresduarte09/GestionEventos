@@ -13,7 +13,7 @@ public class DTOEvento {
 
     int idEvento;
     String tipoEvento;
-    LocalDate fechaEvento; 
+    LocalDate fechaEvento;
     String ubicacion;
     LocalDate fechaRegistro;
     int numAsistentes;
@@ -23,9 +23,14 @@ public class DTOEvento {
     String observaciones;
     String estadoAtencion;
 
+    private int idLocalEvento;
+
+    private List<DTODetalleSolicitud> detallesSolicitud =
+            new ArrayList<>();
+
     public DTOEvento() {
     }
- 
+
     public int getIdEvento() {
         return idEvento;
     }
@@ -58,6 +63,14 @@ public class DTOEvento {
         this.ubicacion = ubicacion;
     }
 
+    public int getIdLocalEvento() {
+        return idLocalEvento;
+    }
+
+    public void setIdLocalEvento(int idLocalEvento) {
+        this.idLocalEvento = idLocalEvento;
+    }
+
     public LocalDate getFechaRegistro() {
         return fechaRegistro;
     }
@@ -78,7 +91,9 @@ public class DTOEvento {
         return necesidadesIniciales;
     }
 
-    public void setNecesidadesIniciales(String necesidadesIniciales) {
+    public void setNecesidadesIniciales(
+            String necesidadesIniciales) {
+
         this.necesidadesIniciales = necesidadesIniciales;
     }
 
@@ -113,22 +128,32 @@ public class DTOEvento {
     public void setEstadoAtencion(String estadoAtencion) {
         this.estadoAtencion = estadoAtencion;
     }
-    
-    //para guardar los detalles de los recursos, se utiliza el DTODetalleSolicitud
-    //se pone en DTOEvento porq es el nucleo de las operaciones
-    private List<DTODetalleSolicitud> detallesSolicitud = new ArrayList<>();
 
     public List<DTODetalleSolicitud> getDetallesSolicitud() {
         return detallesSolicitud;
     }
 
-    public void setDetallesSolicitud(List<DTODetalleSolicitud> detallesSolicitud) {
+    public void setDetallesSolicitud(
+            List<DTODetalleSolicitud> detallesSolicitud) {
+
         this.detallesSolicitud = detallesSolicitud;
-    }    
-    
+    }
+
     @Override
     public String toString() {
-        return "DTOEvento{" + "idEvento=" + idEvento + ", tipoEvento=" + tipoEvento + ", fechaEvento=" + fechaEvento + ", ubicacion=" + ubicacion + ", fechaRegistro=" + fechaRegistro + ", numAsistentes=" + numAsistentes + ", necesidadesIniciales=" + necesidadesIniciales + ", horaInicio=" + horaInicio + ", horaFin=" + horaFin + ", observaciones=" + observaciones + ", estadoAtencion=" + estadoAtencion + '}';
+        return "DTOEvento{" 
+                + "idEvento=" + idEvento
+                + ", tipoEvento=" + tipoEvento
+                + ", fechaEvento=" + fechaEvento
+                + ", ubicacion=" + ubicacion
+                + ", idLocalEvento=" + idLocalEvento
+                + ", fechaRegistro=" + fechaRegistro
+                + ", numAsistentes=" + numAsistentes
+                + ", necesidadesIniciales=" + necesidadesIniciales
+                + ", horaInicio=" + horaInicio
+                + ", horaFin=" + horaFin
+                + ", observaciones=" + observaciones
+                + ", estadoAtencion=" + estadoAtencion + '}';
     }
 
     @Override
@@ -140,18 +165,21 @@ public class DTOEvento {
 
     @Override
     public boolean equals(Object obj) {
+
         if (this == obj) {
             return true;
         }
+
         if (obj == null) {
             return false;
         }
+
         if (getClass() != obj.getClass()) {
             return false;
         }
+
         final DTOEvento other = (DTOEvento) obj;
+
         return this.idEvento == other.idEvento;
     }
-    
-    
 }

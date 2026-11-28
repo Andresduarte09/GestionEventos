@@ -26,46 +26,74 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     public JFrameRevisarAnalisisEvaluacion(ControlPresentacion control) {
         this.control = control;
         this.evento = control.getEvento();
+
         initComponents();
         this.setLocationRelativeTo(null);
-        //para hacer que los campos de txt no se puedan modificar
+
+        // Evitar que los campos de texto se puedan modificar.
         txtTipoEvento.setEditable(false);
         txtNumAsistentes.setEditable(false);
         txtFecha.setEditable(false);
         txtHora.setEditable(false);
 
-        lblimagenUbicacion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblimagenUbicacion.setHorizontalAlignment(
+                javax.swing.SwingConstants.CENTER);
 
-        //configuracion de la informacion del local
-        
+        // Configuración de la información del local.
         txtEjemploInfo.setEditable(false);
         txtEjemploInfo.setLineWrap(true);
         txtEjemploInfo.setWrapStyleWord(true);
         txtEjemploInfo.setFont(lblUbicacionInfo.getFont());
         txtEjemploInfo.setOpaque(false);
         txtEjemploInfo.setBorder(null);
+
         jScrollPane2.setOpaque(false);
         jScrollPane2.getViewport().setOpaque(false);
         jScrollPane2.setBorder(null);
-        
-        
+
+        // Consultar los locales disponibles.
         locales = control.consultarLocalesDisponibles();
+
         lblUbicacionInfo.removeAllItems();
+
         for (dto.DTOLocalEvento local : locales) {
             lblUbicacionInfo.addItem(local.getNombreLocal());
         }
+
+        // Mostrar los datos del evento.
+        if (evento != null) {
+
+            txtTipoEvento.setText(evento.getTipoEvento());
+
+            txtNumAsistentes.setText(
+                    String.valueOf(evento.getNumAsistentes()));
+
+            txtFecha.setText(
+                    String.valueOf(evento.getFechaEvento()));
+
+            txtHora.setText(
+                    String.valueOf(evento.getHoraInicio()));
+
+            // Recuperar el local seleccionado anteriormente.
+            if (evento.getIdLocalEvento() > 0) {
+
+                for (int i = 0; i < locales.size(); i++) {
+
+                    if (locales.get(i).getIdLocalEvento()
+                            == evento.getIdLocalEvento()) {
+
+                        lblUbicacionInfo.setSelectedIndex(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Actualizar la información cuando se seleccione otro local.
         lblUbicacionInfo.addActionListener(e -> actualizarUbicacion());
 
-        if (evento != null) {
-            txtTipoEvento.setText(evento.getTipoEvento());
-            txtNumAsistentes.setText(String.valueOf(evento.getNumAsistentes()));
-            txtFecha.setText(String.valueOf(evento.getFechaEvento()));
-            txtHora.setText(String.valueOf(evento.getHoraInicio()));
-        }
-        
         actualizarUbicacion();
     }
-
     private static final int ANCHO_IMAGEN = 350;
     private static final int ALTO_IMAGEN = 280;
 
@@ -297,8 +325,19 @@ public class JFrameRevisarAnalisisEvaluacion extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFechaActionPerformed
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        control.iniciarConfigurarPropuesta();
-        this.dispose();
+        int indice = lblUbicacionInfo.getSelectedIndex();
+        if (indice < 0 || indice >= locales.size()) {
+            javax.swing.JOptionPane.showMessageDialog(
+                    this, "Debes seleccionar un local.");
+            return;
+        }
+        int idLocalEvento = locales.get(indice).getIdLocalEvento();
+
+        if (control.confirmarLocalSeleccionado(idLocalEvento)) {
+            control.iniciarConfigurarPropuesta();
+            this.dispose();
+        }
+
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

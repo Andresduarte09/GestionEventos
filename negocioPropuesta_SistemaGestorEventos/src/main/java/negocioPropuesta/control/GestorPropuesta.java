@@ -243,7 +243,6 @@ public class GestorPropuesta {
     }
 
     public boolean verificarDisponibilidadLocal(int idEventoActual) {
-
         DTOEvento actual = null;
 
         for (DTOEvento evento : almacen.getEventos()) {
@@ -256,13 +255,30 @@ public class GestorPropuesta {
         }
 
         if (actual == null
-                || actual.getUbicacion() == null
-                || actual.getUbicacion().isBlank()
+                || actual.getIdLocalEvento() <= 0
                 || actual.getFechaEvento() == null) {
 
             return false;
         }
 
+        // Verificar las reservas existentes.
+        for (DTOReserva reserva : almacen.getReservas()) {
+
+            boolean mismoLocal =
+                    reserva.getIdLocalEvento()
+                    == actual.getIdLocalEvento();
+
+            boolean mismaFecha = Objects.equals(
+                    reserva.getFecha(),
+                    actual.getFechaEvento());
+
+            if (mismoLocal && mismaFecha) {
+
+                return false;
+            }
+        }
+
+        // Verificar otros eventos.
         for (DTOEvento evento : almacen.getEventos()) {
 
             if (evento.getIdEvento() != idEventoActual) {
@@ -271,8 +287,9 @@ public class GestorPropuesta {
                         actual.getFechaEvento(),
                         evento.getFechaEvento());
 
-                boolean mismaUbicacion = actual.getUbicacion()
-                        .equalsIgnoreCase(evento.getUbicacion());
+                boolean mismoLocal =
+                        actual.getIdLocalEvento()
+                        == evento.getIdLocalEvento();
 
                 boolean cancelado = "Cancelado"
                         .equalsIgnoreCase(evento.getEstadoAtencion());
@@ -280,7 +297,7 @@ public class GestorPropuesta {
                 boolean rechazado = "Rechazada"
                         .equalsIgnoreCase(evento.getEstadoAtencion());
 
-                if (mismaFecha && mismaUbicacion
+                if (mismaFecha && mismoLocal
                         && !cancelado && !rechazado) {
 
                     return false;

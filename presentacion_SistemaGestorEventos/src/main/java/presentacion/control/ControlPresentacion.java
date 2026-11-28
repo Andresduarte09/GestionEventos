@@ -185,6 +185,27 @@ public class ControlPresentacion {
         this.evento = null;
         iniciarSesion();
     }
+    
+    public boolean confirmarLocalSeleccionado(int idLocalEvento) {
+        if (evento == null) {
+            return false;
+        }
+
+        try {
+
+            evento = subsistemaEvento.seleccionarLocal(
+                    evento.getIdEvento(),
+                    idLocalEvento);
+
+            return true;
+
+        } catch (IllegalArgumentException | IllegalStateException ex) {
+
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+
+            return false;
+        }
+    }
 
     //---------------- RECURSOS DEL EVENTO ----------------
 
