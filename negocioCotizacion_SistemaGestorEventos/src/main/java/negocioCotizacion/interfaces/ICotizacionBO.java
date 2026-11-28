@@ -8,7 +8,7 @@ import dto.DTOCotizacion;
 import dto.DTODetalleCotizacion;
 import dto.DTOVersionCotizacion;
 import java.util.List;
-import java.util.List;
+import dto.DTORecurso;
 
 /**
  *
@@ -16,10 +16,18 @@ import java.util.List;
  */
 public interface ICotizacionBO {
 
+    int obtenerSiguienteIdCotizacion();
+
+    int obtenerSiguienteIdVersion();
+
+    int obtenerSiguienteIdDetalle();
+
+    DTORecurso consultarRecursoPorNombre(String nombre);
+
     DTOCotizacion guardar(DTOCotizacion cotizacion);
 
     DTOCotizacion consultar(int idCotizacion);
-    
+
     DTOCotizacion consultarPorPropuesta(int idPropuesta);
 
     void actualizar(DTOCotizacion cotizacion);
@@ -31,8 +39,8 @@ public interface ICotizacionBO {
     DTODetalleCotizacion guardarDetalle(DTODetalleCotizacion detalle);
 
     List<DTODetalleCotizacion> consultarDetallesVersion(int idVersion);
-    
+
     List<DTOVersionCotizacion> consultarVersionesCotizacion(int idCotizacion);
-    
+
     void revertirCreacionVersion(int idCotizacion, int idVersion, boolean cotizacionNueva);
 }

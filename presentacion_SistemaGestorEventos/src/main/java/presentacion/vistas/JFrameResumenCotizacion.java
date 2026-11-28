@@ -230,7 +230,7 @@ public class JFrameResumenCotizacion extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Concepto", "Horas totales facturables", "Tarifa por hora", "Importe"
+                "Concepto", "Cantidad facturable", "Precio por unidad/hora", "Importe"
             }
         ) {
             boolean[] canEdit = new boolean [] {
