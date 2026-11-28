@@ -12,7 +12,7 @@ import dto.DTODetalleCotizacion;
 import dto.DTOVersionCotizacion;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.ArrayList;
+import dto.DTORecurso;
 
 /**
  *
@@ -24,6 +24,54 @@ public class CotizacionBO implements ICotizacionBO {
 
     public CotizacionBO(AlmacenDatos almacen) {
         this.almacen = almacen;
+    }
+
+    public CotizacionBO() {
+        this(AlmacenDatos.getInstance());
+    }
+
+    @Override
+    public int obtenerSiguienteIdCotizacion() {
+        int nuevoID = 1;
+        for (DTOCotizacion registro : almacen.getCotizaciones()) {
+            nuevoID = Math.max(nuevoID, registro.getID() + 1);
+        }
+        return nuevoID;
+    }
+
+    @Override
+    public int obtenerSiguienteIdVersion() {
+        int nuevoID = 1;
+        for (DTOVersionCotizacion registro : almacen.getVersionesCotizacion()) {
+            nuevoID = Math.max(nuevoID, registro.getID() + 1);
+        }
+        return nuevoID;
+    }
+
+    @Override
+    public int obtenerSiguienteIdDetalle() {
+        int nuevoID = 1;
+        for (DTODetalleCotizacion registro : almacen.getDetallesCotizacion()) {
+            nuevoID = Math.max(nuevoID, registro.getID() + 1);
+        }
+        return nuevoID;
+    }
+
+    @Override
+    public DTORecurso consultarRecursoPorNombre(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del recurso no es válido.");
+        }
+        DTORecurso encontrado = null;
+        for (DTORecurso recurso : almacen.getRecursos()) {
+            if (recurso.getNombre() != null && recurso.getNombre().trim().equalsIgnoreCase(nombre.trim())) {
+                if (encontrado != null) {
+                    throw new IllegalStateException("Existen varios recursos con el nombre: " + nombre);
+                }
+                encontrado = recurso;
+            }
+        }
+        return encontrado;
     }
 
     @Override

@@ -4,7 +4,6 @@
  */
 package negocioCotizacion.gestor;
 
-import com.mycompany.persistencia.AlmacenDatos;
 import dto.DTOCotizacion;
 import dto.DTODetalleCotizacion;
 import dto.DTOInventario;
@@ -29,14 +28,12 @@ import dto.DTOConceptoCotizacion;
  */
 public class GestorCotizacion {
 
-    private final AlmacenDatos almacen;
     private final ICotizacionBO cotizacionBO;
     private DTOVersionCotizacion versionActual;
     private GestorPropuesta gestorPropuesta;
 
     public GestorCotizacion() {
-        this.almacen = AlmacenDatos.getInstance();
-        this.cotizacionBO = new CotizacionBO(this.almacen);
+        this.cotizacionBO = new CotizacionBO();
     }
 
     public GestorCotizacion(GestorPropuesta gestorPropuesta) {
@@ -120,7 +117,7 @@ public class GestorCotizacion {
     }
 
     private boolean coincideConUltimaVersion(DTOVersionCotizacion version, LocalTime horario, DTOInventario inventario,
-            List<DTOConceptoCotizacion> conceptos) {
+                                             List<DTOConceptoCotizacion> conceptos) {
         List<DTODetalleCotizacion> detalles = consultarDetallesVersion(version.getID());
         if (detalles.size() != 1) {
             return false;
@@ -638,15 +635,8 @@ public class GestorCotizacion {
             descuentoAnterior = anterior.getDescuento();
         }
 
-        int ultimoNumero = 0;
-        int nuevoID = 1;
-
-        for (DTOVersionCotizacion version : almacen.getVersionesCotizacion()) {
-            if (version.getIdCotizacion() == idCotizacion) {
-                ultimoNumero = Math.max(ultimoNumero, version.getNumero());
-            }
-            nuevoID = Math.max(nuevoID, version.getID() + 1);
-        }
+        int ultimoNumero = anterior == null ? 0 : anterior.getNumero();
+        int nuevoID = cotizacionBO.obtenerSiguienteIdVersion();
 
         DTOVersionCotizacion nuevaVersion = new DTOVersionCotizacion(
                 nuevoID, ultimoNumero + 1, LocalDate.now(), "Pendiente", "Nueva versión", descuentoAnterior, 0f, 0f);
@@ -657,7 +647,7 @@ public class GestorCotizacion {
     }
 
     public DTODetalleCotizacion crearDetalleCotizacion(int idVersion, LocalTime horario,
-            List<DTOInventario> inventarios, float importe) {
+                                                       List<DTOInventario> inventarios, float importe) {
 
         DTOVersionCotizacion version = cotizacionBO.consultarVersion(idVersion);
         if (version == null) {
@@ -693,10 +683,7 @@ public class GestorCotizacion {
             throw new IllegalStateException("El desglose no coincide con el importe del detalle.");
         }
 
-        int nuevoID = 1;
-        for (DTODetalleCotizacion existente : almacen.getDetallesCotizacion()) {
-            nuevoID = Math.max(nuevoID, existente.getID() + 1);
-        }
+        int nuevoID = cotizacionBO.obtenerSiguienteIdDetalle();
 
         DTODetalleCotizacion detalle = new DTODetalleCotizacion();
         detalle.setID(nuevoID);
@@ -712,21 +699,8 @@ public class GestorCotizacion {
     }
 
     public DTOVersionCotizacion consultarUltimaVersion(int idCotizacion) {
-        if (cotizacionBO.consultar(idCotizacion) == null) {
-            throw new IllegalArgumentException("La cotizacion indicada no existe.");
-        }
-
-        DTOVersionCotizacion ultimaVersion = null;
-
-        for (DTOVersionCotizacion version : almacen.getVersionesCotizacion()) {
-            if (version.getIdCotizacion() == idCotizacion) {
-                if (ultimaVersion == null || version.getNumero() > ultimaVersion.getNumero()) {
-                    ultimaVersion = version;
-                }
-            }
-        }
-
-        return ultimaVersion;
+        List<DTOVersionCotizacion> versiones = cotizacionBO.consultarVersionesCotizacion(idCotizacion);
+        return versiones.isEmpty() ? null : versiones.get(versiones.size() - 1);
     }
 
     public DTOCotizacion obtenerOCrearCotizacion(DTOPropuesta propuesta) {
@@ -740,11 +714,7 @@ public class GestorCotizacion {
             return existente;
         }
 
-        int nuevoID = 1;
-
-        for (DTOCotizacion cotizacion : almacen.getCotizaciones()) {
-            nuevoID = Math.max(nuevoID, cotizacion.getID() + 1);
-        }
+        int nuevoID = cotizacionBO.obtenerSiguienteIdCotizacion();
 
         DTOCotizacion nuevaCotizacion = new DTOCotizacion();
         nuevaCotizacion.setID(nuevoID);
@@ -818,19 +788,7 @@ public class GestorCotizacion {
             nombreCatalogo = "Mesas redondas";
         }
 
-        DTORecurso encontrado = null;
-
-        for (DTORecurso recurso : almacen.getRecursos()) {
-            if (recurso.getNombre() != null && recurso.getNombre().trim().equalsIgnoreCase(nombreCatalogo)) {
-                if (encontrado != null) {
-                    throw new IllegalStateException("Existen varios recursos con el nombre: " + nombre);
-                }
-
-                encontrado = recurso;
-            }
-        }
-
-        return encontrado;
+        return cotizacionBO.consultarRecursoPorNombre(nombreCatalogo);
     }
 
     public float consultarTarifaRecurso(String nombre) {
