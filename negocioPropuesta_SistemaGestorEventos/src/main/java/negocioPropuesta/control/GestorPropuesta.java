@@ -3,10 +3,13 @@ package negocioPropuesta.control;
 import com.mycompany.persistencia.AlmacenDatos;
 import subsistemaInfraestructura.interfaces.ISubsistemaInfraestructura;
 import dto.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import negocioPropuesta.interfaces.IConfigPropuestaBO;
 import negocioPropuesta.interfaces.IPropuestaBO;
@@ -292,24 +295,118 @@ public class GestorPropuesta {
             String horarioMontaje,
             String horarioDesmontaje) {
 
+        // Validar campos vacíos.
+        if (horarioMontaje == null || horarioMontaje.isBlank()
+                || horarioDesmontaje == null
+                || horarioDesmontaje.isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "Debes ingresar ambos horarios.");
+        }
+
+        LocalTime montaje;
+        LocalTime desmontaje;
+
         try {
 
-            if (horarioMontaje != null
-                    && !horarioMontaje.isBlank()) {
-
-                LocalTime.parse(horarioMontaje.trim());
-            }
-
-            if (horarioDesmontaje != null
-                    && !horarioDesmontaje.isBlank()) {
-
-                LocalTime.parse(horarioDesmontaje.trim());
-            }
+            montaje = LocalTime.parse(horarioMontaje.trim());
+            desmontaje = LocalTime.parse(horarioDesmontaje.trim());
 
         } catch (DateTimeParseException ex) {
 
             throw new IllegalArgumentException(
                     "Los horarios deben tener formato HH:mm.");
+        }
+
+        // Buscar el evento actual.
+        DTOEvento eventoActual = null;
+
+        for (DTOEvento evento : almacen.getEventos()) {
+
+            if (evento.getIdEvento() == idEventoActual) {
+
+                eventoActual = evento;
+                break;
+            }
+        }
+
+        if (eventoActual == null
+                || eventoActual.getFechaEvento() == null
+                || eventoActual.getHoraInicio() == null
+                || eventoActual.getHoraFin() == null) {
+
+            throw new IllegalStateException(
+                    "No se encontraron los horarios del evento.");
+        }
+
+        int maxHorasMontaje = 0;
+        int maxHorasDesmontaje = 0;
+
+        // Obtener las horas máximas del personal seleccionado.
+        for (DTOPersonal personal : capturarSeleccionActual().getPersonal()) {
+
+            if (personal.getCantidad() > 0) {
+
+                maxHorasMontaje = Math.max(
+                        maxHorasMontaje,
+                        personal.getHorasMontaje());
+
+                maxHorasDesmontaje = Math.max(
+                        maxHorasDesmontaje,
+                        personal.getHorasDesmontaje());
+            }
+        }
+
+        // Establecer fecha y hora del evento.
+        LocalDateTime inicioEvento = LocalDateTime.of(
+                eventoActual.getFechaEvento(),
+                eventoActual.getHoraInicio());
+
+        LocalDateTime finEvento = LocalDateTime.of(
+                eventoActual.getFechaEvento(),
+                eventoActual.getHoraFin());
+
+        // Si el evento termina después de medianoche.
+        if (finEvento.isBefore(inicioEvento)) {
+
+            finEvento = finEvento.plusDays(1);
+        }
+
+        // Establecer fecha y hora del montaje.
+        LocalDateTime fechaMontaje = LocalDateTime.of(
+                inicioEvento.toLocalDate(),
+                montaje);
+
+        // Establecer fecha y hora del desmontaje.
+        LocalDateTime fechaDesmontaje = LocalDateTime.of(
+                finEvento.toLocalDate(),
+                desmontaje);
+
+        // Calcular los horarios límite.
+        LocalDateTime horaMaximaMontaje
+                = inicioEvento.minusHours(maxHorasMontaje);
+
+        LocalDateTime horaMinimaDesmontaje
+                = finEvento.plusHours(maxHorasDesmontaje);
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm (dd/MM/yyyy)");
+
+        // Validar montaje.
+        if (fechaMontaje.isAfter(horaMaximaMontaje)) {
+
+            throw new IllegalArgumentException(
+                    "El montaje debe comenzar como máximo a las "
+                    + horaMaximaMontaje.format(formato)
+                    + ".\nHoras requeridas: " + maxHorasMontaje);
+        }
+
+        // Validar desmontaje.
+        if (fechaDesmontaje.isBefore(horaMinimaDesmontaje)) {
+
+            throw new IllegalArgumentException(
+                    "El desmontaje debe finalizar como mínimo a las "
+                    + horaMinimaDesmontaje.format(formato)
+                    + ".\nHoras requeridas: " + maxHorasDesmontaje);
         }
     }
 }

@@ -510,6 +510,16 @@ public class ControlPresentacion {
         return comentariosPropuesta;
     }
 
+    //Volver para atras en flujo 3 xd
+    public void volverRevisarAnalisisEvaluacion() {
+        if (configurarPropuesta != null) {
+            configurarPropuesta.dispose();
+        }
+
+        iniciarRevisarAnalisisEvaluacion();
+    }
+    
+    
     //---------------- COTIZACION - F4 ----------------
 
     public DTOCotizacion getCotizacion() {

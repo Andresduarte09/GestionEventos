@@ -21,7 +21,7 @@ import presentacion.paneles.PanelInventario;
 import dto.*;
 
 /**
- * 
+ *
  * @author Andre
  */
 public class JFrameConfigurarPropuesta extends JFrame {
@@ -47,8 +47,9 @@ public class JFrameConfigurarPropuesta extends JFrame {
     private JButton btnProveedor;
     private JButton btnPersonal;
     private JButton btnResumen;
+    private JButton btnVolver;
 
-    // Controlador de presentación y subpaneles (cada uno en su propia clase)
+    // Controlador de presentación y subpaneles
     private final ControlPresentacion control;
     private PanelFolio pnlFolio;
     private PanelServicios pnlServicios;
@@ -82,6 +83,7 @@ public class JFrameConfigurarPropuesta extends JFrame {
         btnProveedor = crearBotonNavegacion("Proveedor");
         btnPersonal = crearBotonNavegacion("Personal");
         btnResumen = crearBotonNavegacion("Resumen");
+        btnVolver = crearBotonNavegacion("Volver");
 
         pnlNavegacionLateral.add(btnFolio);
         pnlNavegacionLateral.add(btnServicios);
@@ -89,6 +91,7 @@ public class JFrameConfigurarPropuesta extends JFrame {
         pnlNavegacionLateral.add(btnProveedor);
         pnlNavegacionLateral.add(btnPersonal);
         pnlNavegacionLateral.add(btnResumen);
+        pnlNavegacionLateral.add(btnVolver);
 
         layoutPaneles = new CardLayout();
         pnlContenido = new JPanel(layoutPaneles);
@@ -114,13 +117,18 @@ public class JFrameConfigurarPropuesta extends JFrame {
         add(pnlNavegacionLateral, BorderLayout.WEST);
         add(pnlContenido, BorderLayout.CENTER);
 
-        // Eventos de los botones laterales para cambio de panel
+        // Eventos de los botones laterales
         btnFolio.addActionListener(e -> control.solicitarFolio());
         btnServicios.addActionListener(e -> control.solicitarServicios());
         btnEquipo.addActionListener(e -> control.solicitarEquipos());
         btnProveedor.addActionListener(e -> control.solicitarEquiposExternos());
         btnPersonal.addActionListener(e -> control.solicitarPersonal());
         btnResumen.addActionListener(e -> control.obtenerResumen());
+
+        // Regresar a la pantalla anterior del flujo
+        btnVolver.addActionListener(
+                e -> control.volverRevisarAnalisisEvaluacion()
+        );
 
         // Abrir panel predilecto
         navegarA(PANEL_FOLIO);
@@ -134,34 +142,37 @@ public class JFrameConfigurarPropuesta extends JFrame {
         btn.setFocusPainted(false);
         return btn;
     }
-    
+
     public void solicitarFolio(DTOCliente cliente, DTOEvento evento) {
         pnlFolio.solicitarFolio(cliente, evento);
     }
- 
+
     public void solicitarServicios(List<DTOServicio> servicios) {
         pnlServicios.solicitarServicios(servicios);
     }
- 
+
     public void solicitarEquipos(List<DTOEquipo> equipos) {
         pnlEquipo.solicitarEquipos(equipos);
     }
- 
+
     public void solicitarInventario(List<DTOInventario> inventarios) {
         pnlInventario.solicitarInventario(inventarios);
     }
- 
+
     public void solicitarEquiposExternos(List<DTOEquipo> equiposProveedor) {
         pnlProveedor.solicitarEquiposExternos(equiposProveedor);
     }
- 
+
     public void solicitarPersonal(List<DTOPersonal> personal) {
         pnlPersonal.solicitarPersonal(personal);
     }
- 
-    public void solicitarResumen(DTOCliente cliente, DTOEvento evento, List<DTOServicio> servicios,
-            List<DTOEquipo> equipos, List<DTOPersonal> personal) {
-        pnlResumen.solicitarResumen(cliente, evento, servicios, equipos, personal);
+
+    public void solicitarResumen(DTOCliente cliente, DTOEvento evento,
+            List<DTOServicio> servicios, List<DTOEquipo> equipos,
+            List<DTOPersonal> personal) {
+
+        pnlResumen.solicitarResumen(cliente, evento, servicios,
+                equipos, personal);
     }
 
     public void navegarA(String nombrePanel) {
